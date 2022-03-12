@@ -1,16 +1,15 @@
 # Nutriverde
 
-# Sobre 
 A NutriVerde é uma plataforma web que busca conectar pequenos produtores agricolas a potenciais consumidores nnas proximidades e também fornece meios
 para os produtores se organizarem de forma a facilitar a conexão com o consumidor
 
-omo baixar e instalar, como usar
-
 # Tecnologias
-* Node.JS
-* MongoDB
+* Node.JS 
+* MongoDB 
 * Bootstrap (bs5)
 * React
+* React Testing Library e Jest
+* Swagger
 * Ionic (alpha)
 
 # Como Baixar 
@@ -28,7 +27,7 @@ yarn install
 cd src && nodemom
 ```
 
-# Grupo 7 - NutriVerde
+# Grupo 7 - Integrantes
 
 1. Vitor Rubens Sniquer Leão Martins
 1. Fabio dos Santos de Souza
