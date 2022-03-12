@@ -1,0 +1,58 @@
+{
+  "name": "Nutriverde",
+  "version": "1.0.0",
+  "description": "NutriVerde server",
+  "main": "src/server.ts",
+  "repository": "https://github.com/ES-UFABC/Nutriverde",
+  "author": "Vitor, Fabio, Jonathan, Lucas, Guilherme, Breno",
+  "license": "MIT",
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node src/server.ts"
+  },
+
+  "devDependencies": {
+    "@types/jest": "^24.0.25",
+    "jest": "^24.9.0",
+    "nodemon": "^2.0.2",
+    "rimraf": "^3.0.0",
+    "ts-jest": "^24.2.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4",
+    "@types/bcrypt": "^3.0.0",
+    "@types/connect-mongodb-session": "^2.4.0",
+    "@types/express": "^4.17.9",
+    "@types/express-flash": "^0.0.2",
+    "@types/express-handlebars": "^3.1.0",
+    "@types/express-session": "^1.17.3",
+    "@types/mongodb": "^3.5.34",
+    "@types/node": "^14.14.10",
+    "bcrypt": "^5.0.0",
+    "connect-mongodb-session": "^2.4.1",
+    "express": "^4.17.1",
+    "express-flash": "^0.0.2",
+    "express-handlebars": "^4.0.4",
+    "express-session": "^1.17.1",
+    "mongodb": "^3.6.3",
+    "multiparty-express": "^0.1.9"
+  },
+  "dependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/connect-mongodb-session": "^2.4.0",
+    "@types/express": "^4.17.9",
+    "@types/express-flash": "^0.0.2",
+    "@types/express-handlebars": "^3.1.0",
+    "@types/express-session": "^1.17.3",
+    "@types/mongodb": "^3.5.34",
+    "@types/node": "^14.14.10",
+    "bcrypt": "^5.0.0",
+    "connect-mongodb-session": "^2.4.1",
+    "express": "^4.17.1",
+    "express-flash": "^0.0.2",
+    "express-handlebars": "^4.0.4",
+    "express-session": "^1.17.1",
+    "mongodb": "^3.6.3",
+    "multiparty-express": "^0.1.9"
+  }
+}
