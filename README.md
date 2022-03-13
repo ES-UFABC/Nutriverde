@@ -35,3 +35,7 @@ cd src && nodemom
 1. Lucas Serna Quinto Pardo
 1. Guilherme Cavalcante Santana
 1. Breno Boato da Silva
+
+# Licença 
+
+MIT/X11
