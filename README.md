@@ -10,6 +10,7 @@ para os produtores se organizarem de forma a facilitar a conexão com o consumid
 * Bootstrap (bs5)
 * React
 * React Testing Library e Jest
+* Next.js
 * Swagger
 * Ionic (alpha)
 
