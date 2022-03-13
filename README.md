@@ -1,4 +1,5 @@
 # Nutriverde
+![example workflow](https://github.com/ES-UFABC/Nutriverde/actions/workflows/node.js.yml/badge.svg)
 
 A NutriVerde é uma plataforma web que busca conectar pequenos produtores agricolas a potenciais consumidores nnas proximidades e também fornece meios
 para os produtores se organizarem de forma a facilitar a conexão com o consumidor
