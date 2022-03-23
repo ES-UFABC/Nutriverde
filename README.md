@@ -1,9 +1,9 @@
 # Nutriverde
 ![example workflow](https://github.com/ES-UFABC/Nutriverde/actions/workflows/node.js.yml/badge.svg)
 
-A NutriVerde é uma plataforma web que busca conectar pequenos produtores agricolas a potenciais consumidores nnas proximidades e também fornece meios
-para os produtores se organizarem de forma a facilitar a conexão com o consumidor
-
+  A NutriVerde é uma plataforma web que tem como objetivo facilitar a comunicação e comercialização de produtos entre pequenos produtores e compradores, através de uma plataforma de anúncios em que produtores cadastram seus produtos, área de atuação e  parceiros para que os potenciais compradores consigam localizar as melhores opções de produtos dentro de determinadas regiões e também produtores que estejam de acordo com suas preferências.
+    Além do comércio, nossa aplicação mostra para o público toda a variedade de produtos disponíveis em sua região, enriquecendo seu entendimento sobre a produção de suas redondezas.
+    
 # Tecnologias
 * Node.JS 
 * MongoDB 
@@ -12,7 +12,6 @@ para os produtores se organizarem de forma a facilitar a conexão com o consumid
 * React Testing Library e Jest
 * Next.js
 * Swagger
-* Ionic (alpha)
 
 # Como Baixar 
 ```sh
