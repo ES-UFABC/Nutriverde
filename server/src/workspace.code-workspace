@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "Nutriverde",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}
