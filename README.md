@@ -10,7 +10,7 @@ Além do comércio, nossa aplicação mostra para o público toda a variedade de
 
 * Node.JS
 * MongoDB
-* Bootstrap (bs5)
+* Tailwind
 * React
 * React Testing Library e Jest
 * Next.js
