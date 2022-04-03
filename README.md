@@ -20,12 +20,14 @@ Além do comércio, nossa aplicação mostra para o público toda a variedade de
 
 ### Como baixar
 
-Como pré-requisitos, é necessário que baixe o [Node.js](https://nodejs.org/en/), e após instalá-lo, rode os seguintes comandos:
+Como pré-requisitos, é necessário que baixe o [Node.js](https://nodejs.org/en/) e o [Mongo DB](https://www.mongodb.com/try/download/community), e após instalá-lo, rode os seguintes comandos:
 
 ```sh
 npm i -g yarn
 npm i -g nodemon
-npm i -g ts-node # Apenas necessário em Windows
+
+# Apenas necessário em Windows
+npm i -g ts-node
 ```
 
 Com os pré-requisitos instalados, para obter o projeto basta que efetue o clone deste em uma pasta de sua escolha:
@@ -43,6 +45,9 @@ Para o back-end:
 ```sh
 cd $ROOT/server
 yarn
+
+# Insere dados mockados no Mongo DB
+mongo conf/mongo-create-db.js 
 ```
 
 Para o front-end:
