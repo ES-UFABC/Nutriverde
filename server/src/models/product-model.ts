@@ -2,42 +2,53 @@ import { config } from "../config";
 import * as dbConnect from "./db-connection";
 
 /**
- * Blog Product model
- * A Product must have a single unitOfMeas
+ * Product model
  */
 export class Product {
   id: number;
   name: string;
-  unitOfMeas: string; // the unitOfMeas username
+  description: string;
+  unitOfMeas: string;
   typology: string;
   price: number;
   specialDeliveryConditions: string;
+  cropDate: string;
   quantity: number;
   cover: string;
+  producerId: number;
 
   constructor(
     name: string,
+    description: string,
     unitOfMeas: string,
     typology: string,
     specialDeliveryConditions: string,
-    quantity: number
+    cropDate: string,
+    quantity: number,
+    producerId: number
   ) {
     this.id = 0;
     this.name = name;
+    this.description = description;
     this.unitOfMeas = unitOfMeas;
     this.typology = typology;
     this.price = 0;
     this.specialDeliveryConditions = specialDeliveryConditions;
     this.cover = "";
+    this.cropDate = cropDate;
     this.quantity = quantity;
+    this.producerId = producerId;
   }
 
   isValid(): boolean {
     return (
       this.name.length > 0 &&
+      this.description.length > 0 &&
       this.unitOfMeas.length > 0 &&
       this.typology.length > 0 &&
-      this.specialDeliveryConditions.length > 0
+      this.specialDeliveryConditions.length > 0 &&
+      this.cropDate.length > 0 &&
+      this.producerId > 0
     );
   }
 
@@ -49,9 +60,12 @@ export class Product {
   static decode(json: any): Product {
     for (const prop of [
       "name",
+      "description",
       "unitOfMeas",
       "typology",
       "specialDeliveryConditions",
+      "cropDate",
+      "producerId",
     ]) {
       if (!(prop in json)) {
         throw new Error(`Field ${prop} is required`);
@@ -60,10 +74,13 @@ export class Product {
 
     const product = new Product(
       json.name,
+      json.description,
       json.unitOfMeas,
       json.typology,
       json.specialDeliveryConditions,
-      json.quantity
+      json.cropDate,
+      json.quantity,
+      json.producerId
     );
 
     if ("id" in json) {
@@ -214,12 +231,12 @@ export class ProductDAO {
         .getDb()
         .collection(config.db.collections.sequences);
       const result = await seqColl.findOneAndUpdate(
-        { name: "Product_id" },
+        { name: "product_id" },
         { $inc: { value: 1 } }
       );
 
       if (result.ok) {
-        return result.value as number;
+        return result.value.value as number;
       }
 
       throw Error("Failed to create new id in the database");
