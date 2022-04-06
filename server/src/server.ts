@@ -1,7 +1,7 @@
 import e from "express";
 import * as dbConnect from "./models/db-connection";
 import { config } from "./config";
-import * as productController from "./controllers/product-controller";
+import * as productService from "./services/product";
 import * as producerController from "./controllers/producer-controller";
 import cors from "cors";
 
@@ -14,8 +14,10 @@ app.use(e.json());
 app.use(e.urlencoded({ extended: true })); // to use
 app.use(cors());
 
-app.get("/products", productController.list);
-app.get("/products/search/:word", productController.searchAndList);
+app.get("/products", productService.list);
+app.post("/products", productService.create);
+app.get("/products/search/:word", productService.searchAndList);
+
 app.get("/producers", producerController.list);
 
 /**
