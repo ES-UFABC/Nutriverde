@@ -2,8 +2,9 @@ import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { /*useEffect, useState*/ useRef } from "react";
 import Layout from "../../components/layout";
 import Image from "next/image";
-import Map from "../../components/map";
-import Marker from "../../components/marker";
+// import Map from "../../components/map";
+// import Marker from "../../components/marker";
+import ProductCard from "../../components/product-card";
 
 // TODO: allow revalidation when informations change
 // TODO: make prety loading page or use blocking ?
@@ -49,18 +50,20 @@ const render = (status: Status) => {
 };
 
 
-export default function ProducerAbout(props:{ producer:IProducer } ) {
-    const ref = useRef<HTMLDivElement>(null);
+export default function ProducerAbout(props:any) {
+    // const ref = useRef<HTMLDivElement>(null);
     const producer:IProducer = props.producer;
-    const map = ref.current ? new window.google.maps.Map(ref.current, {}) : {};
+    const products = props.products || [];
+    // const map = ref.current ? new window.google.maps.Map(ref.current, {}) : {};
     
     const center = {lat: -23.64161, lng: -46.73097};
     console.log('producer',producer && producer);
+    console.log('products',products && products);
 
     return (    
         <Layout title={`${producer && producer.fantasyName} - Produtor`}>
 
-            <p className="text-4xl font-bold text-center my-4">
+            <p className="text-4xl font-bold text-center my-4 ">
                 {producer && producer.fantasyName}
             </p>
             <div style={{ display: "flex", height: "200px" }} className="w-full h-48 relative">
@@ -87,7 +90,7 @@ export default function ProducerAbout(props:{ producer:IProducer } ) {
                 <span className="font-bold">Métodos de Pagamento</span>: {producer && producer.paymentMethods.map((pa:string) => pa+", ")}
             </p>
             <div style={{ display: "flex", height: "200px" }}>
-                <Wrapper
+                {/* <Wrapper
                     apiKey={"AIzaSyCXGJse38b65vXJStGzFD3r7-CuC0TjPgk"}
                     // render={render}
                 >
@@ -97,7 +100,15 @@ export default function ProducerAbout(props:{ producer:IProducer } ) {
                     >
                         <Marker key="center" position={center} />
                     </Map>
-                </Wrapper>
+                </Wrapper> */}
+            </div>
+            <p className="text-4xl font-bold text-center my-4">
+                Confira nossos produtos!
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+                {products && products.map((item:any) => (
+                    <ProductCard item = {item}/>
+                ))}
             </div>
         </Layout>
     );
@@ -116,10 +127,15 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context:any) {
-    const res = await fetch(`http://localhost:3000/producers/${context.params.id}`);
-    const j = await res.json()
-    const producer:IProducer = j.item;
+    const resProducer = await fetch(`http://localhost:3000/producers/${context.params.id}`);
+    const producerMessage = await resProducer.json()
+    const producer:IProducer = producerMessage.item;
+    // TODO: connect true routes
+    const resProducts = await fetch(`http://localhost:3000/products`);
+    const productsMessage = await resProducts.json()
+    const products = productsMessage.items;
     return { props: {
-        producer
+        producer,
+        products
       } }
 }
