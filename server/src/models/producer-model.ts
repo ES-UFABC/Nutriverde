@@ -1,45 +1,48 @@
 import * as dbConnection from "./db-connection"
 import {config} from '../config'
 import * as dbConnect from "./db-connection"
+import { User } from "./user-model"
 
 /**
  * Producer model
- * 
- * { "_id" : ObjectId("623b3e977e48e9c814f04938"), 
- * 
- * 
- *  
- * "phone" : [ "1234145" ], "comerceAddress" : 
- * [ "Alphaville" ], "productionAddress" : 
- * [ "Alphaville" ], "cpfOrCnpj" : "12312512", "certifications" : [ ],
- *  "agroEcological" : false, "agroEcologicalCertifications" : [ ], 
- * "organical" : true, , 
- * "georeferencedLocalization" : [ "L90,G123" ], 
- * "externalWebPages" : [ ], "productionClassification" : 
- * [ "Tuberculos e raizes" ], "isNative" : true, 
- * "localMarketPlace" : "Feira de quinta", "dapFísica" : "" }
- * 
- * 
- * 
- */
-export class Producer {
-    id: number
-    name: string
-    fantasyName: string
-    email: string
-    paymentMethods: string
 
-    constructor(name: string, paymentMethods: string, fantasyName: string, email: string) {
+ */
+export class Producer extends User {
+    id: number
+    fantasyName: string 
+    productionAddress: string[]
+    commerceAddress: string[]
+    cnpj? : string
+    producerPaymentMehods: string[]
+
+    constructor(name: string, password: string, phones: string[], email: string, 
+                address : string[], cpf : string, fantasyName: string,
+                productionAddress: string[],commerceAddress: string[], producerPaymentMehods: string[] ) {
+
+        super(name, password, phones, email, address, cpf);
         this.id = 0
         this.name = name
         this.email = email
         this.fantasyName = fantasyName
-        this.paymentMethods = paymentMethods
+        this.producerPaymentMehods = producerPaymentMehods
+        this.productionAddress = productionAddress
+        this.commerceAddress = commerceAddress
     }
 
     isValid() {
-        return this.name.length > 0 && this.paymentMethods.length > 0
+        return 1 > 0 
     }
+    /**
+     * 
+     * @param other 
+     * @returns 
+     */
+    isEquals(other : Producer){
+        return this.name === other.name && 
+        this.email === other.email &&
+        this.cpf === other.cpf
+    }
+
 
     /**
      * Convert a JSON representation to an Producer instance
@@ -47,20 +50,19 @@ export class Producer {
      * @returns the Producer instance
      */
     static decode(json: any): Producer {
-        for (const prop of ["email", "paymentMethods", "name"]) {
+    for (const prop of ["fantasyName", "productionAddress","commerceAddress","producerPaymentMehods"]) {
             if (!(prop in json)) {
                 throw new Error(`Property ${prop} is required`)
             }
         }
 
-        const producer = new Producer(json.name, json.paymentMethods, json.fantasyName, json.email)
+        const producer = new Producer(json.name, json.password, json.phones, 
+                                    json.email, json.address, json.cpf,
+                                    json.fantasyName, json.productionAddress,
+                                    json.commerceAddress,json.producerPaymentMehods)
 
         if ("id" in json) {
             producer.id = parseInt(json.id)
-        }
-        
-        if ("fantasyName" in json) {
-            producer.fantasyName = json.fantasyName
         }
 
         return producer
@@ -83,7 +85,27 @@ export class ProducerDAO {
     }
     
     getCollection() {
-        return dbConnection.getDb().collection(config.db.collections.producers)
+        return dbConnection.getDb().collection(config.db.collections.users)
+    }
+
+    /**
+     * Retrieve an Producer given its name
+     * @param email the Producer email
+     * @returns the Producer
+     */
+     async findByEmail(email: string): Promise<Producer> {
+        try {
+            const response = await this.getCollection().findOne({email: email})
+
+            if (response) {
+                return Producer.decode(response)
+            }
+            throw Error("Failed to retrieve Producer with given email")
+        } catch (error) {
+            console.log(error)
+            console.error("Error while retrieving Producer")
+            throw error
+        }
     }
 
     /**
@@ -104,10 +126,32 @@ export class ProducerDAO {
             throw error
         }
     }
+
+    /**
+     * Retrieve an Producer given its id
+     * @param id the Producer id
+     * @returns the Producer
+     */
+     async findById(id: number): Promise<Producer> {
+        try {
+            const response = await this.getCollection().findOne({id: id})
+
+            if (response) {
+                return Producer.decode(response)
+            }
+            throw Error("Failed to retrieve Producer with given id")
+        } catch (error) {
+            console.log(error)
+            console.error("Error while retrieving Producer")
+            throw error
+        }
+    }
+
+
     async update(Producer:Producer){
         try {
             const response = await this.getCollection().replaceOne(
-                { name: Producer.name }, Producer)
+                { id: Producer.id }, Producer)
 
             return (response) ? response.modifiedCount > 0 : false
         } catch (error) {
@@ -117,6 +161,17 @@ export class ProducerDAO {
     async removeByname(name : string ){
         try {
             const response = await this.getCollection().deleteOne({name:name})
+            return (response.deletedCount) ? response.deletedCount > 0 : false
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
+
+    async removeById(id : number ){
+        try {
+            const response = await this.getCollection().deleteOne({id:id})
             return (response.deletedCount) ? response.deletedCount > 0 : false
         } catch (error) {
             console.log(error)
@@ -138,18 +193,17 @@ export class ProducerDAO {
             throw error
         }
     }
+    
     async insert(Producer : Producer) : Promise<boolean>{
         try {
             const newId = await this.nextId()
             Producer.id = newId
             const response = await this.getCollection().insertOne(Producer)
-            console.log(response)
             if(!response || response.insertedCount < 1 ){
                 throw Error("Invalid result while inserting a post ")
             }
             return true
         } catch (error) {
-            console.log("Error ao inserir elemento no banco")
             console.log(error)
             throw error
         }

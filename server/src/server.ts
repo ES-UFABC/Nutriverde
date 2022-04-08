@@ -2,12 +2,15 @@ import e from "express";
 import * as dbConnect from "./models/db-connection";
 import { config } from "./config";
 import * as productController from "./controllers/product-controller";
-import * as producerController from "./controllers/producer-controller";
+
+import * as producerService from "./producer-service"
+
+
 import cors from "cors";
 import { ok } from "assert";
 
 
-import * as service from "./service.test"
+import * as service from "./producer-service"
 /**
  * Configure session middleware
  */
@@ -24,16 +27,25 @@ app.use(cors());
  app.get("/products/search/:word", productController.searchAndList);
 
 
+
 /**
  * Producers get put post delete
  */
-app.get("/producers", producerController.list);
+app.get("/producers", async (req,res) =>
+  await producerService.ProducerService.getInstance().listAll(req,res)
+);
 
 
-// 
-app.put("/producers", async (req,res) => {
-  await service.insert(req,res)
+app.get("/producers/:id", async (req,res) =>
+  await producerService.ProducerService.getInstance().findById(req,res)
+);
+
+
+app.put("/register", async (req,res) => {
+  await producerService.ProducerService.getInstance().insert(req,res)
+  console.log("Estou registrando")
 })
+
 
 
 /**

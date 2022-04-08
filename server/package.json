@@ -7,7 +7,7 @@
   "author": "Vitor, Fabio, Jonathan, Lucas, Guilherme, Breno",
   "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx mocha -r ts-node/register 'src/models/*.test.ts'",
     "start": "ts-node src/server.ts"
   },
   "devDependencies": {
@@ -33,8 +33,8 @@
     "nodemon": "^2.0.2",
     "rimraf": "^3.0.0",
     "ts-jest": "^24.2.0",
-    "ts-node": "^8.5.4",
-    "typescript": "^3.7.4"
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -43,6 +43,7 @@
     "@types/express-flash": "^0.0.2",
     "@types/express-handlebars": "^3.1.0",
     "@types/express-session": "^1.17.3",
+    "@types/mocha": "^9.1.0",
     "@types/mongodb": "^3.5.34",
     "@types/node": "^14.14.10",
     "bcrypt": "^5.0.0",
@@ -52,6 +53,7 @@
     "express-flash": "^0.0.2",
     "express-handlebars": "^6.0.3",
     "express-session": "^1.17.1",
+    "mocha": "^9.2.2",
     "mongodb": "^3.6.3",
     "multiparty-express": "^0.1.9"
   }

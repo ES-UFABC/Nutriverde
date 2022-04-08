@@ -31,9 +31,9 @@ function nextProductId() {
 }
 
 /**
- * Producers collection
+ * Users collection
  */
-db.createCollection("producers");
+db.createCollection("user");
 
 db.producers.createIndex({ id: 1 }, { unique: true });
 
@@ -43,6 +43,7 @@ db.producers.insertOne({
   fantasyName: "Fazenda do Vitor ",
   email: "vitor.fazenda@gnail.com",
   paymentMethods: ["Pix", "Dinheiro", "PayPal"],
+  test : "teste"
 });
 db.producers.insertOne({
   id: nextProducerId(),
@@ -50,6 +51,22 @@ db.producers.insertOne({
   fantasyName: "Fazenda do Jonhatan ",
   email: "jonathan.fazenda@gnail.com",
   paymentMethods: ["Pix", "Dinheiro", "PayPal", "Débito"],
+});
+
+db.producers.insertOne({
+  id: nextProducerId(),
+  name: "Elon Musk",
+  fantasyName: "Fazenda da Tesla ",
+  email: "jonathan.fazenda@gnail.com",
+  paymentMethods: ["Pix", "Dinheiro", "PayPal", "Débito"],
+});
+
+db.producers.insertOne({
+  id: nextProducerId(),
+  name: "Raul Gil",
+  fantasyName: "Fazenda do Raul Gil ",
+  email: "jonathan.fazenda@gnail.com",
+  paymentMethods: ["PayPal", "Débito"],
 });
 
 db.producers.insertOne({
