@@ -4,7 +4,10 @@ import { config } from "./config";
 import * as productController from "./controllers/product-controller";
 import * as producerController from "./controllers/producer-controller";
 import cors from "cors";
+import { ok } from "assert";
 
+
+import * as service from "./service.test"
 /**
  * Configure session middleware
  */
@@ -14,9 +17,24 @@ app.use(e.json());
 app.use(e.urlencoded({ extended: true })); // to use
 app.use(cors());
 
-app.get("/products", productController.list);
-app.get("/products/search/:word", productController.searchAndList);
+/**
+ * Products get put post delete
+ */
+ app.get("/products", productController.list);
+ app.get("/products/search/:word", productController.searchAndList);
+
+
+/**
+ * Producers get put post delete
+ */
 app.get("/producers", producerController.list);
+
+
+// 
+app.put("/producers", async (req,res) => {
+  await service.insert(req,res)
+})
+
 
 /**
  * Server stack set-up

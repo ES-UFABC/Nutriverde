@@ -191,7 +191,7 @@ export class ProductDAO {
             const seqColl = dbConnect.getDb()
                 .collection(config.db.collections.sequences)
             const result = await seqColl.findOneAndUpdate(
-                { name: "Product_id" },
+                { name: "product_id" },
                 { $inc: { value: 1 } })
 
             if (result.ok) {

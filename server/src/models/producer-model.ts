@@ -143,6 +143,7 @@ export class ProducerDAO {
             const newId = await this.nextId()
             Producer.id = newId
             const response = await this.getCollection().insertOne(Producer)
+            console.log(response)
             if(!response || response.insertedCount < 1 ){
                 throw Error("Invalid result while inserting a post ")
             }
@@ -158,7 +159,7 @@ export class ProducerDAO {
         try {
             const seqColl = await dbConnection.getDb().collection(config.db.collections.sequences)
             const result = await seqColl.findOneAndUpdate(
-                { name: "Producer_id" },
+                { name: "producer_id" },
                 { $inc: { value: 1 } })
 
             if (result.ok) {
