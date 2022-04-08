@@ -4,6 +4,7 @@ import { config } from "./config";
 import * as productController from "./controllers/product-controller";
 
 import * as producerService from "./producer-service"
+import * as userService from "./user-service"
 
 
 import cors from "cors";
@@ -46,6 +47,13 @@ app.put("/register", async (req,res) => {
   console.log("Estou registrando")
 })
 
+app.get("/producers/:id", async (req,res) =>
+  await producerService.ProducerService.getInstance().findById(req,res)
+);
+
+app.get("/users/:id", async (req,res) =>
+  await userService.UserService.getInstance().findById(req,res)
+);
 
 
 /**

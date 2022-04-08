@@ -130,7 +130,7 @@ export class UserDAO {
      */
      async findById(id: number): Promise<User> {
         try {
-            const response = await this.getCollection().findOne({id: id})
+            const response = await this.getCollection().findOne({id: id , fantasyName : { $exists : false } })
 
             if (response) {
                 return User.decode(response)
