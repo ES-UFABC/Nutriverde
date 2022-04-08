@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/layout";
-import Image from "next/image";
 import Carousel from "../components/carousel";
 import { SearchIcon } from "@heroicons/react/outline";
-import NumberFormat from "react-number-format";
-import Link from "next/link";
+import ProductCard from "../components/product-card";
 
 interface IProducts {
   id: number;
@@ -75,44 +73,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
           {products.map((item) => (
-            <Link key={item.id} href={`/products/${item.id}`}>
-              <a className="flex flex-col items-center bg-white rounded-lg border shadow-md hover:bg-gray-100">
-                <div className="flex w-full h-full relative justify-center">
-                  <Image
-                    className="object-cover w-full h-96 rounded-none rounded-t-lg"
-                    src="/placeholder.png"
-                    width={125}
-                    height={125}
-                    alt={item.name}
-                  />
-                </div>
-                <div className="flex flex-col justify-between px-4 py-2 leading-normal w-full">
-                  <div className="flex flex-row justify-between">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                      {item.name}
-                    </h5>
-                    <p>
-                      <NumberFormat
-                        className="font-bold text-emerald-800 text-2xl"
-                        value={item.price}
-                        displayType="text"
-                        prefix="R$"
-                        decimalSeparator=","
-                        thousandSeparator="."
-                        decimalScale={2}
-                        fixedDecimalScale
-                      />{" "}
-                      <span>cada {item.unitOfMeas}</span>
-                    </p>
-                  </div>
-                  <hr className="mb-2 w-full" />
-                  <p>
-                    <span className="font-bold">Tipologia</span>:{" "}
-                    {item.typology}
-                  </p>
-                </div>
-              </a>
-            </Link>
+            <ProductCard item = {item}/>
           ))}
         </div>
       </div>
