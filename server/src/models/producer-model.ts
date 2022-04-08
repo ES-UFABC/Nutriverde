@@ -181,7 +181,7 @@ export class ProducerDAO {
 
     async listAll() : Promise<Producer[]>{
         try {
-            const response = await this.getCollection().find({},
+            const response = await this.getCollection().find( { fantasyName : { $exists : true } } ,
                 {projection : {_id:0}}
             ).toArray() || []
             if( response ){

@@ -174,8 +174,10 @@ export class UserDAO {
             throw error
         }
     }
-
-    async listAll() : Promise<User[]>{
+    /***
+     * @deprecated
+     */
+    async listAll() : Promise<User[]>{ 
         try {
             const response = await this.getCollection().find({},
                 {projection : {_id:0}}
