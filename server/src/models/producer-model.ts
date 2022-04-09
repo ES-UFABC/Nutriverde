@@ -69,6 +69,7 @@ export class Producer {
     organic!: boolean
     externalWebPages!: [string]
     productionsClassification!: [string]
+    [index:string]:any
 
     constructor(name: string, paymentMethods: string, fantasyName: string, email: string) {
         this.id = 0
@@ -103,6 +104,10 @@ export class Producer {
         }
         
         const producer = new Producer(json.name, json.paymentMethods, json.fantasyName, json.email)
+
+        Object.keys(json).forEach(key =>{
+                producer[key] = json[key]
+        })
 
         if ("id" in json) {
             producer.id = parseInt(json.id)

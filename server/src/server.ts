@@ -35,6 +35,7 @@ dbConnect
     console.error(error.stack);
   });
 
+// producerController.mockPeerAdd(5) // uncoment if want to add mocker Procucers
 /**
  * Server stack tear-down
  */
