@@ -2,7 +2,42 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/layout";
 
 export default function Contato() {
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [step, setstep] = useState(0);
+
+  // name: string;
+  // description: string;
+  // unitOfMeas: string;
+  // typology: string;
+  // price: number;
+  // specialDeliveryConditions: string;
+  // cropDate: string;
+  // quantity: number;
+  // cover: string;
+  // producerId: number;
+
+  const sendData = async (e) => {
+    e.preventDefault();
+    const res = await fetch({
+      url: serverUrl + "/products",
+      method: "POST",
+      body: {
+        name: dataForm.nameprod,
+        typology: dataForm.typeprod,
+        quantity: dataForm.quantprod,
+        cropDate: dataForm.prodcrop,
+        price: dataForm.prodprice,
+        specialDeliveryConditions: dataForm.proddelivery,
+        description: dataForm.proddescription,
+        unitOfMeas: "KG",
+        producerId: 1,
+      },
+    });
+    const json = await res.json();
+    console.log(json);
+  };
+
+  
 
   const [dataForm, setDataForm] = useState({
     nameprod: "",
@@ -10,19 +45,21 @@ export default function Contato() {
     quantprod: "",
     prodcrop: "",
     prodprice: "",
-    proddescription: ""
+    proddelivery: "",
+    proddescription: "",
   });
+
   const onChangeInput = (e) =>
     setDataForm({ ...dataForm, [e.target.name]: e.target.value });
 
-  const sendContact = async (e) => {
-    e.preventDefault();
-    console.log(dataForm.inputproduct);
-  };
+  // const sendContact = async (e) => {
+  //   e.preventDefault();
+  //   console.log(dataForm.inputproduct);
+  // };
 
   return (
     <Layout title="Registro de Produtos">
-      <form onSubmit={sendContact}>
+      <form onSubmit={sendData}>
         <div className=" ">
           {/* <div className=" ">
             <ul className="steps steps-horizontal lg:steps-horizontal ">
@@ -58,7 +95,7 @@ export default function Contato() {
                 <div>
                   <h2>Tipo do produto:</h2>
                   <input
-                    type="number"
+                    type="text"
                     name="typeprod"
                     className="w-1/2  "
                     placeholder="Selecione o tipo"
@@ -114,18 +151,21 @@ export default function Contato() {
                 </div>
                 <br />
                 <br />
-                <div className="flex ">
-                  <button type="" className="">
-                    Buscar no local
-                  </button>
-                  <br />
 
-                  <button type="" className="">
-                    Entrega própria
-                  </button>
-                  <br />
-                  <br />
+                <div>
+                  <h2>Condições de entrega:</h2>
+                  <input
+                    type="text"
+                    name="proddelivery"
+                    className="w-1/2  "
+                    placeholder="Busca no local ou entrega própria?"
+                    onChange={onChangeInput}
+                    value={dataForm.proddelivery}
+                  />
                 </div>
+
+                <br />
+                <br />
               </div>
             )}
             {step === 2 && (
