@@ -17,6 +17,7 @@ app.use(cors());
 app.get("/products", productController.list);
 app.get("/products/search/:word", productController.searchAndList);
 app.get("/producers", producerController.list);
+app.get("/producers/:id", producerController.findById);
 
 /**
  * Server stack set-up
