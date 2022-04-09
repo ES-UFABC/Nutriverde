@@ -9,17 +9,32 @@ import * as dbConnect from "./db-connection"
  * 
  * 
  *  
- * "phone" : [ "1234145" ], "comerceAddress" : 
- * [ "Alphaville" ], "productionAddress" : 
- * [ "Alphaville" ], "cpfOrCnpj" : "12312512", "certifications" : [ ],
- *  "agroEcological" : false, "agroEcologicalCertifications" : [ ], 
+ * "phones" : [ "123456789" ],
+ * "productionAddress" :  ["Deltafarm","123","bairro","01234-567","Municipio"] ,
+ * "productionRegion": "Comunidade Azul",
+ * "negotiateOnProductionSite" : true,
+ * 
+ * "businessAddress" : ["Alphaville","142","bairro","01234-567","Municipio"] ,
+ * "bussinessType" : "single",
+ * "georeferencedLocalization" : { "lat": 90, "lng":123 }, 
+ * 
+ * "affiliatedEntities" : [ ],
+ * 
+ * "cpfOrCnpj" : "123456789-A",
+ * "licensed": false,
+ * "certifications" : [ ],
+ * 
+ * "agroEcological" : false,
+ * "agroEcologicalCertifications" : [ ], 
+ * 
  * "organical" : true, , 
- * "georeferencedLocalization" : [ "L90,G123" ], 
- * "externalWebPages" : [ ], "productionClassification" : 
- * [ "Tuberculos e raizes" ], "isNative" : true, 
- * "localMarketPlace" : "Feira de quinta", "dapFísica" : "" }
+ * "externalWebPages" : [ ],
+ * "isNative" : true, 
  * 
+ * "productionsClassification" : [ "Tuberculos e raizes" ],
  * 
+ * "localMarketPlace" : "Feira de quinta",
+ * "dapFísica" : "" }
  * 
  */
 export class Producer {
@@ -28,6 +43,32 @@ export class Producer {
     fantasyName: string
     email: string
     paymentMethods: string
+    phones!: [string]
+    productionAddress!: {
+        street: string;
+        codeId: string;
+        district: string;
+        cep: string;
+        county: string; }
+    productionRegion!: string
+    negotiateOnProductionSite!: boolean
+    businessAddress!: {
+        street: string;
+        codeId: string;
+        district: string;
+        cep: string;
+        county: string; }
+    businessIsCollective!: boolean
+    geoReferencedLocalization!: { lat: number; lng: number; }
+    affiliatedEntities!: [string]
+    cpfOrCnpj!: string
+    licensed!: boolean
+    certificationsAndRecords!: [string]
+    agroEcological!: boolean
+    agroEcologicalCertifications!: [string]
+    organic!: boolean
+    externalWebPages!: [string]
+    productionsClassification!: [string]
 
     constructor(name: string, paymentMethods: string, fantasyName: string, email: string) {
         this.id = 0
@@ -37,6 +78,14 @@ export class Producer {
         this.paymentMethods = paymentMethods
     }
 
+    // constructor(json:any) {
+    //     Object.keys(json).forEach(
+    //         (key:string) => {
+    //             if(key in this) {
+    //                 this[key] = json[key]
+    //             }
+    //         })
+    // }
     isValid() {
         return this.name.length > 0 && this.paymentMethods.length > 0
     }

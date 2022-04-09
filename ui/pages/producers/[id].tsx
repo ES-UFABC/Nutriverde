@@ -16,35 +16,34 @@ interface IProducer {
     fantasyName: string;
     email: string;
     paymentMethods: [string];
-    // phones : [ string ];
-    // productionAddress : {
-    //     street: string;
-    //     number: string;
-    //     district: string;
-    //     cep: string;
-    //     county: string; };
-    // productionRegion: string;
-    // negotiateOnProductionSite : true;
-    // businessAddress : {
-    //     street: string;
-    //     number: string;
-    //     district: string;
-    //     cep: string;
-    //     county: string; };
-    // bussinessType: string;
-    // georeferencedLocalization: { lat: number; lng: number; };
-    // affiliatedEntities: [ ];
-    // cpfOrCnpj: string;
-    // licensed: boolean;
-    // certifications : [ ];
-    // agroEcological: boolean;
-    // agroEcologicalCertifications : [ string ];
-    // organic: boolean;
-    // externalWebPages: [ ];
-    // isNative: boolean;
-    // productionsClassification: [ string ];
-
+    phones: [ string ];
+    productionAddress : {
+        street: string;
+        codeId: string;
+        district: string;
+        cep: string;
+        county: string; };
+    productionRegion: string;
+    negotiateOnProductionSite: boolean;
+    businessAddress : {
+        street: string;
+        codeId: string;
+        district: string;
+        cep: string;
+        county: string; };
+    businessIsCollective: boolean;
+    geoReferencedLocalization: { lat: number; lng: number; };
+    affiliatedEntities: [ string ];
+    cpfOrCnpj: string;
+    licensed: boolean;
+    certificationsAndRecords : [ string ];
+    agroEcological: boolean;
+    agroEcologicalCertifications : [ string ];
+    organic: boolean;
+    externalWebPages: [ string ];
+    productionsClassification: [ string ];
 };
+
 const render = (status: Status) => {
     return <h1>{status}</h1>;
 };
