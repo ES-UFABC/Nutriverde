@@ -1,9 +1,38 @@
 import React, { useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
 import Layout from "../components/layout";
 
 export default function Contato() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [step, setstep] = useState(0);
+  const [files, setFiles] = useState([]);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    onDropAccepted: async (files) => {
+      // Uploads files to server.
+      uploadedFiles = files.map(async (f) => {
+        const data = new FormData();
+        data.append("file", f);
+
+        const res = await fetch({
+          url: `${serverUrl}/files`,
+          method: "POST",
+          body: data,
+        });
+
+        if (res.status < 200 && res.status >= 400) {
+          console.error("error uploading file", res);
+          return Object.assign(f, { preview: "" });
+        }
+
+        const json = await res.json();
+        return Object.assign(f, { preview: `${serverUrl}/files/${json.name}` });
+      });
+
+      setFiles(uploadedFiles);
+    },
+  });
 
   // name: string;
   // description: string;
@@ -36,8 +65,6 @@ export default function Contato() {
     const json = await res.json();
     console.log(json);
   };
-
-  
 
   const [dataForm, setDataForm] = useState({
     nameprod: "",
@@ -118,6 +145,24 @@ export default function Contato() {
                 </div>
                 <br />
                 <br />
+
+                <section className="container">
+                  <div {...getRootProps({ className: "dropzone" })}>
+                    <input {...getInputProps()} />
+                    <p>
+                      Drag 'n' drop some files here, or click to select files
+                    </p>
+                  </div>
+                  <aside>
+                    {files.map((file) => (
+                      <div key={file.name}>
+                        <div>
+                          <img src={file.preview} />
+                        </div>
+                      </div>
+                    ))}
+                  </aside>
+                </section>
               </div>
             )}
 
