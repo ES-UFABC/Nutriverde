@@ -3,7 +3,7 @@ import * as dbConnect from "./models/db-connection";
 import { config } from "./config";
 import * as producerService from "./service/producer-service"
 import * as userService from "./service/user-service"
-
+import * as  productService from "./service/product-service"
 
 import cors from "cors";
 import { ok } from "assert";
@@ -22,9 +22,13 @@ app.use(cors());
 /**
  * Products routes TODO:
  */
- app.get("/products",);
- app.get("/products/search/:word");
+ app.get("/products", async (req,res) =>
+    await productService.ProductService.getInstance().listAll(req,res)
+ );
 
+ app.get("/products/search/:word", async (req,res) =>
+  await productService.ProductService.getInstance().listAllByName(req,res)
+ );
 
 
 /**
