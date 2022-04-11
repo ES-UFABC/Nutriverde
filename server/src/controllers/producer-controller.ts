@@ -25,15 +25,8 @@ export async function findById(req: e.Request, res: e.Response) {
   }
 }
 
-export async function mockPeerAdd (quatity:number) {
+export async function mockAdd (quatity:number) {
   try {
-
-    // const p = new Producer(
-    //   /*name:*/ "meu nome é",
-    //   /*paymentMethods:*/ "cx1", 
-    //   /*fantasyName: */"jk,men", 
-    //   /*email:*/ "string@mentir.com"
-    // );
     for (let index = 0; index < quatity; index++) {
 
       const p = Producer.decode(mocker.newProducer());

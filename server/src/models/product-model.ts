@@ -14,9 +14,10 @@ export class Product {
     specialDeliveryConditions: string
     quantity : number
     cover: string
+    producerId: number
 
     constructor(name: string, unitOfMeas: string,
-        typology: string, specialDeliveryConditions: string , quantity : number) {
+        typology: string, specialDeliveryConditions: string , quantity : number,producerId: number) {
         this.id = 0
         this.name = name
         this.unitOfMeas = unitOfMeas
@@ -25,6 +26,7 @@ export class Product {
         this.specialDeliveryConditions = specialDeliveryConditions
         this.cover = ""
         this.quantity = quantity
+        this.producerId = producerId
     }
 
     isValid(): boolean {
@@ -49,7 +51,8 @@ export class Product {
             json.unitOfMeas, 
             json.typology, 
             json.specialDeliveryConditions,
-            json.quantity)
+            json.quantity,
+            parseInt(json.producerId))
 
         if ("id" in json) {
             product.id = parseInt(json.id)
@@ -152,6 +155,25 @@ export class ProductDAO {
     }
 
     /**
+     * Find Product using its Producer id
+     * @param id the Product Producer id
+     */
+         async findByProducerId(id: number): Promise<Product[]> {
+            try {
+                console.log( "model: id= %d: %s", id, typeof id)
+                const response = await this.getCollection().find(
+                    { producerId: id }
+                ).toArray() || [] 
+                if(response){
+                    return response as Product[]
+                }
+                throw Error("Erro ao buscar por elemento")
+            } catch (error) {
+                console.error("Failed to find item by id")
+                 throw error
+            }
+        }
+    /**
      * Uptypology the given Product in the database
      * (Assumes the Product id already exists)
      * @param Product the Product
@@ -191,7 +213,7 @@ export class ProductDAO {
             const seqColl = dbConnect.getDb()
                 .collection(config.db.collections.sequences)
             const result = await seqColl.findOneAndUpdate(
-                { name: "Product_id" },
+                { name: "product_id" },
                 { $inc: { value: 1 } })
 
             if (result.ok) {

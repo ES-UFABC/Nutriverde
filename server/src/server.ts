@@ -18,6 +18,7 @@ app.get("/products", productController.list);
 app.get("/products/search/:word", productController.searchAndList);
 app.get("/producers", producerController.list);
 app.get("/producers/:id", producerController.findById);
+app.get("/producers/:id/products", productController.findByProducerId);
 
 /**
  * Server stack set-up
@@ -35,7 +36,8 @@ dbConnect
     console.error(error.stack);
   });
 
-// producerController.mockPeerAdd(5) // uncoment if want to add mocker Procucers
+// producerController.mockAdd(5) // if want to add mocker Procucers
+// productController.mockAdd(5,10) // if want to add mocker Procucts, from 1st to (n1)th Procucer, exact (n2) Products
 /**
  * Server stack tear-down
  */
