@@ -9,7 +9,7 @@ db = connect("127.0.0.1:27017/NutriVerde");
  */
 db.createCollection("sequences");
 db.sequences.insertOne({
-  name: "producer_id",
+  name: "user_id",
   value: 1,
 });
 db.sequences.insertOne({
@@ -18,7 +18,7 @@ db.sequences.insertOne({
 });
 function nextProducerId() {
   return db.sequences.findOneAndUpdate(
-    { name: "producer_id" },
+    { name: "user_id" },
     { $inc: { value: 1 } }
   ).value;
 }

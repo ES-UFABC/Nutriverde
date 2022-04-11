@@ -1,17 +1,15 @@
 import e from "express";
 import * as dbConnect from "./models/db-connection";
 import { config } from "./config";
-import * as productController from "./controllers/product-controller";
-
-import * as producerService from "./producer-service"
-import * as userService from "./user-service"
+import * as producerService from "./service/producer-service"
+import * as userService from "./service/user-service"
 
 
 import cors from "cors";
 import { ok } from "assert";
 
 
-import * as service from "./producer-service"
+import * as service from "./service/producer-service"
 /**
  * Configure session middleware
  */
@@ -22,38 +20,37 @@ app.use(e.urlencoded({ extended: true })); // to use
 app.use(cors());
 
 /**
- * Products get put post delete
+ * Products routes TODO:
  */
- app.get("/products", productController.list);
- app.get("/products/search/:word", productController.searchAndList);
+ app.get("/products",);
+ app.get("/products/search/:word");
 
 
 
 /**
- * Producers get put post delete
+ * Producers routes
  */
 app.get("/producers", async (req,res) =>
   await producerService.ProducerService.getInstance().listAll(req,res)
 );
 
-
 app.get("/producers/:id", async (req,res) =>
   await producerService.ProducerService.getInstance().findById(req,res)
 );
 
 
-app.put("/register", async (req,res) => {
-  await producerService.ProducerService.getInstance().insert(req,res)
-  console.log("Estou registrando")
-})
-
-app.get("/producers/:id", async (req,res) =>
-  await producerService.ProducerService.getInstance().findById(req,res)
-);
-
+/**
+ * Users routes
+ */
 app.get("/users/:id", async (req,res) =>
   await userService.UserService.getInstance().findById(req,res)
 );
+// TODO: 
+app.put("/register", async (req,res) => {
+  await userService.UserService.getInstance().insert(req,res)
+  console.log("Estou registrando")
+})
+
 
 
 /**

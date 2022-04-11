@@ -1,6 +1,6 @@
 import e from "express";
-import * as producerModel from "./models/producer-model";
-import * as userModel from "./models/user-model";
+import * as producerModel from "../models/producer-model";
+import * as userModel from "../models/user-model";
   
   /**
    * Custom exception to signal a database error
@@ -65,7 +65,9 @@ import * as userModel from "./models/user-model";
      */
     async insert(req: e.Request, res: e.Response) {
         try {
-        const producer = producerModel.Producer.decode(req.body)
+        
+        console.log(req.body) // DEBUG: 
+        const producer = producerModel.Producer.decode(req.body) // o erro está aqui campos obrigatorios dele
         const response = await producerModel.ProducerDAO.getInstance().insert(producer)
         res.status(200).json({ items: producer, message: "success" });
         } catch (error) {

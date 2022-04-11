@@ -211,7 +211,7 @@ export class UserDAO {
         try {
             const seqColl = await dbConnection.getDb().collection(config.db.collections.sequences)
             const result = await seqColl.findOneAndUpdate(
-                { name: "User_id" },
+                { name: "user_id" },
                 { $inc: { value: 1 } })
 
             if (result.ok) {

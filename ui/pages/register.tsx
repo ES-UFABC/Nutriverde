@@ -14,19 +14,32 @@ interface IProducer { // tornar publico ao front-end
     paymentMethods: string; // string [] 
   }
 
+
 export default function Register() {
 
     async function submit(e: any) {
       try {
         e.preventDefault();
-        console.log(e)
-        const namee = e.target.name.value;
-        const fantasyNamee = e.target.fantasyName.value;
+
+        const name = e.target.name.value;
         const email = e.target.email.value;
+        const cpf = e.target.cpf.value;
+        const phone = [e.target.telefone.value]; 
+        const endereço = [e.target.endereço.value]; 
+        const floating_password = e.target.floating_password.value; 
+        const floating_repeat_password = e.target.floating_repeat_password.value; 
+
+        const corpo =  JSON.stringify({ name : `${name}`,
+
+        email : `${email}` , cpf:`${cpf}`, address:`${endereço}`, password:`${floating_password}`,
+      phones:`${phone}`})
+
+      console.log(corpo)
         const requestOptions = {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name : `${namee}` , fantasyName : `${fantasyNamee}`, email : `${email}`})
+          body: corpo
+          
       };
         const path = "register";
         const res = await fetch(`http://localhost:3000/${path}`, requestOptions);

@@ -1,6 +1,5 @@
 import e from "express";
-import * as userModel from "./models/user-model";
-  
+import * as userModel from "../models/user-model";
   /**
    * Custom exception to signal a database error
    */
@@ -9,7 +8,7 @@ import * as userModel from "./models/user-model";
   
   
   /**
-   * A singleton service to perform CRUD operations over a user
+   * A singleton service to perform CRUD operations over a User
    */
   export class UserService {
     private static instance: UserService
@@ -23,19 +22,19 @@ import * as userModel from "./models/user-model";
         return this.instance
     }
     /**
-     * 
+     * @deprecated 
      * @param req 
      * @param res 
      */
     async listAll(req: e.Request, res: e.Response) {
         try {
 
-        const users = await userModel.UserDAO.getInstance().listAll();
-        console.log(users)
-        res.status(200).json({ items: users, message: "success" });
+        const Users = await userModel.UserDAO.getInstance().listAll();
+        console.log(Users)
+        res.status(200).json({ items: Users, message: "success" });
         } catch (error) {
         console.error(error);
-        res.status(500).json({ items: [], message: "error retrieving users" });
+        res.status(500).json({ items: [], message: "error retrieving Users" });
         }
     }
 
@@ -48,11 +47,11 @@ import * as userModel from "./models/user-model";
         try {
         const id = Number(req.params.id)
         console.log(req.params)
-        const users = await userModel.UserDAO.getInstance().findById(id);
-        res.status(200).json({ items: users, message: "success" });
+        const Users = await userModel.UserDAO.getInstance().findById(id);
+        res.status(200).json({ items: Users, message: "success" });
         } catch (error) {
         console.error(error);
-        res.status(500).json({ items: [], message: "error retrieving users" });
+        res.status(500).json({ items: [], message: "error retrieving Users" });
         }
     }
 
@@ -64,12 +63,14 @@ import * as userModel from "./models/user-model";
      */
     async insert(req: e.Request, res: e.Response) {
         try {
-        const user = userModel.User.decode(req.body)
-        const response = await userModel.UserDAO.getInstance().insert(user)
-        res.status(200).json({ items: user, message: "success" });
+        
+        const User = userModel.User.decode(req.body) 
+        console.log(User)
+        const response = await userModel.UserDAO.getInstance().insert(User)
+        res.status(200).json({ items: User, message: "success" });
         } catch (error) {
         console.error(error);
-        res.status(500).json({ items: [], message: "error inserting users" });
+        res.status(500).json({ items: [], message: "error inserting Users" });
         }
     }
 
@@ -79,25 +80,25 @@ import * as userModel from "./models/user-model";
         // DELETE COM um certo corpo // key 
         // decode em "req.body" 
         const name = req.body.name || ""
-        const user = await userModel.UserDAO.getInstance().findByname(name) // debug
+        const User = await userModel.UserDAO.getInstance().findByname(name) // debug
         const response = await userModel.UserDAO.getInstance().removeByname(name)
-        res.status(200).json({ items: user, message: "success" });
+        res.status(200).json({ items: User, message: "success" });
         } catch (error) {
         console.error(error);
-        res.status(500).json({ items: [], message: "error removing users" });
+        res.status(500).json({ items: [], message: "error removing Users" });
         }
     }
 
     async update(req: e.Request, res: e.Response) {
         try {
         
-        const user = await userModel.User.decode(req.body) 
-        const response = await userModel.UserDAO.getInstance().update(user)
+        const User = await userModel.User.decode(req.body) 
+        const response = await userModel.UserDAO.getInstance().update(User)
 
-        res.status(200).json({ items: user, message: "success" });
+        res.status(200).json({ items: User, message: "success" });
         } catch (error) {
         console.error(error);
-        res.status(500).json({ items: [], message: "error updating users" });
+        res.status(500).json({ items: [], message: "error updating Users" });
         }
     }
     
