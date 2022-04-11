@@ -25,7 +25,7 @@ export async function findById(req: e.Request, res: e.Response) {
   }
 }
 
-export async function mockPeerAdd (quatity:number) {
+export async function mockAdd (quatity:number) {
   try {
 
     // const p = new Producer(

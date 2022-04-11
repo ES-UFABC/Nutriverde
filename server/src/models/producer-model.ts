@@ -105,7 +105,8 @@ export class Producer {
         
         const producer = new Producer(json.name, json.paymentMethods, json.fantasyName, json.email)
 
-        Object.keys(json).forEach(key =>{
+        Object.keys(Producer).forEach(key =>{
+            if(key in json)
                 producer[key] = json[key]
         })
 

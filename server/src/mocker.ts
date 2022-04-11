@@ -69,7 +69,7 @@ function externalWebPages() {
     return falso.randDomainName({ length: falso.randNumber({ min: 0, max: 3}) })
 }
 
-function productionsClassification() {
+function productionsClassification(max = 6) {
     return falso.rand(
         [
             "Cereais",
@@ -86,7 +86,7 @@ function productionsClassification() {
             "Chás e ervas ",
             "Macaxeira, Aipim, Batata e outras raízes"
         ],
-        { length: falso.randNumber({ min: 0, max: 6}) }
+        { length: falso.randNumber({ min: 0, max: max}) }
     )
 }
 
@@ -115,4 +115,19 @@ export function newProducer() {
       productionsClassification: productionsClassification(),
     }
     return producer
+}
+
+export function newProduct(producerId: number) {
+    const product = {
+        id: 0,
+        name: falso.randColor() + falso.randShape(),
+        unitOfMeas: falso.rand(["Kg","unidade","cacho","pacote","caixa"], { length: 1 }), // the unitOfMeas username
+        typology: productionsClassification(1),
+        price: falso.randNumber({ min: 5, max: 50, precision: 0.5 }),
+        specialDeliveryConditions: "",
+        quantity : falso.randNumber({ min: 1, max: 50 }),
+        cover: "",
+        producerId: producerId,
+    }
+    return product
 }

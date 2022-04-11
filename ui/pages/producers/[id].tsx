@@ -1,5 +1,5 @@
-import { Status, Wrapper } from "@googlemaps/react-wrapper";
-import { /*useEffect, useState*/ useRef } from "react";
+// import { Status, Wrapper } from "@googlemaps/react-wrapper";
+// import { useEffect, useState, useRef } from "react";
 import Layout from "../../components/layout";
 import Image from "next/image";
 // import Map from "../../components/map";
@@ -44,9 +44,9 @@ interface IProducer {
     productionsClassification: [ string ];
 };
 
-const render = (status: Status) => {
-    return <h1>{status}</h1>;
-};
+// const render = (status: Status) => {
+//     return <h1>{status}</h1>;
+// };
 
 
 export default function ProducerAbout(props:any) {
@@ -55,7 +55,8 @@ export default function ProducerAbout(props:any) {
     const products = props.products || [];
     // const map = ref.current ? new window.google.maps.Map(ref.current, {}) : {};
     
-    const center = {lat: -23.64161, lng: -46.73097};
+    // const center = {lat: -23.64161, lng: -46.73097};
+    // const center = producer.geoReferencedLocalization;
     console.log('producer',producer && producer);
     console.log('products',products && products);
 
@@ -126,11 +127,12 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context:any) {
-    const resProducer = await fetch(`http://localhost:3000/producers/${context.params.id}`);
+    const path = `producers/${context.params.id}`;
+    const resProducer = await fetch(`http://localhost:3000/${path}`);
     const producerMessage = await resProducer.json()
     const producer:IProducer = producerMessage.item;
     // TODO: connect true routes
-    const resProducts = await fetch(`http://localhost:3000/products`);
+    const resProducts = await fetch(`http://localhost:3000/${path}/products`);
     const productsMessage = await resProducts.json()
     const products = productsMessage.items;
     return { props: {
