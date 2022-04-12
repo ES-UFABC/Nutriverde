@@ -4,6 +4,7 @@ import { config } from "./config";
 import * as productService from "./services/product";
 import * as fileService from "./services/file";
 import * as producerController from "./controllers/producer-controller";
+import * as productController from "./controllers/product-controller"
 import cors from "cors";
 import multer from "multer";
 
@@ -44,11 +45,12 @@ dbConnect
     console.error(error.stack);
   });
 
-// producerController.mockAdd(5) // if want to add mocker Procucers
-// productController.mockAdd(5,10) // if want to add mocker Procucts, from 1st to (n1)th Procucer, exact (n2) Products
+ //producerController.mockAdd(5) // if want to add mocker Procucers
+ //productController.mockAdd(5,10) // if want to add mocker Procucts, from 1st to (n1)th Procucer, exact (n2) Products
 /**
  * Server stack tear-down
  */
+
 process.on("exit", (code) => {
   console.log(`Server exiting with code ${code}`);
 });

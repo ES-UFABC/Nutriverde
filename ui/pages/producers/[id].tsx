@@ -76,8 +76,8 @@ export default function ProducerAbout(props:any) {
     
     // const center = {lat: -23.64161, lng: -46.73097};
     // const center = producer.coord || {lat:-23.06, lng:-46.5};
-    // console.log('products',products && products);
-    // console.log('products',products && products);
+     console.log('products',products && products);
+     console.log('products',products && products);
 
 
     // useEffect(() => {
@@ -132,7 +132,8 @@ export default function ProducerAbout(props:any) {
             <p>
                 <p><span className="font-bold">Métodos de Pagamento</span>: {producer.paymentMethods && producer.paymentMethods.map((pa:string) => pa+", ")}
             </p> */}
-            <div className="">
+            
+            {/* <div className="">
                 <p><span className="font-bold">Responsável</span>: {producer.name}</p>
                 <p><span className="font-bold">E-mail</span>: {" "}
                 <a
@@ -143,21 +144,21 @@ export default function ProducerAbout(props:any) {
                 </a></p>
                 <p><span className="font-bold">Métodos de Pagamento</span>: 
                 {producer.paymentMethods.length<1?"nenhum":producer.paymentMethods.map(doc => " '"+doc+"'")}</p>
-                <p><span className="font-bold">Telefones</span>: {producer.phones.length<1?"nenhum":producer.phones.map(doc => ' '+doc+' ')}</p>
-                {/* <p><span className="font-bold">Responsável</span>: {producer.productionAddress} */}
+                <p><span className="font-bold">Telefones</span>: {producer.phones&&producer.phones.length<1?"nenhum":producer.phones.map(doc => ' '+doc+' ')}</p>
+                <p><span className="font-bold">Responsável</span>: {producer.productionAddress}
                 <p><span className="font-bold">Comunidade ou Região de Produção</span>: {producer.productionRegion}</p>
                 <p><span className="font-bold">Atente no endereço de produção</span>: {producer.negotiateOnProductionSite===true?"sim":"não"}</p>
-                {/* <p><span className="font-bold">Responsável</span>: {producer.businessAddress} */}
+                <p><span className="font-bold">Responsável</span>: {producer.businessAddress}
                 <p><span className="font-bold">Tipo de Produtor</span>: {producer.businessIsCollective===true?"Coletivo":"Individual"}</p>
                 <p><span className="font-bold">Cadastrado em Entidades</span>: 
                     {producer.affiliatedEntities.length<1?"nenhuma":
                         producer.affiliatedEntities.map(doc => ' "'+doc+'"')}</p>
                 <p><span className="font-bold">Documento(CPF ou CNPJ)</span>: {producer.cpfOrCnpj}</p>
                 <p><span className="font-bold">Produtor licenciado?</span>: {producer.licensed===true?"sim":"não"}</p>
-            </div>
+            </div> */}
 
 
-            <div className="">
+            {/* <div className="">
                 <p><span className="font-bold">Registros ou Certificações</span>:
                     {producer.certificationsAndRecords.length<1?"nenhum":
                         producer.certificationsAndRecords.map(doc => ' "'+doc+'"')}</p>
@@ -178,7 +179,9 @@ export default function ProducerAbout(props:any) {
                 <p><span className="font-bold">Tipos de Produção</span>: 
                     {producer.productionsClassification.length<1?"nenhuma":
                         producer.productionsClassification.map(doc => ' "'+doc+'"')}</p>
-            </div>
+            </div> */}
+
+
             <div style={{ display: "flex", height: "200px" }}> 
                 {/* <Wrapper
                     apiKey={"AIzaSyCXGJse38b65vXJStGzFD3r7-CuC0TjPgk"}
@@ -204,28 +207,30 @@ export default function ProducerAbout(props:any) {
     );
 }
 
-//  async function getStaticPaths() {  
-// //     const res = await fetch(`http://localhost:3000/producers`);
-// //     const j = await res.json()
-// //     const producers = j.items;
-// //     // console.log('producers:', producers);
-// //     // Get the paths we want to pre-render based on producers
-// //     const paths = producers.map((producer:any) => ({
-// //       params: { id: producer.id.toString() },
-// //     }))
-//     return { paths:[], fallback: true }
-// }
+ export async function getStaticPaths() {  
+//     const res = await fetch(`http://localhost:3000/producers`);
+//     const j = await res.json()
+//     const producers = j.items;
+//     // console.log('producers:', producers);
+//     // Get the paths we want to pre-render based on producers
+//     const paths = producers.map((producer:any) => ({
+//       params: { id: producer.id.toString() },
+//     }))
+    return { paths:[], fallback: true }
+}
 
-//  async function getStaticProps(context:any) {
-//     const path = `producers/${context.params.id}`;
-//     const resProducer = await fetch(`http://localhost:3000/${path}`);
-//     const producerMessage = await resProducer.json()
-//     const producer:IProducer = producerMessage.item;
-//     const resProducts = await fetch(`http://localhost:3000/${path}/products`);
-//     const productsMessage = await resProducts.json()
-//     const products = productsMessage.items;
-//     return { props: {
-//         producer,
-//         products
-//       } }
-// }
+export async function getStaticProps(context:any) {
+     console.log("Chamei",context)
+    const path = `producers/${context.params.id}`;
+    const resProducer = await fetch(`http://localhost:3000/${path}`);
+    const producerMessage = await resProducer.json()
+    const producer:IProducer = producerMessage.item;
+    const resProducts = await fetch(`http://localhost:3000/${path}/products`);
+    const productsMessage = await resProducts.json()
+    console.log(productsMessage)
+    const products = productsMessage.items;
+    return { props: {
+        producer,
+        products
+      } }
+}

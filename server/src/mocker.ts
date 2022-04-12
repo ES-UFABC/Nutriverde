@@ -128,6 +128,8 @@ export function newProduct(producerId: number) {
         quantity : falso.randNumber({ min: 1, max: 50 }),
         cover: "",
         producerId: producerId,
+        description: falso.randProductDescription(),
+        cropDate : falso.randFutureDate({})
     }
     return product
 }
