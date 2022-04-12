@@ -5,7 +5,7 @@ import * as falso from '@ngneat/falso';
 //     return falso.randNumber({ min:min, max:max })
 // }
 export function randomRange(){
-    return falso.randNumber({ min:4, max:24 })
+    return falso.randNumber({ min:0, max:24 })
 }
 function paymentMethods() {
     return ["cx1","cx2","cx3"]
@@ -160,7 +160,6 @@ export function newProducer() {
     externalWebPages!: [string]
     productionsClassification!: [string]
     [index:string]:any
-    producerPaymentMehods: string[]
  */
 
 
