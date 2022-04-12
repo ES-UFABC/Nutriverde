@@ -3,10 +3,10 @@ import Image from "next/image";
 import NumberFormat from "react-number-format";
 import Link from "next/link";
 
-export default function ProducerCard(props:any){
+export default function ProductCard(props:any){
     const item = props.item;
     return (
-        <Link key={item.id} href={`/products/${item.id}`}>
+        <Link  href={`/products/${item.id}`}>
             <a className="flex flex-col items-center bg-white rounded-lg border shadow-md hover:bg-gray-100">
             <div className="flex w-full h-full relative justify-center">
                 <Image

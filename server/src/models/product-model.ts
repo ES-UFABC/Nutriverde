@@ -187,25 +187,42 @@ export class ProductDAO {
       throw error;
     }
   }
+    /**
+     * Find Product using its Producer id
+     * @param id the Product Producer id
+     */
+         async findByProducerId(id: number): Promise<Product[]> {
+            try {
+                console.log( "model: id= %d: %s", id, typeof id)
+                const response = await this.getCollection().find(
+                    { producerId: id }
+                ).toArray() || [] 
+                if(response){
+                    return response as Product[]
+                }
+                throw Error("Erro ao buscar por elemento")
+            } catch (error) {
+                console.error("Failed to find item by id")
+                 throw error
+            }
+        }
+    /**
+     * Uptypology the given Product in the database
+     * (Assumes the Product id already exists)
+     * @param Product the Product
+     */
+    async update(Product: Product): Promise<boolean> {
+        try {
+            const response = await this.getCollection().replaceOne(
+                { id: Product.id }, Product)
 
-  /**
-   * Uptypology the given Product in the database
-   * (Assumes the Product id already exists)
-   * @param Product the Product
-   */
-  async update(Product: Product): Promise<boolean> {
-    try {
-      const response = await this.getCollection().replaceOne(
-        { id: Product.id },
-        Product
-      );
-
-      return response ? response.modifiedCount > 0 : false;
-    } catch (error) {
-      console.error("Failed to uptypology element");
-      throw error;
+            return (response) ? response.modifiedCount > 0 : false
+        } catch (error) {
+            console.error("Failed to uptypology element")
+            throw error
+        }
     }
-  }
+  
 
   /**
    * Remove the Product with the given id.

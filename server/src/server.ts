@@ -22,6 +22,8 @@ app.post("/products", productService.create);
 app.get("/products/search/:word", productService.searchAndList);
 
 app.get("/producers", producerController.list);
+app.get("/producers/:id", producerController.findById);
+app.get("/producers/:id/products", productController.findByProducerId);
 
 app.post("/files", upload.single("file"), fileService.create);
 app.get("/files/:filename", fileService.get);
@@ -42,6 +44,8 @@ dbConnect
     console.error(error.stack);
   });
 
+// producerController.mockAdd(5) // if want to add mocker Procucers
+// productController.mockAdd(5,10) // if want to add mocker Procucts, from 1st to (n1)th Procucer, exact (n2) Products
 /**
  * Server stack tear-down
  */

@@ -69,6 +69,7 @@ export class Producer {
     organic!: boolean
     externalWebPages!: [string]
     productionsClassification!: [string]
+    [index:string]:any
 
     constructor(name: string, paymentMethods: string, fantasyName: string, email: string) {
         this.id = 0
@@ -101,8 +102,13 @@ export class Producer {
                 throw new Error(`Property ${prop} is required`)
             }
         }
-
+        
         const producer = new Producer(json.name, json.paymentMethods, json.fantasyName, json.email)
+
+        Object.keys(json).forEach(key =>{
+            // if(key in json)
+                producer[key] = json[key]
+        })
 
         if ("id" in json) {
             producer.id = parseInt(json.id)
@@ -153,6 +159,26 @@ export class ProducerDAO {
             throw error
         }
     }
+
+    /**
+     * Retrieve an Producer given its id
+     * @param id the Producer id
+     * @returns the Producer
+     */
+     async findById(id: string): Promise<Producer> {
+        try {
+            const response = await this.getCollection().findOne({id: +id})
+
+            if (response) {
+                return Producer.decode(response)
+            }
+            throw Error("Failed to retrieve Producer with given id")
+        } catch (error) {
+            console.error("Error while retrieving Producer")
+            throw error
+        }
+    }
+
     async update(Producer:Producer){
         try {
             const response = await this.getCollection().replaceOne(
@@ -187,11 +213,11 @@ export class ProducerDAO {
             throw error
         }
     }
-    async insert(Producer : Producer) : Promise<boolean>{
+    async insert(producer : Producer) : Promise<boolean>{
         try {
             const newId = await this.nextId()
-            Producer.id = newId
-            const response = await this.getCollection().insertOne(Producer)
+            producer.id = newId
+            const response = await this.getCollection().insertOne(producer)
             if(!response || response.insertedCount < 1 ){
                 throw Error("Invalid result while inserting a post ")
             }
@@ -207,7 +233,7 @@ export class ProducerDAO {
         try {
             const seqColl = await dbConnection.getDb().collection(config.db.collections.sequences)
             const result = await seqColl.findOneAndUpdate(
-                { name: "Producer_id" },
+                { name: "producer_id" },
                 { $inc: { value: 1 } })
 
             if (result.ok) {
