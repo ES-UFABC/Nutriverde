@@ -11,13 +11,14 @@ import * as productService from "./services/product-service"
 
 //import * as producerModel from "../models/producer-model";
 //import * as userModel from "../models/user-model";
-import * as productModel from "./models/product-model";
+// import * as productModel from "./models/product-model";
 
 import cors from "cors";
 import { ok } from "assert";
-import * as mocker from "./mocker"
-import { Producer, ProducerDAO } from "./models/producer-model";
+// import * as mocker from "./mocker"
+// import { Producer, ProducerDAO } from "./models/producer-model";
 
+import * as breeder from "./models/mocker-populate"
 /**
  * Configure session middleware
  */
@@ -78,16 +79,7 @@ app.get("/users/:id", async (req,res) =>
 );
 // TODO: 
 app.get("/mocker", async (req,res) => {
-
-
-
-  for(let i = 1; i < 30; i++){
-    const productResponse = await productModel.ProductDAO.getInstance().
-    insert(productModel.Product.decode(mocker.newProduct(i)))
-  }
-
-
-  res.send(200).json()
+  await breeder.add(req,res)
 })
 
 app.get("/register", async (req,res) => {
@@ -112,8 +104,6 @@ dbConnect
     console.error(error.stack);
   });
 
- //producerController.mockAdd(5) // if want to add mocker Procucers
- //productController.mockAdd(5,10) // if want to add mocker Procucts, from 1st to (n1)th Procucer, exact (n2) Products
 /**
  * Server stack tear-down
  */

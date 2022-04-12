@@ -58,26 +58,27 @@ interface IProducts {
 // };
 
 export default function ProducerAbout(props:any) {
+    console.log("props",props)
     // const ref = useRef<HTMLDivElement>(null);
 
-    const producer:IProducer = props.producer || {  paymentMethods:[],
-                                                    phones:[],
-                                                    affiliatedEntities :[],
-                                                    certificationsAndRecords :[],
-                                                    agroEcologicalCertifications :[],
-                                                    externalWebPages :[],
-                                                    productionsClassification:[]
-                                                };
+    // const producer:IProducer = props.producer || {  paymentMethods:[],
+    //                                                 phones:[],
+    //                                                 affiliatedEntities :[],
+    //                                                 certificationsAndRecords :[],
+    //                                                 agroEcologicalCertifications :[],
+    //                                                 externalWebPages :[],
+    //                                                 productionsClassification:[]
+    //                                             };
 
     // const [producer, setProducer] = useState<IProducer>();
     // const [products, setProducts] = useState<IProducts[]>([]);
-    const products = props.products || [];
+    // const products = props.products || [];
     // const map = ref.current ? new window.google.maps.Map(ref.current, {}) : {};
     
     // const center = {lat: -23.64161, lng: -46.73097};
     // const center = producer.coord || {lat:-23.06, lng:-46.5};
-     console.log('products',products && products);
-     console.log('products',products && products);
+    //  console.log('producer',producer && producer);
+    //  console.log('products',products && products);
 
 
     // useEffect(() => {
@@ -101,12 +102,12 @@ export default function ProducerAbout(props:any) {
     //       console.log("error: ", err);
     //     });
     // }, [])
-    const center = producer.coord || {lat:-23.06, lng:-46.5};
+    // const center = producer.coord || {lat:-23.06, lng:-46.5};
 
     return (    
-        <Layout title={`${producer.fantasyName} - Produtor`}>
+        <Layout title={`${/*producer.fantasyName*/""} - Produtor`}>
 
-            <p className="text-4xl font-bold text-center my-4 ">
+            {/* <p className="text-4xl font-bold text-center my-4 ">
                 {producer.fantasyName}
             </p>
             <div style={{ display: "flex", height: "200px" }} className="w-full h-48 relative">
@@ -116,7 +117,7 @@ export default function ProducerAbout(props:any) {
                     layout="fill"
                     alt={producer.fantasyName}
                 />
-            </div>
+            </div> */}
             {/* <p>
                 <p><span className="font-bold">Responsável</span>: {producer.name}
             </p>
@@ -182,8 +183,8 @@ export default function ProducerAbout(props:any) {
             </div> */}
 
 
-            <div style={{ display: "flex", height: "200px" }}> 
-                {/* <Wrapper
+            {/* <div style={{ display: "flex", height: "200px" }}> 
+                <Wrapper
                     apiKey={"AIzaSyCXGJse38b65vXJStGzFD3r7-CuC0TjPgk"}
                     // render={render}
                 >
@@ -193,16 +194,16 @@ export default function ProducerAbout(props:any) {
                     >
                         <Marker key="center" position={center} />
                     </Map>
-                </Wrapper> */}
-            </div>
-            <p className="text-4xl font-bold text-center my-4">
+                </Wrapper>
+            </div> */}
+            {/* <p className="text-4xl font-bold text-center my-4">
                 Confira nossos produtos!
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
                 {products.map((item:any) => (
                     <ProductCard item = {item} key={item.id}/>
                 ))}
-            </div>
+            </div> */}
         </Layout>
     );
 }
@@ -220,17 +221,20 @@ export default function ProducerAbout(props:any) {
 }
 
 export async function getStaticProps(context:any) {
-     console.log("Chamei",context)
-    const path = `producers/${context.params.id}`;
-    const resProducer = await fetch(`http://localhost:3000/${path}`);
-    const producerMessage = await resProducer.json()
-    const producer:IProducer = producerMessage.item;
-    const resProducts = await fetch(`http://localhost:3000/${path}/products`);
-    const productsMessage = await resProducts.json()
-    console.log(productsMessage)
-    const products = productsMessage.items;
+    //  console.log("Chamei",context)
+    // const path = `producers/${context.params.id}`;
+    // const resProducer = await fetch(`http://localhost:3000/${path}`);
+    // const producerMessage = await resProducer.json()
+    // console.log("producerMessage",producerMessage)
+    // const producer:IProducer = producerMessage.item;
+    // console.log(producer)
+    // const resProducts = await fetch(`http://localhost:3000/${path}/products`);
+    // const productsMessage = await resProducts.json()
+    // console.log("productsMessage",productsMessage)
+    // const products = productsMessage.items;
+    // console.log("products",products)
     return { props: {
-        producer,
-        products
+        // producer,
+        // products
       } }
 }
