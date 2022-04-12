@@ -16,6 +16,7 @@ interface IProducts {
 }
 
 export default function Home() {
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [products, setProducts] = useState<IProducts[]>([]);
 
   async function submit(e: any) {
@@ -24,7 +25,7 @@ export default function Home() {
 
       const search = e.target.s.value;
       const path = search ? `products/search/${search}` : "products";
-      const res = await fetch(`http://localhost:3000/${path}`);
+      const res = await fetch(`${serverUrl}/${path}`);
       const resJson = await res.json();
       setProducts(resJson.items);
     } catch (err) {
@@ -33,7 +34,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetch("http://localhost:3000/products")
+    fetch(`${serverUrl}/products`)
       .then(async (response) => {
         const data = await response.json();
         console.log("data: ", data);
