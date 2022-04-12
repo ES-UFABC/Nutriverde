@@ -6,10 +6,11 @@ export const config = {
         "url": "mongodb://localhost:27017",
         "name": "NutriVerde", 
         "collections": {
-            "producers": "producers",
+            "users": "users",
             "products": "products",
             "sequences": "sequences",
-            "sessions": "sessions"
+            "sessions": "sessions",
+            "vendas":"vendas"
         }
     }, 
     "upload_dir": path.resolve(__dirname, "..", "uploads"),

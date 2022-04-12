@@ -26,9 +26,35 @@ export default function Producers() {
       });
   }, []);
 
+  async function submit(e: any) {
+    try {
+      e.preventDefault();
+
+      const search = e.target.s.value;
+      const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: 'Fetch PUT Request Example' })
+    };
+      const path = search ? `products/search/${search}` : "products";
+      const res = await fetch(`http://localhost:3000/${path}`);
+      const resJson = await res.json();
+      setProducts(resJson.items);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return (
     <Layout title="Produtores">
       <div className="container mx-auto p-4">
+      <a className="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center" href="/register">
+       Venha fazer parte da comunidade NutriVerde
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" className="w-5 h-5 ml-2 -mr-1">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3">
+          </path>
+        </svg>
+      </a>        
+        
         <p className="text-4xl font-bold text-center my-4">
           Conheça nossos parceiros!
         </p>

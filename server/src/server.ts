@@ -1,12 +1,16 @@
 import e from "express";
 import * as dbConnect from "./models/db-connection";
 import { config } from "./config";
-import * as productService from "./services/product";
+//import * as productService from "./services/product";
 import * as fileService from "./services/file";
-import * as producerController from "./controllers/producer-controller";
-import * as productController from "./controllers/product-controller"
-import cors from "cors";
 import multer from "multer";
+import * as producerService from "./services/producer-service"
+import * as userService from "./services/user-service"
+import * as productService from "./services/product-service"
+
+import cors from "cors";
+import { ok } from "assert";
+
 
 /**
  * Configure session middleware
@@ -18,16 +22,58 @@ app.use(e.json());
 app.use(e.urlencoded({ extended: true })); // to use
 app.use(cors());
 
-app.get("/products", productService.list);
-app.post("/products", productService.create);
-app.get("/products/search/:word", productService.searchAndList);
+/**
+ * Products routes
+ */
+app.post("/products", async (req,res) => {
+  await productService.ProductService.getInstance().insert(req,res)
+});
 
-app.get("/producers", producerController.list);
-app.get("/producers/:id", producerController.findById);
-app.get("/producers/:id/products", productController.findByProducerId);
+app.get("/producers/:id/products",async (req,res) => {
+  await productService.ProductService.getInstance().findByProducerId(req,res)
+});
 
+app.get("/products", async (req,res) =>
+  await productService.ProductService.getInstance().listAll(req,res)
+);
+
+app.get("/products/search/:word", async (req,res) =>
+await productService.ProductService.getInstance().listAllByName(req,res)
+);
+
+
+/***
+ * Files end point
+ */
 app.post("/files", upload.single("file"), fileService.create);
 app.get("/files/:filename", fileService.get);
+
+
+/**
+ * Producers routes
+ */
+app.get("/producers", async (req,res) =>
+  await producerService.ProducerService.getInstance().listAll(req,res)
+);
+
+app.get("/producers/:id", async (req,res) =>
+  await producerService.ProducerService.getInstance().findById(req,res)
+);
+
+
+/**
+ * Users routes
+ */
+app.get("/users/:id", async (req,res) =>
+  await userService.UserService.getInstance().findById(req,res)
+);
+// TODO: 
+app.put("/register", async (req,res) => {
+  await userService.UserService.getInstance().insert(req,res)
+  console.log("Estou registrando")
+})
+
+
 
 /**
  * Server stack set-up
