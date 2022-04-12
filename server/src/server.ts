@@ -8,9 +8,15 @@ import * as producerService from "./services/producer-service"
 import * as userService from "./services/user-service"
 import * as productService from "./services/product-service"
 
+
+//import * as producerModel from "../models/producer-model";
+//import * as userModel from "../models/user-model";
+import * as productModel from "./models/product-model";
+
 import cors from "cors";
 import { ok } from "assert";
-
+import * as mocker from "./mocker"
+import { Producer, ProducerDAO } from "./models/producer-model";
 
 /**
  * Configure session middleware
@@ -21,6 +27,9 @@ const upload = multer();
 app.use(e.json());
 app.use(e.urlencoded({ extended: true })); // to use
 app.use(cors());
+
+
+
 
 /**
  * Products routes
@@ -68,12 +77,23 @@ app.get("/users/:id", async (req,res) =>
   await userService.UserService.getInstance().findById(req,res)
 );
 // TODO: 
-app.put("/register", async (req,res) => {
+app.get("/mocker", async (req,res) => {
+
+
+
+  for(let i = 1; i < 30; i++){
+    const productResponse = await productModel.ProductDAO.getInstance().
+    insert(productModel.Product.decode(mocker.newProduct(i)))
+  }
+
+
+  res.send(200).json()
+})
+
+app.get("/register", async (req,res) => {
   await userService.UserService.getInstance().insert(req,res)
   console.log("Estou registrando")
 })
-
-
 
 /**
  * Server stack set-up
@@ -84,6 +104,7 @@ dbConnect
   .then(() => {
     app.listen(config["server-port"], () => {
       console.log(`Server listening at ${config["server-port"]}`);
+      
     });
   })
   .catch((error) => {

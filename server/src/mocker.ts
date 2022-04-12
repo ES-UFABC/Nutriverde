@@ -96,7 +96,7 @@ export function newProducer() {
       name: falso.randFullName(),
       fantasyName: falso.randCompanyName(),
       email: falso.randEmail(),
-      paymentMethods: paymentMethods(),
+      producerPaymentMethods: paymentMethods(),
       phones: phones(),
       productionAddress : address(),
       productionRegion: productionRegion(),
@@ -105,7 +105,7 @@ export function newProducer() {
       businessIsCollective: falso.randBoolean(),
       geoReferencedLocalization: { lat: falso.randLatitude(), lng: falso.randLongitude() },
       affiliatedEntities: affiliatedEntities(),
-      cpfOrCnpj: cpfOrCnpj(),
+      cnpj: cpfOrCnpj(),
       licensed: falso.randBoolean(),
       certificationsAndRecords : certificationsAndRecords(),
       agroEcological: falso.randBoolean(),
@@ -116,6 +116,60 @@ export function newProducer() {
     }
     return producer
 }
+
+/***
+ *   
+   
+    id: number
+    name: string
+    fantasyName: string
+    email: string
+    phones!: [string]
+
+    // TODO:
+    productionAddress!: {
+        street: string;
+        codeId: string;
+        district: string;
+        cep: string;
+        county: string; }
+    productionRegion!: string
+    negotiateOnProductionSite!: boolean
+        // TODO:
+    businessAddress!: {
+        street: string;
+        codeId: string;
+        district: string;
+        cep: string;
+        county: string; }
+
+    businessIsCollective!: boolean
+    geoReferencedLocalization!: { lat: number; lng: number; } 
+    affiliatedEntities!: [string]
+    cnpj!: string
+    licensed!: boolean
+    certificationsAndRecords!: [string]
+    agroEcological!: boolean
+    agroEcologicalCertifications!: [string]
+    organic!: boolean
+    externalWebPages!: [string]
+    productionsClassification!: [string]
+    [index:string]:any
+    producerPaymentMehods: string[]
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export function newProduct(producerId: number) {
     const product = {

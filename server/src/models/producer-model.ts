@@ -47,7 +47,7 @@ export class Producer extends User {
     
     constructor(name: string, password: string, phones: string[], email: string, 
                 address : string[], cpf : string, fantasyName: string,
-                productionAddress: string[],commerceAddress: string[], producerPaymentMehods: string[] ) {
+                producerPaymentMehods: string[] ) {
 
         super(name, password, phones, email, address, cpf);
         this.id = 0
@@ -56,7 +56,6 @@ export class Producer extends User {
         this.fantasyName = fantasyName
         this.producerPaymentMehods = producerPaymentMehods
         //this.productionAddress = productionAddress
-        this.commerceAddress = commerceAddress
     }
 
     // constructor(json:any) {
@@ -88,7 +87,7 @@ export class Producer extends User {
      * @returns the Producer instance
      */
     static decode(json: any): Producer {
-    for (const prop of ["fantasyName", "productionAddress","commerceAddress","producerPaymentMehods"]) {
+    for (const prop of ["fantasyName"]) {
             if (!(prop in json)) {
                 throw new Error(`Property ${prop} is required`)
             }
@@ -96,8 +95,8 @@ export class Producer extends User {
 
         const producer = new Producer(json.name, json.password, json.phones, 
                                     json.email, json.address, json.cpf,
-                                    json.fantasyName, json.productionAddress,
-                                    json.commerceAddress,json.producerPaymentMehods)
+                                    json.fantasyName,
+                                    json.producerPaymentMehods)
 
         Object.keys(json).forEach(key =>{
             // if(key in json)
