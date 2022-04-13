@@ -13,7 +13,7 @@ const navigation = [
 const profileNavigation = [
   { name: "Perfil", href: "/profile" },
   { name: "Configurações", href: "/settings" },
-  { name: "Criar produto", href: "/products/form" },
+  { name: "Meus produtos", href: "/my/products" },
   { name: "Sair", href: "/logout" },
 ];
 

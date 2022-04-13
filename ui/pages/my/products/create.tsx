@@ -2,7 +2,7 @@ import classNames from "classnames";
 import Router from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import Layout from "../../components/layout";
+import Layout from "../../../components/layout";
 
 export default function Contato() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -66,17 +66,17 @@ export default function Contato() {
       return;
     }
 
-    Router.push("/");
+    Router.push("/my/products");
   };
 
   const [dataForm, setDataForm] = useState({
-    nameprod: "",
+    nameprod: undefined,
     typeprod: "unknown",
-    quantprod: "",
-    prodcrop: "",
-    prodprice: "",
-    proddelivery: "",
-    proddescription: "",
+    quantprod: undefined,
+    prodcrop: undefined,
+    prodprice: undefined,
+    proddelivery: undefined,
+    proddescription: undefined,
   });
 
   const onChangeInput = (e: any) =>
@@ -127,24 +127,29 @@ export default function Contato() {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-y-12">
             {step === 0 && (
               <>
-                <div>
-                  <h2 className="">Nome do produto:</h2>
+                <div className="relative z-0 mb-6 w-full group">
                   <input
                     type="text"
                     name="nameprod"
-                    className="w-full"
-                    placeholder="Qual o nome do seu produto?"
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-emerald-800 peer"
+                    placeholder=" "
                     onChange={onChangeInput}
                     value={dataForm.nameprod}
+                    required
                   />
+                  <label
+                    htmlFor="nameprod"
+                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >
+                    Nome do produto
+                  </label>
                 </div>
 
-                <div>
-                  <h2>Tipo do produto:</h2>
+                <div className="relative z-0 mb-6 w-full group">
                   <select
                     name="typeprod"
-                    className="w-full"
-                    placeholder="Selecione o tipo"
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-emerald-800 peer"
+                    placeholder=" "
                     onChange={onChangeInput}
                     value={dataForm.typeprod}
                   >
@@ -166,18 +171,29 @@ export default function Contato() {
                     <option value="sausages">Embutidos</option>
                     <option value="preserves">Conservas</option>
                   </select>
+                  <label
+                    htmlFor="typeprod"
+                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >
+                    Tipo do produto
+                  </label>
                 </div>
 
-                <div>
-                  <h2>Quantidade:</h2>
+                <div className="relative z-0 mb-6 w-full group">
                   <input
                     type="number"
                     name="quantprod"
-                    className="w-full"
-                    placeholder="Qual a quantidade em estoque?"
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-emerald-800 peer"
+                    placeholder=" "
                     onChange={onChangeInput}
                     value={dataForm.quantprod}
                   />
+                  <label
+                    htmlFor="quantprod"
+                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >
+                    Quantidade
+                  </label>
                 </div>
 
                 {/* <section className="container">
@@ -202,40 +218,55 @@ export default function Contato() {
 
             {step === 1 && (
               <>
-                <div>
-                  <h2>Safra:</h2>
+                <div className="relative z-0 mb-6 w-full group">
                   <input
                     type="date"
                     name="prodcrop"
-                    className="w-full"
-                    placeholder="Qual a safra?"
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-emerald-800 peer"
+                    placeholder=" "
                     onChange={onChangeInput}
                     value={dataForm.prodcrop}
                   />
+                  <label
+                    htmlFor="prodcrop"
+                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >
+                    Safra
+                  </label>
                 </div>
 
-                <div>
-                  <h2>Preço:</h2>
+                <div className="relative z-0 mb-6 w-full group">
                   <input
                     type="number"
                     name="prodprice"
-                    className="w-full"
-                    placeholder="Qual o valor por KG?"
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-emerald-800 peer"
+                    placeholder=" "
                     onChange={onChangeInput}
                     value={dataForm.prodprice}
                   />
+                  <label
+                    htmlFor="prodprice"
+                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >
+                    Preço
+                  </label>
                 </div>
 
-                <div>
-                  <h2>Condições de entrega:</h2>
+                <div className="relative z-0 mb-6 w-full group">
                   <input
                     type="text"
                     name="proddelivery"
-                    className="w-full"
-                    placeholder="Busca no local ou entrega própria?"
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-emerald-800 peer"
+                    placeholder=" "
                     onChange={onChangeInput}
                     value={dataForm.proddelivery}
                   />
+                  <label
+                    htmlFor="proddelivery"
+                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >
+                    Condições de entrega
+                  </label>
                 </div>
 
                 <br />
@@ -245,16 +276,21 @@ export default function Contato() {
 
             {step === 2 && (
               <>
-                <div className="col-span-2">
-                  <h2>Descrição:</h2>
+                <div className="relative z-0 mb-6 w-full group col-span-2">
                   <textarea
                     name="proddescription"
-                    className="w-full"
-                    placeholder="Insira uma descrição"
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-emerald-800 peer"
+                    placeholder=" "
                     onChange={onChangeInput}
                     rows={5}
                     value={dataForm.proddescription}
                   />
+                  <label
+                    htmlFor="proddescription"
+                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >
+                    Descrição
+                  </label>
                 </div>
               </>
             )}
