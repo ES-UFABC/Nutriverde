@@ -1,7 +1,8 @@
 import classNames from "classnames";
+import Router from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import Layout from "../components/layout";
+import Layout from "../../components/layout";
 
 export default function Contato() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -51,7 +52,6 @@ export default function Contato() {
       unitOfMeas: "KG",
       producerId: 1,
     };
-    console.log(data);
 
     const res = await fetch(`${serverUrl}/products`, {
       method: "POST",
@@ -60,13 +60,18 @@ export default function Contato() {
       },
       body: JSON.stringify(data),
     });
-    const json = await res.json();
-    console.log(json);
+
+    if (res.status < 200 || res.status >= 400) {
+      console.log("Error creating product", res);
+      return;
+    }
+
+    Router.push("/");
   };
 
   const [dataForm, setDataForm] = useState({
     nameprod: "",
-    typeprod: "",
+    typeprod: "unknown",
     quantprod: "",
     prodcrop: "",
     prodprice: "",
