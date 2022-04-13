@@ -5,62 +5,59 @@ import Layout from "../components/layout";
 export default function Contato() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [step, setstep] = useState(0);
-  const [files, setFiles] = useState([]);
+  // const [files, setFiles] = useState([]);
 
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*",
-    onDropAccepted: async (files) => {
-      // Uploads files to server.
-      uploadedFiles = files.map(async (f) => {
-        const data = new FormData();
-        data.append("file", f);
+  // const { getRootProps, getInputProps } = useDropzone({
+  //   accept: "image/*",
+  //   onDropAccepted: async (files) => {
+  //     // Uploads files to server.
+  //     const uploadedFiles = files.map(async (f) => {
+  //       const data = new FormData();
+  //       data.append("file", f);
 
-        const res = await fetch({
-          url: `${serverUrl}/files`,
-          method: "POST",
-          body: data,
-        });
+  //       const res = await fetch({
+  //         url: `${serverUrl}/files`,
+  //         method: "POST",
+  //         body: data,
+  //       });
 
-        if (res.status < 200 && res.status >= 400) {
-          console.error("error uploading file", res);
-          return Object.assign(f, { preview: "" });
-        }
+  //       console.log(res);
+  //       if (res.status < 200 && res.status >= 400) {
+  //         console.error("error uploading file", res);
+  //         return Object.assign(f, { preview: "" });
+  //       }
 
-        const json = await res.json();
-        return Object.assign(f, { preview: `${serverUrl}/files/${json.name}` });
-      });
+  //       const json = await res.json();
+  //       return Object.assign(f, { preview: `${serverUrl}/files/${json.name}` });
+  //     });
+  //     await Promise.all(uploadedFiles);
 
-      setFiles(uploadedFiles);
-    },
-  });
+  //     setFiles(uploadedFiles);
+  //   },
+  // });
 
-  // name: string;
-  // description: string;
-  // unitOfMeas: string;
-  // typology: string;
-  // price: number;
-  // specialDeliveryConditions: string;
-  // cropDate: string;
-  // quantity: number;
-  // cover: string;
-  // producerId: number;
-
-  const sendData = async (e) => {
+  const sendData = async (e: any) => {
     e.preventDefault();
-    const res = await fetch({
-      url: serverUrl + "/products",
+
+    const data = {
+      name: dataForm.nameprod,
+      typology: dataForm.typeprod,
+      quantity: dataForm.quantprod,
+      cropDate: dataForm.prodcrop,
+      price: dataForm.prodprice,
+      specialDeliveryConditions: dataForm.proddelivery,
+      description: dataForm.proddescription,
+      unitOfMeas: "KG",
+      producerId: 1,
+    };
+    console.log(data);
+
+    const res = await fetch(`${serverUrl}/products`, {
       method: "POST",
-      body: {
-        name: dataForm.nameprod,
-        typology: dataForm.typeprod,
-        quantity: dataForm.quantprod,
-        cropDate: dataForm.prodcrop,
-        price: dataForm.prodprice,
-        specialDeliveryConditions: dataForm.proddelivery,
-        description: dataForm.proddescription,
-        unitOfMeas: "KG",
-        producerId: 1,
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify(data),
     });
     const json = await res.json();
     console.log(json);
@@ -76,7 +73,7 @@ export default function Contato() {
     proddescription: "",
   });
 
-  const onChangeInput = (e) =>
+  const onChangeInput = (e: any) =>
     setDataForm({ ...dataForm, [e.target.name]: e.target.value });
 
   // const sendContact = async (e) => {
@@ -146,7 +143,7 @@ export default function Contato() {
                 <br />
                 <br />
 
-                <section className="container">
+                {/* <section className="container">
                   <div {...getRootProps({ className: "dropzone" })}>
                     <input {...getInputProps()} />
                     <p>
@@ -162,7 +159,7 @@ export default function Contato() {
                       </div>
                     ))}
                   </aside>
-                </section>
+                </section> */}
               </div>
             )}
 
@@ -237,17 +234,17 @@ export default function Contato() {
               <ul className="steps steps-horizontal lg:steps-horizontal ">
                 <li
                   onClick={() => setstep(0)}
-                  class="step step-primary cursor-pointer"
+                  className="step step-primary cursor-pointer"
                 >
                   Informações do produto
                 </li>
                 <li
                   onClick={() => setstep(1)}
-                  class="step step-primary cursor-pointer"
+                  className="step step-primary cursor-pointer"
                 >
                   Informações adicionais para a venda
                 </li>
-                <li onClick={() => setstep(2)} class="step cursor-pointer">
+                <li onClick={() => setstep(2)} className="step cursor-pointer">
                   Descrição do produto
                 </li>
               </ul>
