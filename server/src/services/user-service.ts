@@ -1,5 +1,7 @@
 import e from "express";
+import * as bcrypt from "bcrypt"
 import * as userModel from "../models/user-model";
+import "../session-data"
   /**
    * Custom exception to signal a database error
    */
@@ -38,6 +40,43 @@ import * as userModel from "../models/user-model";
         }
     }
 
+    async loginProcessing(req: e.Request, res: e.Response) {
+        const username = req.body.username as string || ""
+        const password = req.body.password as string || ""
+        const isValidLogin = () => username.trim().length > 0 && password.trim.length > 0
+        console.log(username)
+        console.log(password)
+        try {
+            const retrUser = 
+                await userModel.UserDAO.getInstance().findByEmail(username)
+            console.log("User ",retrUser)
+                //await bcrypt.compare(password, retrUser.password)
+            if (password === retrUser.password) { // compare 
+
+                res.cookie('user_id', retrUser.id, {
+                    httpOnly: true,
+                })
+                res.json({
+                    name: retrUser.name, email : retrUser.email, message: "success"
+                });
+
+            } else {
+                throw Error("Login credentials did not match")
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ name: username ,message: "Invalid Login" });
+        }
+    }
+
+    async logout(req: e.Request, res: e.Response) {
+        if (req.session.authenticated) {
+            req.session.authenticated = false
+            req.session.userName = ""
+        }
+        res.status(200).json({ message: "sucess" });
+    }
+
     /**
      * 
      * @param req 
@@ -63,7 +102,7 @@ import * as userModel from "../models/user-model";
      */
     async insert(req: e.Request, res: e.Response) {
         try {
-        
+        console.log(req.body)
         const User = userModel.User.decode(req.body) 
         console.log(User)
         const response = await userModel.UserDAO.getInstance().insert(User)

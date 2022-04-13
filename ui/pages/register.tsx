@@ -47,7 +47,7 @@ export default function Register() {
         
         
         router.push({
-          pathname: '/'
+          pathname: '/login'
         });
 
         console.log(resJson)

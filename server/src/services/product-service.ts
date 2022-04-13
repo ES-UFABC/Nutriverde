@@ -106,8 +106,8 @@ import * as productModel from "../models/product-model";
     
     async findByProducerId(req: e.Request, res: e.Response) {
         const searchItem = parseInt(req.params.id);
-        console.log("product producer id: ", searchItem);
-        console.log(req.body);
+        //console.log("product producer id: ", searchItem);
+        //console.log(req.body);
         try {
           const products = await productModel.ProductDAO.getInstance().findByProducerId(searchItem);
           res.status(200).json({ items: products, message: "success" });

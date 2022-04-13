@@ -1,0 +1,6 @@
+Authentication: 
+    [-] Read NextAuth Documentation 
+    [-] Session on a mongoDb Collections 
+    [-] protect a Page with Login credentials 
+    [-] persistence with cookies (http only)
+

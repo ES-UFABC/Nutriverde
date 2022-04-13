@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@ngneat/falso": "^4.0.0",
-    "@types/bcrypt": "^3.0.0",
+    "@types/bcrypt": "^5.0.0",
     "@types/connect-mongodb-session": "^2.4.0",
     "@types/express": "^4.17.9",
     "@types/express-flash": "^0.0.2",
@@ -49,7 +49,7 @@
     "@types/mocha": "^9.1.0",
     "@types/mongodb": "^3.5.34",
     "@types/node": "^14.14.10",
-    "bcrypt": "^5.0.0",
+    "bcrypt": "^5.0.1",
     "connect-mongodb-session": "^2.4.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",

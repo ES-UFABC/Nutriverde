@@ -32,7 +32,7 @@ import * as userModel from "../models/user-model";
         try {
 
         const producers = await producerModel.ProducerDAO.getInstance().listAll();
-        console.log(producers)
+        //console.log(producers)
         res.status(200).json({ items: producers, message: "success" });
         } catch (error) {
         console.error(error);
@@ -48,7 +48,7 @@ import * as userModel from "../models/user-model";
      async findById(req: e.Request, res: e.Response) {
         try {
         const id = Number(req.params.id)
-        console.log(req.params)
+        //console.log(req.params)
         const producers = await producerModel.ProducerDAO.getInstance().findById(id);
         res.status(200).json({ items: producers, message: "success" });
         } catch (error) {
@@ -66,7 +66,7 @@ import * as userModel from "../models/user-model";
     async insert(req: e.Request, res: e.Response) {
         try {
         
-        console.log(req.body) // DEBUG: 
+        //console.log(req.body) // DEBUG: 
         const producer = producerModel.Producer.decode(req.body) // o erro está aqui campos obrigatorios dele
         const response = await producerModel.ProducerDAO.getInstance().insert(producer)
         res.status(200).json({ items: producer, message: "success" });

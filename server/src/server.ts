@@ -13,12 +13,14 @@ import * as productService from "./services/product-service"
 //import * as userModel from "../models/user-model";
 // import * as productModel from "./models/product-model";
 
+
 import cors from "cors";
 import { ok } from "assert";
 // import * as mocker from "./mocker"
 // import { Producer, ProducerDAO } from "./models/producer-model";
 
 import * as breeder from "./models/mocker-populate"
+import session from "express-session";
 /**
  * Configure session middleware
  */
@@ -28,6 +30,19 @@ const upload = multer();
 app.use(e.json());
 app.use(e.urlencoded({ extended: true })); // to use
 app.use(cors());
+
+
+
+// credencials 
+  app.use(function(req, res, next) {
+  res.header('Content-Type', 'application/json;charset=UTF-8')
+  res.header('Access-Control-Allow-Credentials')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  next()
+})
 
 
 
@@ -62,12 +77,18 @@ app.get("/files/:filename", fileService.get);
 /**
  * Producers routes
  */
-app.get("/producers", async (req,res) =>
-  await producerService.ProducerService.getInstance().listAll(req,res)
+app.get("/producers", async (req,res) =>{
+
+    await producerService.ProducerService.getInstance().listAll(req,res)
+}
+
 );
 
-app.get("/producers/:id", async (req,res) =>
+app.get("/producers/:id", async (req,res) =>{
+
   await producerService.ProducerService.getInstance().findById(req,res)
+}
+  
 );
 
 
@@ -82,10 +103,16 @@ app.get("/mocker", async (req,res) => {
   await breeder.add(req,res)
 })
 
-app.get("/register", async (req,res) => {
-  await userService.UserService.getInstance().insert(req,res)
+app.put("/register", async (req,res) => {
   console.log("Estou registrando")
+  await userService.UserService.getInstance().insert(req,res)
+
 })
+app.put("/login", async (req,res) => {
+  await userService.UserService.getInstance().loginProcessing(req,res)
+})
+
+
 
 /**
  * Server stack set-up
