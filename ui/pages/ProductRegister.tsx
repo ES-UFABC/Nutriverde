@@ -1,10 +1,11 @@
+import classNames from "classnames";
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Layout from "../components/layout";
 
 export default function Contato() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-  const [step, setstep] = useState(0);
+  const [step, setStep] = useState(0);
   // const [files, setFiles] = useState([]);
 
   // const { getRootProps, getInputProps } = useDropzone({
@@ -84,64 +85,95 @@ export default function Contato() {
   return (
     <Layout title="Registro de Produtos">
       <form onSubmit={sendData}>
-        <div className=" ">
-          {/* <div className=" ">
-            <ul className="steps steps-horizontal lg:steps-horizontal ">
-              <li onClick={() => setstep(0)} class="step step-primary cursor-pointer">
-                Informações do produto
-              </li>
-              <li onClick={() => setstep(1)} class="step step-primary cursor-pointer">
-                Informações adicionais para a venda
-              </li>
-              <li onClick={() => setstep(2)} class="step cursor-pointer">
-                Descrição do produto
-              </li>
-            </ul>
-          </div> */}
-          <div className=" ">
+        <div className="container mx-auto p-4 flex flex-col justify-content-center">
+          <ul className="steps steps-horizontal mb-14">
+            <li
+              onClick={() => setStep(0)}
+              className={classNames({
+                step: true,
+                "cursor-pointer": true,
+                "step-primary": step >= 0,
+              })}
+            >
+              Informações do produto
+            </li>
+            <li
+              onClick={() => setStep(1)}
+              className={classNames({
+                step: true,
+                "cursor-pointer": true,
+                "step-primary": step >= 1,
+              })}
+            >
+              Informações adicionais para a venda
+            </li>
+            <li
+              onClick={() => setStep(2)}
+              className={classNames({
+                step: true,
+                "cursor-pointer": true,
+                "step-primary": step >= 2,
+              })}
+            >
+              Descrição do produto
+            </li>
+          </ul>
+
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-y-12">
             {step === 0 && (
-              <div className=" ">
-                <br />
-                <br />
-                <div className="">
-                  <h2>Nome do produto:</h2>
+              <>
+                <div>
+                  <h2 className="">Nome do produto:</h2>
                   <input
                     type="text"
                     name="nameprod"
-                    className="w-1/2  "
+                    className="w-full"
                     placeholder="Qual o nome do seu produto?"
                     onChange={onChangeInput}
                     value={dataForm.nameprod}
                   />
                 </div>
-                <br />
-                <br />
+
                 <div>
                   <h2>Tipo do produto:</h2>
-                  <input
-                    type="text"
+                  <select
                     name="typeprod"
-                    className="w-1/2  "
+                    className="w-full"
                     placeholder="Selecione o tipo"
                     onChange={onChangeInput}
                     value={dataForm.typeprod}
-                  />
+                  >
+                    <option value="unknown">Desconhecido</option>
+                    <option value="beekeeping">Apicultura</option>
+                    <option value="cereals">Cereais</option>
+                    <option value="fruits">Frutas</option>
+                    <option value="vegetables">Hortaliças</option>
+                    <option value="dairy">Laticínios e derivados,</option>
+                    <option value="protein">Proteína de origem animal</option>
+                    <option value="tubers">Raizes e turbéculos</option>
+                    <option value="meals">Refeições</option>
+                    <option value="seeds">Sementes e mudas</option>
+                    <option value="legumes">Legumes</option>
+                    <option value="bakery">Panificação</option>
+                    <option value="sweets">Doces, mel, melado e geléias</option>
+                    <option value="beverages">Bebidas e polpas</option>
+                    <option value="herbs">Chás e ervas</option>
+                    <option value="sausages">Embutidos</option>
+                    <option value="preserves">Conservas</option>
+                  </select>
                 </div>
-                <br />
-                <br />
+
                 <div>
                   <h2>Quantidade:</h2>
                   <input
                     type="number"
                     name="quantprod"
-                    className="w-1/2  "
+                    className="w-full"
                     placeholder="Qual a quantidade em estoque?"
                     onChange={onChangeInput}
                     value={dataForm.quantprod}
                   />
                 </div>
-                <br />
-                <br />
 
                 {/* <section className="container">
                   <div {...getRootProps({ className: "dropzone" })}>
@@ -160,46 +192,41 @@ export default function Contato() {
                     ))}
                   </aside>
                 </section> */}
-              </div>
+              </>
             )}
 
             {step === 1 && (
-              <div>
-                <br />
-                <br />
+              <>
                 <div>
                   <h2>Safra:</h2>
                   <input
                     type="date"
                     name="prodcrop"
-                    className="w-1/2  "
+                    className="w-full"
                     placeholder="Qual a safra?"
                     onChange={onChangeInput}
                     value={dataForm.prodcrop}
                   />
                 </div>
-                <br />
-                <br />
+
                 <div>
                   <h2>Preço:</h2>
                   <input
                     type="number"
                     name="prodprice"
-                    className="w-1/2  "
+                    className="w-full"
                     placeholder="Qual o valor por KG?"
                     onChange={onChangeInput}
                     value={dataForm.prodprice}
                   />
                 </div>
-                <br />
-                <br />
 
                 <div>
                   <h2>Condições de entrega:</h2>
                   <input
                     type="text"
                     name="proddelivery"
-                    className="w-1/2  "
+                    className="w-full"
                     placeholder="Busca no local ou entrega própria?"
                     onChange={onChangeInput}
                     value={dataForm.proddelivery}
@@ -208,53 +235,45 @@ export default function Contato() {
 
                 <br />
                 <br />
-              </div>
+              </>
             )}
+
             {step === 2 && (
-              <div>
-                <br />
-                <br />
-                <h2>Descrição:</h2>
-                <input
-                  type="text"
-                  name="proddescription"
-                  className=" w-1/2"
-                  placeholder="Insira uma descrição"
-                  onChange={onChangeInput}
-                  value={dataForm.proddescription}
-                />
-                <br />
-                <br />
-              </div>
+              <>
+                <div className="col-span-2">
+                  <h2>Descrição:</h2>
+                  <textarea
+                    name="proddescription"
+                    className="w-full"
+                    placeholder="Insira uma descrição"
+                    onChange={onChangeInput}
+                    rows={5}
+                    value={dataForm.proddescription}
+                  />
+                </div>
+              </>
             )}
-            <button type="submit" className="cursor-pointer">
+          </div>
+
+          {step < 2 && (
+            <button
+              type="button"
+              className="btn btn-primary mt-14 cursor-pointer"
+              onClick={() => setStep(step + 1)}
+            >
+              Próximo
+            </button>
+          )}
+
+          {step >= 2 && (
+            <button
+              type="submit"
+              className="btn btn-primary mt-14 cursor-pointer"
+            >
               Enviar
             </button>
-            <div className=" ">
-              <ul className="steps steps-horizontal lg:steps-horizontal ">
-                <li
-                  onClick={() => setstep(0)}
-                  className="step step-primary cursor-pointer"
-                >
-                  Informações do produto
-                </li>
-                <li
-                  onClick={() => setstep(1)}
-                  className="step step-primary cursor-pointer"
-                >
-                  Informações adicionais para a venda
-                </li>
-                <li onClick={() => setstep(2)} className="step cursor-pointer">
-                  Descrição do produto
-                </li>
-              </ul>
-            </div>
-
-            <br />
-            <br />
-            <br />
-            {/* <button type="submit" className="cursor-pointer">Enviar</button> */}
-          </div>
+          )}
+          {/* <button type="submit" className="cursor-pointer">Enviar</button> */}
         </div>
       </form>
     </Layout>
