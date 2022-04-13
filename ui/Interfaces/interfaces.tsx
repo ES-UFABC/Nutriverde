@@ -14,7 +14,7 @@ export interface IProducer {
     businessIsCollective: boolean;
     coord: { lat: number; lng: number; };
     affiliatedEntities: string[];
-    cpfOrCnpj: string;
+    cnpj: string;
     licensed: boolean;
     certificationsAndRecords: string[];
     agroEcological: boolean;
@@ -24,25 +24,20 @@ export interface IProducer {
     productionsClassification: string[];
 };
 export type address = {
-    site: string;
-    code: string;
+    street: string;
+    codeId: string;
     cep: string;
     district: string;
     county: string;
 };
-
-export async function stringifyAdress(address:address): Promise<string> {
-    try {
-        return (
-            address.site + ", " +
-            address.code + " - " +
-            address.district + ", " +
-            address.county + " - " +
-            address.cep
-        )
-    } catch (error) {
-        throw error
-    }
+export function stringifyAdress(address: address){
+    return (
+        address.street + ", " +
+        address.codeId + " - " +
+        address.district + ", " +
+        address.county + " - " +
+        address.cep
+    )
 }
 export interface IProduct {
     id: number;
