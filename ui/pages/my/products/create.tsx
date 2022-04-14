@@ -162,7 +162,33 @@ export default function Contato() {
                     onChange={onChangeInput}
                     value={dataForm.typeprod}
                   >
-                    <option value="unknown">Desconhecido</option>
+                    <option value="Desconhecido">Desconhecido</option>
+                    <option value="Apicultura">Apicultura</option>
+                    <option value="Cereais">Cereais</option>
+                    <option value="Frutas">Frutas</option>
+                    <option value="Hortaliças">Hortaliças</option>
+                    <option value="Laticínios e derivados">
+                      Laticínios e derivados
+                    </option>
+                    <option value="Proteína de origem animal">
+                      Proteína de origem animal
+                    </option>
+                    <option value="Raizes e turbéculos">
+                      Raizes e turbéculos
+                    </option>
+                    <option value="Refeições">Refeições</option>
+                    <option value="Sementes e mudas">Sementes e mudas</option>
+                    <option value="Legumes">Legumes</option>
+                    <option value="Panificação">Panificação</option>
+                    <option value="Doces, mel, melado e geléias">
+                      Doces, mel, melado e geléias
+                    </option>
+                    <option value="Bebidas e polpas">Bebidas e polpas</option>
+                    <option value="Chás e ervas">Chás e ervas</option>
+                    <option value="Embutidos">Embutidos</option>
+                    <option value="Conservas">Conservas</option>
+
+                    {/* <option value="unknown">Desconhecido</option>
                     <option value="beekeeping">Apicultura</option>
                     <option value="cereals">Cereais</option>
                     <option value="fruits">Frutas</option>
@@ -178,7 +204,7 @@ export default function Contato() {
                     <option value="beverages">Bebidas e polpas</option>
                     <option value="herbs">Chás e ervas</option>
                     <option value="sausages">Embutidos</option>
-                    <option value="preserves">Conservas</option>
+                    <option value="preserves">Conservas</option> */}
                   </select>
                   <label
                     htmlFor="typeprod"
