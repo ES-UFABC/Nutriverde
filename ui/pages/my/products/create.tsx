@@ -1,42 +1,54 @@
 import classNames from "classnames";
 import Router from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Layout from "../../../components/layout";
+
+interface IFile extends File {
+  id: string;
+  preview: string;
+}
 
 export default function Contato() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [step, setStep] = useState(0);
-  // const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<IFile[]>([]);
 
-  // const { getRootProps, getInputProps } = useDropzone({
-  //   accept: "image/*",
-  //   onDropAccepted: async (files) => {
-  //     // Uploads files to server.
-  //     const uploadedFiles = files.map(async (f) => {
-  //       const data = new FormData();
-  //       data.append("file", f);
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    onDropAccepted: async (files) => {
+      // Uploads files to server.
+      const promises = files.map(async (f) => {
+        const data = new FormData();
+        data.append("file", f);
 
-  //       const res = await fetch({
-  //         url: `${serverUrl}/files`,
-  //         method: "POST",
-  //         body: data,
-  //       });
+        const res = await fetch(`${serverUrl}/files`, {
+          method: "POST",
+          body: data,
+        });
 
-  //       console.log(res);
-  //       if (res.status < 200 && res.status >= 400) {
-  //         console.error("error uploading file", res);
-  //         return Object.assign(f, { preview: "" });
-  //       }
+        console.log("file uploaded", res);
+        if (res.status < 200 && res.status >= 400) {
+          console.error("error uploading file", res);
+          return Object.assign(f, { preview: "", id: "" });
+        }
 
-  //       const json = await res.json();
-  //       return Object.assign(f, { preview: `${serverUrl}/files/${json.name}` });
-  //     });
-  //     await Promise.all(uploadedFiles);
+        const json = await res.json();
+        return Object.assign(f, {
+          preview: `${serverUrl}/files/${json.name}`,
+          id: json.name,
+        });
+      });
 
-  //     setFiles(uploadedFiles);
-  //   },
-  // });
+      const uploadedFiles = await Promise.all(promises);
+
+      // FIXME: waits at least 1 second to load images correctly.
+      await new Promise((r) => setTimeout(r, 1 * 1000));
+      setDataForm({ ...dataForm, cover: uploadedFiles[0].id });
+
+      setFiles(uploadedFiles);
+    },
+  });
 
   const sendData = async (e: any) => {
     e.preventDefault();
@@ -51,6 +63,7 @@ export default function Contato() {
       description: dataForm.proddescription,
       unitOfMeas: "KG",
       producerId: 1,
+      cover: dataForm.cover,
     };
 
     const res = await fetch(`${serverUrl}/products`, {
@@ -70,22 +83,18 @@ export default function Contato() {
   };
 
   const [dataForm, setDataForm] = useState({
-    nameprod: undefined,
+    nameprod: "",
     typeprod: "unknown",
-    quantprod: undefined,
-    prodcrop: undefined,
-    prodprice: undefined,
-    proddelivery: undefined,
-    proddescription: undefined,
+    quantprod: "",
+    prodcrop: "",
+    prodprice: "",
+    proddelivery: "",
+    proddescription: "",
+    cover: "",
   });
 
   const onChangeInput = (e: any) =>
     setDataForm({ ...dataForm, [e.target.name]: e.target.value });
-
-  // const sendContact = async (e) => {
-  //   e.preventDefault();
-  //   console.log(dataForm.inputproduct);
-  // };
 
   return (
     <Layout title="Registro de Produtos">
@@ -195,24 +204,6 @@ export default function Contato() {
                     Quantidade
                   </label>
                 </div>
-
-                {/* <section className="container">
-                  <div {...getRootProps({ className: "dropzone" })}>
-                    <input {...getInputProps()} />
-                    <p>
-                      Drag 'n' drop some files here, or click to select files
-                    </p>
-                  </div>
-                  <aside>
-                    {files.map((file) => (
-                      <div key={file.name}>
-                        <div>
-                          <img src={file.preview} />
-                        </div>
-                      </div>
-                    ))}
-                  </aside>
-                </section> */}
               </>
             )}
 
@@ -292,6 +283,44 @@ export default function Contato() {
                     Descrição
                   </label>
                 </div>
+
+                <section className="col-span-2">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Imagens
+                  </p>
+
+                  <div
+                    {...getRootProps({ className: "dropzone" })}
+                    className="w-full text-center border-dashed border-2 border-gray-300 py-12"
+                  >
+                    <input {...getInputProps()} name="files" />
+                    <p className="text-gray-400">
+                      Clique ou jogue as imagens aqui
+                    </p>
+                  </div>
+
+                  {files.length > 0 && (
+                    <>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-6 mb-4">
+                        Selecione uma imagem como cover:
+                      </p>
+                      <aside className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-1">
+                        {files.map((file) => (
+                          <img
+                            src={file.preview}
+                            className={classNames("cursor-pointer p-1", {
+                              "border-solid border-2 border-emerald-800 rounded-md":
+                                dataForm.cover === file.id,
+                            })}
+                            onClick={() =>
+                              setDataForm({ ...dataForm, cover: file.id })
+                            }
+                          />
+                        ))}
+                      </aside>
+                    </>
+                  )}
+                </section>
               </>
             )}
           </div>
@@ -299,7 +328,7 @@ export default function Contato() {
           {step < 2 && (
             <button
               type="button"
-              className="btn btn-primary mt-14 cursor-pointer"
+              className="btn btn-primary mt-14"
               onClick={() => setStep(step + 1)}
             >
               Próximo
@@ -314,7 +343,6 @@ export default function Contato() {
               Enviar
             </button>
           )}
-          {/* <button type="submit" className="cursor-pointer">Enviar</button> */}
         </div>
       </form>
     </Layout>

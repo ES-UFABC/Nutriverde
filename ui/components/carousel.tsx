@@ -1,8 +1,6 @@
-import Image from "next/image";
-
 export default function Carousel({ sources }: { sources: string[] }) {
   return (
-    <div id="default-carousel" className="relative" data-carousel="static">
+    <div id="default-carousel" className="relative z-0" data-carousel="static">
       <div className="overflow-hidden relative h-56 rounded-lg sm:h-64 xl:h-80 2xl:h-96">
         <div
           className="hidden duration-700 ease-in-out"
