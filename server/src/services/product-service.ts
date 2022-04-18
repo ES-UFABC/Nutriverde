@@ -81,7 +81,9 @@ import * as productModel from "../models/product-model";
      */
     async insert(req: e.Request, res: e.Response) {
         try {
-        const Product = productModel.Product.decode(req.body) 
+        console.log(req.body);
+        const Product = productModel.Product.decode(req.body)
+
         const response = await productModel.ProductDAO.getInstance().insert(Product)
         res.status(200).json({ items: Product, message: "success" });
         } catch (error) {
