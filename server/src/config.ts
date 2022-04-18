@@ -14,5 +14,5 @@ export const config = {
         }
     }, 
     "upload_dir": path.resolve(__dirname, "..", "uploads"),
-    "secret": "ff743fb0dc08ee859d8a854157e6c54c"
+    "secret": "c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2"
 }

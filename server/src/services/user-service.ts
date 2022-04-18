@@ -1,12 +1,16 @@
 import e from "express";
 import * as bcrypt from "bcrypt"
 import * as userModel from "../models/user-model";
-import "../session-data"
+import  JWT  from 'jsonwebtoken'
+import { config } from "../config";
+
+
   /**
    * Custom exception to signal a database error
    */
   export class ValidationError extends Error {}
   export class DatabaseError extends Error {}
+  
   
   
   /**
@@ -41,40 +45,36 @@ import "../session-data"
     }
 
     async loginProcessing(req: e.Request, res: e.Response) {
-        const username = req.body.username as string || ""
+        const email = req.body.email as string || ""
         const password = req.body.password as string || ""
-        const isValidLogin = () => username.trim().length > 0 && password.trim.length > 0
-        console.log(username)
-        console.log(password)
         try {
             const retrUser = 
-                await userModel.UserDAO.getInstance().findByEmail(username)
-            console.log("User ",retrUser)
-                //await bcrypt.compare(password, retrUser.password)
-            if (password === retrUser.password) { // compare 
+                await userModel.UserDAO.getInstance().findByEmail(email)
 
-                res.cookie('user_id', retrUser.id, {
-                    httpOnly: true,
-                })
+            if (await bcrypt.compare(password, retrUser.password)) { 
+
+                const token = await JWT.sign( {
+                    name: retrUser.name,
+                    email: retrUser.email,
+                    id: retrUser.id
+                }, 
+                process.env.SERVER_SECRET || config.secret, 
+                {expiresIn: 60*3}
+                
+                );
+            
                 res.json({
-                    name: retrUser.name, email : retrUser.email, message: "success"
-                });
+                    token,
+                    message: "Login Successfull"
+                })
 
             } else {
                 throw Error("Login credentials did not match")
             }
         } catch (error) {
             console.log(error)
-            res.status(500).json({ name: username ,message: "Invalid Login" });
+            res.status(500).json({ name: email ,message: "Invalid Login" });
         }
-    }
-
-    async logout(req: e.Request, res: e.Response) {
-        if (req.session.authenticated) {
-            req.session.authenticated = false
-            req.session.userName = ""
-        }
-        res.status(200).json({ message: "sucess" });
     }
 
     /**
@@ -96,20 +96,51 @@ import "../session-data"
 
 
     /**
-     * 
+     * TODO: Validade Data  
      * @param req 
      * @param res 
      */
     async insert(req: e.Request, res: e.Response) {
         try {
-        console.log(req.body)
-        const User = userModel.User.decode(req.body) 
-        console.log(User)
-        const response = await userModel.UserDAO.getInstance().insert(User)
-        res.status(200).json({ items: User, message: "success" });
+        
+            const User = userModel.User.decode(req.body)
+            
+            // Check Data x
+            // Check user 
+            // hash 
+            // Store user
+            // Hash the password
+            try {
+                const retrUser = await userModel.UserDAO.getInstance().findByEmail(User.email)
+                res.status(400).json({message:"This User Already exists"})
+            } catch (error) {
+                    const hashedPassword = await bcrypt.hash(User.password, 10); // adicionando uma string aleatorio e depois hash
+                User.password = hashedPassword
+                
+                console.log(User)
+
+                const response = await userModel.UserDAO.getInstance().insert(User)
+            
+                
+                const token = await JWT.sign( {
+                    name: User.name,
+                    email: User.email,
+                    id: User.id
+                }, 
+                process.env.SERVER_SECRET || config.secret, 
+                {expiresIn: 60*3}
+                
+                );
+            
+                res.json({
+                    token,
+                    message: "Account Created Successfully"
+                })
+            }
+            
         } catch (error) {
         console.error(error);
-        res.status(500).json({ items: [], message: "error inserting Users" });
+        res.status(500).json({ items: [], message: "Error creating Users" });
         }
     }
 
@@ -140,6 +171,45 @@ import "../session-data"
         res.status(500).json({ items: [], message: "error updating Users" });
         }
     }
+
+    async auth(req: any, res: e.Response, next:any ){
+        
+        // The user send a token at header of req
+        const token = req.header('x-auth-token') 
     
-  
+        // There is a token at req ? 
+        if(!token){
+            res.status(401).json({
+                errors: [
+                    {
+                        msg: "No token found"
+                    }
+                ]
+            })
+        }
+        try {
+            const user = JWT.verify(token || "", process.env.SERVER_SECRET || config.secret,
+            function(err : any, user : any ) {
+                if (err) {
+                  return res.status(401).json({
+                    success: false,
+                    message: 'Error'
+                  });
+                } else {
+                  req.user = user;
+                  next();
+                }
+            })
+            next()
+        } catch (error) {
+            res.status(400).json({
+                errors: [
+                    {
+                        msg: 'Invalid Token'
+                    }
+                ]
+            })
+        }
+    }
+
 }

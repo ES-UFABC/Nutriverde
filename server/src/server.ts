@@ -54,7 +54,7 @@ app.post("/products", async (req,res) => {
   await productService.ProductService.getInstance().insert(req,res)
 });
 
-app.get("/producers/:id/products",async (req,res) => {
+app.get("/producers/:id/products", async (req,res) => {
   await productService.ProductService.getInstance().findByProducerId(req,res)
 });
 
@@ -112,7 +112,11 @@ app.put("/login", async (req,res) => {
   await userService.UserService.getInstance().loginProcessing(req,res)
 })
 
-
+app.get("/me", userService.UserService.getInstance().auth ,  async (req : e.Request | any ,res) =>
+{
+  console.log(req.user)
+  res.status(200).json({user:req.user})
+})
 
 /**
  * Server stack set-up
