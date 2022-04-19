@@ -1,5 +1,5 @@
 import * as dbConnection from "./db-connection"
-import {config} from '../config'
+import { config } from '../config'
 import * as dbConnect from "./db-connection"
 
 /**
@@ -16,7 +16,7 @@ export class User {
     address: string[]
     userPaymentMethods?: string
 
-    constructor(name: string, password: string, phones: string[], email: string, address : string[], cpf : string) {
+    constructor(name: string, password: string, phones: string[], email: string, address: string[], cpf: string) {
         this.id = 0
         this.name = name
         this.password = password
@@ -27,20 +27,20 @@ export class User {
     }
 
     isValid() {
-        return this.name.length > 0 && this.email.length > 0 
-        && this.address[0].length > 0 && this.cpf.length > 0
-        && this.name.length > 0 && this.phones[0].length > 0
-        && this.password.length > 0 
+        return this.name.length > 0 && this.email.length > 0
+            && this.address[0].length > 0 && this.cpf.length > 0
+            && this.name.length > 0 && this.phones[0].length > 0
+            && this.password.length > 0
     }
     /**
      * 
      * @param other 
      * @returns 
      */
-    isEquals(other : User){
-        return this.name === other.name && 
-        this.userPaymentMethods === other.userPaymentMethods && 
-        this.email === other.email 
+    isEquals(other: User) {
+        return this.name === other.name &&
+            this.userPaymentMethods === other.userPaymentMethods &&
+            this.email === other.email
     }
 
 
@@ -50,7 +50,7 @@ export class User {
      * @returns the User instance
      */
     static decode(json: any): User {
-        for (const prop of ["email", "name","password","phones","address","cpf"]) {
+        for (const prop of ["email", "name", "password", "phones", "address", "cpf"]) {
             if (!(prop in json)) {
                 throw new Error(`Property ${prop} is required`)
             }
@@ -71,7 +71,7 @@ export class User {
 export class UserDAO {
     private static instance: UserDAO
 
-    private constructor() {}
+    private constructor() { }
 
     static getInstance() {
         if (!this.instance) {
@@ -79,7 +79,7 @@ export class UserDAO {
         }
         return this.instance
     }
-    
+
     getCollection() {
         return dbConnection.getDb().collection(config.db.collections.users)
     }
@@ -89,9 +89,9 @@ export class UserDAO {
      * @param email the User email
      * @returns the User
      */
-     async findByEmail(email: string): Promise<User> {
+    async findByEmail(email: string): Promise<User> {
         try {
-            const response = await this.getCollection().findOne({email: email})
+            const response = await this.getCollection().findOne({ email: email })
 
             if (response) {
                 return User.decode(response)
@@ -111,7 +111,7 @@ export class UserDAO {
      */
     async findByname(name: string): Promise<User> {
         try {
-            const response = await this.getCollection().findOne({name: name})
+            const response = await this.getCollection().findOne({ name: name })
 
             if (response) {
                 return User.decode(response)
@@ -128,10 +128,11 @@ export class UserDAO {
      * @param id the User id
      * @returns the User
      */
-     async findById(id: number): Promise<User> {
+    async findById(id: number): Promise<User> {
         try {
-            const response = await this.getCollection().findOne({id: id , fantasyName : { $exists : false } })
-
+            console.log("id:::::",id)
+            const response = await this.getCollection().findOne({ id: id, fantasyName: { $exists: false } })
+            console.log("respond>>>", response)
             if (response) {
                 return User.decode(response)
             }
@@ -144,19 +145,19 @@ export class UserDAO {
     }
 
 
-    async update(User:User){
+    async update(User: User) {
         try {
             const response = await this.getCollection().replaceOne(
                 { id: User.id }, User)
 
             return (response) ? response.modifiedCount > 0 : false
         } catch (error) {
-            
+
         }
     }
-    async removeByname(name : string ){
+    async removeByname(name: string) {
         try {
-            const response = await this.getCollection().deleteOne({name:name})
+            const response = await this.getCollection().deleteOne({ name: name })
             return (response.deletedCount) ? response.deletedCount > 0 : false
         } catch (error) {
             console.log(error)
@@ -165,9 +166,9 @@ export class UserDAO {
     }
 
 
-    async removeById(id : number ){
+    async removeById(id: number) {
         try {
-            const response = await this.getCollection().deleteOne({id:id})
+            const response = await this.getCollection().deleteOne({ id: id })
             return (response.deletedCount) ? response.deletedCount > 0 : false
         } catch (error) {
             console.log(error)
@@ -177,12 +178,12 @@ export class UserDAO {
     /***
      * @deprecated
      */
-    async listAll() : Promise<User[]>{ 
+    async listAll(): Promise<User[]> {
         try {
             const response = await this.getCollection().find({},
-                {projection : {_id:0}}
+                { projection: { _id: 0 } }
             ).toArray() || []
-            if( response ){
+            if (response) {
                 return response as User[]
             }
             throw Error("Erro na opreação de listagem de Autores")
@@ -191,13 +192,13 @@ export class UserDAO {
             throw error
         }
     }
-    
-    async insert(User : User) : Promise<boolean>{
+
+    async insert(User: User): Promise<boolean> {
         try {
             const newId = await this.nextId()
             User.id = newId
             const response = await this.getCollection().insertOne(User)
-            if(!response || response.insertedCount < 1 ){
+            if (!response || response.insertedCount < 1) {
                 throw Error("Invalid result while inserting a post ")
             }
             return true
@@ -207,7 +208,7 @@ export class UserDAO {
         }
     }
 
-    async nextId() : Promise<number> {
+    async nextId(): Promise<number> {
         try {
             const seqColl = await dbConnection.getDb().collection(config.db.collections.sequences)
             const result = await seqColl.findOneAndUpdate(

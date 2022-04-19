@@ -112,10 +112,12 @@ app.put("/login", async (req,res) => {
   await userService.UserService.getInstance().loginProcessing(req,res)
 })
 
-app.get("/me", userService.UserService.getInstance().auth ,  async (req : e.Request | any ,res) =>
+app.get("/me/", userService.UserService.getInstance().auth ,  async (req : e.Request | any ,res) =>
 {
-  console.log(req.user)
-  res.status(200).json({user:req.user})
+  console.log("user:   ",req.user)
+  req.body = req.user
+  await userService.UserService.getInstance().findById(req,res)
+  //res.status(200).json({user:req.user})
 })
 
 /**

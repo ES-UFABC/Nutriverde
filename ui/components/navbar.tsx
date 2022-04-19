@@ -11,6 +11,8 @@ const navigation = [
 ];
 
 const profileNavigation = [
+  { name: "Faça seu Cadastro", href: "/register" },
+  { name: "Faça Login", href: "/login" },
   { name: "Perfil", href: "/profile" },
   { name: "Configurações", href: "/settings" },
   { name: "Meus produtos", href: "/my/products" },
