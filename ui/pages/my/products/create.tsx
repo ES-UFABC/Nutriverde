@@ -3,6 +3,7 @@ import Router from "next/router";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Layout from "../../../components/layout";
+import * as Auth from "../../../services/auth"
 
 interface IFile extends File {
   id: string;
@@ -14,6 +15,10 @@ export default function Contato() {
   const [step, setStep] = useState(0);
   const [files, setFiles] = useState<IFile[]>([]);
 
+  var token: any
+  if (typeof window !== 'undefined') { 
+    token = Auth.getToken()
+  }
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
     onDropAccepted: async (files) => {
@@ -61,18 +66,18 @@ export default function Contato() {
       price: dataForm.prodprice,
       specialDeliveryConditions: dataForm.proddelivery,
       description: dataForm.proddescription,
-      unitOfMeas: "KG",
-      producerId: 1,
+      unitOfMeas: "KG", // FIXME: select Unit of measure 
+      producerId: 1, // This id must be in a autorization fild in the req header
       cover: dataForm.cover,
     };
 
-    const res = await fetch(`${serverUrl}/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'x-auth-token': `${token}`, "Content-Type": "application/json"  },
+      body: JSON.stringify(data)
+    };
+
+    const res = await fetch(`${serverUrl}/products`,requestOptions);
 
     if (res.status < 200 || res.status >= 400) {
       console.log("Error creating product", res);

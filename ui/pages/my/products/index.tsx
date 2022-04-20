@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Layout from "../../../components/layout";
 import ProductCard from "../../../components/product-card";
+import * as Auth from "../../../services/auth"
+
 
 interface IProducts {
   id: number;
@@ -18,18 +20,41 @@ interface IProducts {
 export default function MyProducts() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [products, setProducts] = useState<IProducts[]>([]);
-  const user = 1;
 
-  useEffect(() => {
-    fetch(`${serverUrl}/producers/${user}/products`)
+  var token: any
+  if (typeof window !== 'undefined') { 
+    token = Auth.getToken()
+  }
+
+  
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'x-auth-token': `${token}` }
+  };
+
+  useEffect(() => { // TODO: handler with no Data
+    fetch(`${serverUrl}/producers/products`,requestOptions)
       .then(async (response) => {
         const data = await response.json();
+        console.log(data)
         setProducts(data.items);
       })
       .catch((err) => {
         console.log("error: ", err);
       });
   }, []);
+
+  function gambiarra(){
+    let render;
+    if(products){
+      render = products.map((item) => (
+        <ProductCard item={item} key={item.id} />
+      ))
+    } else {
+      render = <span>Hello</span>
+    }
+    return render
+  }
 
   return (
     <Layout title="Home">
@@ -51,9 +76,7 @@ export default function MyProducts() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-          {products.map((item) => (
-            <ProductCard item={item} key={item.id} />
-          ))}
+          {gambiarra()}
         </div>
       </div>
     </Layout>

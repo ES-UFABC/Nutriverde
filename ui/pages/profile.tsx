@@ -54,7 +54,7 @@ export default function Home() {
         <hr className="mb-2 w-full" />
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
-            <div className="flex flex-col items-center pb-10">
+            <div className="flex flex-col items-center pb-10 bg-gray-200" >
               <h5 className="mb-1 text-xl font-black text-gray-900 dark:text-white">Dados do Perfil</h5>
               <hr className="mb-2 w-full" />
               <span className="text-sm text-gray-500 dark:text-gray-400">Consumidor</span>

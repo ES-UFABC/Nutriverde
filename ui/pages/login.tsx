@@ -22,6 +22,7 @@ export default function Component() {
       const path = "login";
       const res = await fetch(`http://localhost:3000/${path}`, requestOptions);
       const resJson = await res.json();
+      
       Auth.login(resJson.token)
       router.push({
         pathname: '/' // autenticado

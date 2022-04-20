@@ -97,7 +97,8 @@ export class UserService {
     /**
      * TODO: Validade Data  
      * @param req 
-     * @param res 
+     * @param res
+     * @Test 
      */
     async insert(req: e.Request, res: e.Response) {
         try {
@@ -171,11 +172,15 @@ export class UserService {
         }
     }
 
+    /**  
+     * @Test
+     * @deprecated 
+     * 
+     */
     async auth(req: any, res: e.Response, next: any) {
 
         // The user send a token at header of req
         const token = req.header('x-auth-token')
-
         // There is a token at req ? 
         if (!token) {
             return res.status(401).json({

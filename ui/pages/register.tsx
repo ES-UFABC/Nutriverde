@@ -1,6 +1,7 @@
 import Layout from "../components/layout";
 import router from "next/router";
 import "../styles/Register.module.css";
+import * as Auth from "../services/auth"
 
 export default function Register() {
   async function submit(e: any) {
@@ -35,6 +36,10 @@ export default function Register() {
         const res = await fetch(`http://localhost:3000/${path}`, requestOptions);
         const resJson = await res.json();
         
+        Auth.login(resJson.token)
+        router.push({
+          pathname: '/' // autenticado
+        });
         
         router.push({
           pathname: '/login'

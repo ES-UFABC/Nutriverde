@@ -34,27 +34,32 @@ app.use(cors());
 
 
 // credencials 
-  app.use(function(req, res, next) {
-  res.header('Content-Type', 'application/json;charset=UTF-8')
-  res.header('Access-Control-Allow-Credentials')
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  )
-  next()
+app.use(function(req, res, next) {
+res.header('Content-Type', 'application/json;charset=UTF-8')
+res.header('Access-Control-Allow-Credentials')
+res.header(
+  'Access-Control-Allow-Headers',
+  'Origin, X-Requested-With, Content-Type, Accept'
+)
+next()
 })
 
-
-
-
 /**
+ * @Test
  * Products routes
  */
-app.post("/products", async (req,res) => {
+app.post("/products", userService.UserService.getInstance().auth , async (req : e.Request | any, res) => {
+  req.body.producerId = req.user.id
   await productService.ProductService.getInstance().insert(req,res)
 });
 
-app.get("/producers/:id/products", async (req,res) => {
+app.get("/producers/:id/products" ,async (req,res) => {
+  await productService.ProductService.getInstance().findByProducerId(req,res)
+});
+
+
+app.get("/producers/products", userService.UserService.getInstance().auth , async (req : e.Request | any,res) => {
+  req.body.producerId = req.user.id
   await productService.ProductService.getInstance().findByProducerId(req,res)
 });
 

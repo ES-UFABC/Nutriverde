@@ -81,7 +81,7 @@ import * as productModel from "../models/product-model";
      */
     async insert(req: e.Request, res: e.Response) {
         try {
-        console.log(req.body);
+        console.log(req.body.id);
         const Product = productModel.Product.decode(req.body)
 
         const response = await productModel.ProductDAO.getInstance().insert(Product)
@@ -107,9 +107,10 @@ import * as productModel from "../models/product-model";
     }
     
     async findByProducerId(req: e.Request, res: e.Response) {
-        const searchItem = parseInt(req.params.id);
-        //console.log("product producer id: ", searchItem);
-        //console.log(req.body);
+        const searchItem = parseInt(req.params.id) || req.body.producerId // FIXME:
+
+        // sem autenticação, recebe pelo params
+        // com autenticação, token 
         try {
           const products = await productModel.ProductDAO.getInstance().findByProducerId(searchItem);
           res.status(200).json({ items: products, message: "success" });
