@@ -4,33 +4,32 @@ import * as productModel from "../models/product-model";
 /**
  * Custom exception to signal a database error
  */
-export class ValidationError extends Error { }
-export class DatabaseError extends Error { }
-
+export class ValidationError extends Error {}
+export class DatabaseError extends Error {}
 
 /**
  * A singleton service to perform CRUD operations over a Product
  */
 export class ProductService {
-  private static instance: ProductService
+  private static instance: ProductService;
 
-  private constructor() { }
+  private constructor() {}
 
   static getInstance() {
     if (!this.instance) {
-      this.instance = new ProductService()
+      this.instance = new ProductService();
     }
-    return this.instance
+    return this.instance;
   }
   /**
-   * 
-   * @param req 
-   * @param res 
+   *
+   * @param req
+   * @param res
    */
   async listAll(req: e.Request, res: e.Response) {
     try {
       const Products = await productModel.ProductDAO.getInstance().listAll();
-      console.log("all products where fetch ")
+      console.log("all products where fetch ");
       res.status(200).json({ items: Products, message: "success" });
     } catch (error) {
       console.error(error);
@@ -39,14 +38,15 @@ export class ProductService {
   }
 
   /**
-   * 
-   * @param req 
-   * @param res 
+   *
+   * @param req
+   * @param res
    */
   async listAllByName(req: e.Request, res: e.Response) {
     try {
-      const name = req.params.word || ""
-      const Products = await productModel.ProductDAO.getInstance().searchAndList(name);
+      const name = req.params.word || "";
+      const Products =
+        await productModel.ProductDAO.getInstance().searchAndList(name);
       res.status(200).json({ items: Products, message: "success" });
     } catch (error) {
       console.error(error);
@@ -54,16 +54,14 @@ export class ProductService {
     }
   }
 
-
-
   /**
-   * 
-   * @param req 
-   * @param res 
+   *
+   * @param req
+   * @param res
    */
   async findById(req: e.Request, res: e.Response) {
     try {
-      const id = Number(req.params.id)
+      const id = Number(req.params.id);
 
       const Products = await productModel.ProductDAO.getInstance().findById(id);
       res.status(200).json({ items: Products, message: "success" });
@@ -73,29 +71,31 @@ export class ProductService {
     }
   }
 
-
   /**
-   * 
-   * @param req 
-   * @param res 
+   *
+   * @param req
+   * @param res
    */
   async insert(req: e.Request, res: e.Response) {
     try {
-      const Product = productModel.Product.decode(req.body)
-      const response = await productModel.ProductDAO.getInstance().insert(Product)
-      res.status(200).json({ items: Product, message: "success" });
+      // console.log(req.body);
+      const product = productModel.Product.decode(req.body);
+      const response = await productModel.ProductDAO.getInstance().insert(
+        product
+      );
+      res.status(200).json({ items: product, message: "success" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ items: [], message: "error inserting Products" });
     }
   }
 
-
   async update(req: e.Request, res: e.Response) {
     try {
-
-      const Product = await productModel.Product.decode(req.body)
-      const response = await productModel.ProductDAO.getInstance().update(Product)
+      const Product = await productModel.Product.decode(req.body);
+      const response = await productModel.ProductDAO.getInstance().update(
+        Product
+      );
 
       res.status(200).json({ items: Product, message: "success" });
     } catch (error) {
@@ -108,14 +108,15 @@ export class ProductService {
     // console.log("product producer id: ", searchItem);
     try {
       const producerId = Number(req.params.id);
-      const products = await productModel.ProductDAO.getInstance().findByProducerId(producerId);
-      console.log("products of producer-id(%d) fetch", producerId)
+      const products =
+        await productModel.ProductDAO.getInstance().findByProducerId(
+          producerId
+        );
+      console.log("products of producer-id(%d) fetch", producerId);
       res.status(200).json({ items: products, message: "success" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ items: [], message: "error searching products" });
     }
   }
-
-
 }
