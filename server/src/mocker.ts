@@ -185,7 +185,7 @@ export function newProducer() {
 export function newProduct(producerId: number) {
     const product = {
         id: 0,
-        name: falso.randColor() + falso.randShape(),
+        name: falso.randColor() +" "+ falso.randShape(),
         unitOfMeas: falso.rand(["Kg", "unidade", "cacho", "pacote", "caixa"], { length: 1 }), // the unitOfMeas username
         typology: productionsClassification(1),
         price: falso.randNumber({ min: 5, max: 50, precision: 0.5 }),
