@@ -42,19 +42,19 @@ export class Producer extends User {
     externalWebPages!: [string]
     productionsClassification!: [string]
     [index:string]:any
-    producerPaymentMehods: string[]
+    producerPaymentMethods: string[]
     
     
     constructor(name: string, password: string, phones: string[], email: string, 
                 address : string[], cpf : string, fantasyName: string,
-                producerPaymentMehods: string[] ) {
+                producerPaymentMethods: string[] ) {
 
         super(name, password, phones, email, address, cpf);
         this.id = 0
         this.name = name
         this.email = email
         this.fantasyName = fantasyName
-        this.producerPaymentMehods = producerPaymentMehods
+        this.producerPaymentMethods = producerPaymentMethods
         //this.productionAddress = productionAddress
     }
 
@@ -96,7 +96,7 @@ export class Producer extends User {
         const producer = new Producer(json.name, json.password, json.phones, 
                                     json.email, json.address, json.cpf,
                                     json.fantasyName,
-                                    json.producerPaymentMehods)
+                                    json.producerPaymentMethods)
 
         Object.keys(json).forEach(key =>{
             // if(key in json)
