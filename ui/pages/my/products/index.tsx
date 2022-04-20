@@ -43,7 +43,11 @@ export default function MyProducts() {
         console.log("error: ", err);
       });
   }, []);
-
+  
+  /**
+   * @Test
+   * @returns 
+   */
   function gambiarra(){
     let render;
     if(products){
@@ -51,7 +55,7 @@ export default function MyProducts() {
         <ProductCard item={item} key={item.id} />
       ))
     } else {
-      render = <span>Hello</span>
+      render = <span>Nenhum Produto Cadastrado.</span>
     }
     return render
   }
