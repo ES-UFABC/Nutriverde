@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { IProducer , address, stringifyAdress } from "../Interfaces/interfaces"
+import { IProducer , address, stringifyAdress } from "../Interfaces"
 
 export default function ProducerLoaded(props: any) {
     const producer: IProducer = props.item as IProducer
