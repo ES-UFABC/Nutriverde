@@ -4,22 +4,12 @@ import { useEffect, useState } from "react";
 import Layout from "../../../components/layout";
 import ProductCard from "../../../components/product-card";
 import * as Auth from "../../../services/auth"
+import { IProduct } from "../../../Interfaces"
 
-
-interface IProducts {
-  id: number;
-  name: string;
-  unitOfMeas: string;
-  typology: string;
-  price: number;
-  specialDeliveryConditions: string;
-  quantity: number;
-  cover: string;
-}
 
 export default function MyProducts() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-  const [products, setProducts] = useState<IProducts[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
 
   var token: any
   if (typeof window !== 'undefined') { 

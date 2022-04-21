@@ -193,7 +193,7 @@ export class ProductDAO {
      */
          async findByProducerId(id: number): Promise<Product[]> {
             try {
-                console.log( "model: id= %d: %s", id, typeof id)
+                // console.log( "model: id= %d: %s", id, typeof id)
                 const response = await this.getCollection().find(
                     { producerId: id }
                 ).toArray() || [] 

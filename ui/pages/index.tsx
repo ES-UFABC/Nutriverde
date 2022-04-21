@@ -1,37 +1,16 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import Carousel from "../components/carousel";
-import { SearchIcon } from "@heroicons/react/outline";
 import ProductCard from "../components/product-card";
+import { IProduct } from "../Interfaces"
+import SearchBar from "../components/searchbar";
 
-interface IProducts {
-  id: number;
-  name: string;
-  unitOfMeas: string;
-  typology: string;
-  price: number;
-  specialDeliveryConditions: string;
-  quantity: number;
-  cover: string;
-}
 
 export default function Home() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-  const [products, setProducts] = useState<IProducts[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
 
-  async function submit(e: any) {
-    try {
-      e.preventDefault();
 
-      const search = e.target.s.value;
-      const path = search ? `products/search/${search}` : "products";
-      const res = await fetch(`${serverUrl}/${path}`);
-      const resJson = await res.json();
-      setProducts(resJson.items);
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   useEffect(() => {
     fetch(`${serverUrl}/products`)
@@ -53,24 +32,8 @@ export default function Home() {
         <p className="text-4xl font-bold text-center my-4">
           Veja nossos produtos!
         </p>
-        {/* TODO: criar componente para busca */}
-        <form className="pb-4" onSubmit={submit}>
-          <div className="flex">
-            <input
-              type="text"
-              id="search"
-              name="s"
-              className="block p-4 text-md rounded-none rounded-l-lg bg-gray-50 border border-emerald-800 text-gray-900 focus:z-10 focus:ring-emerald-900 focus:border-emerald-900 block flex-1 min-w-0 w-full border-emerald-800"
-              placeholder="Procure por produtos..."
-            />
-            <button
-              className="inline-flex items-center px-4 text-md text-white bg-emerald-800 rounded-r-lg border border-l-0 border-emerald-800 hover:bg-emerald-700 focus:z-10 focus:ring-4 focus:ring-emerald-900"
-              type="submit"
-            >
-              <SearchIcon className="block h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-        </form>
+        
+        <SearchBar onSet={setProducts} searchPath="products/search/" default="products" />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
           {products.map((item) => (

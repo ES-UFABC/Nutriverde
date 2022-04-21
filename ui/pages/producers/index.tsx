@@ -1,14 +1,8 @@
 import { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import ProducerCard from "../../components/producer-card";
+import { IProducer } from "../../Interfaces"
 
-interface IProducer {
-  id: number;
-  name: string;
-  fantasyName: string;
-  email: string;
-  paymentMethods: string;
-}
 
 export default function Producers() {
   const [producers, setProducts] = useState<IProducer[]>([]);
