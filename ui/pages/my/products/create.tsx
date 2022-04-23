@@ -9,7 +9,7 @@ interface IFile extends File {
   preview: string;
 }
 
-export default function Contato() {
+export default function MyProductCreate() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [step, setStep] = useState(0);
   const [files, setFiles] = useState<IFile[]>([]);
