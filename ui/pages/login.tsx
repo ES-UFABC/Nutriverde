@@ -12,7 +12,7 @@ export default function Component() {
 
 
       const corpo = JSON.stringify({ email: `${email}`, password: `${password}` })
-      console.log(corpo)
+      //console.log(corpo)
       const requestOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -22,13 +22,17 @@ export default function Component() {
       const path = "login";
       const res = await fetch(`http://localhost:3000/${path}`, requestOptions);
       const resJson = await res.json();
-      
-      Auth.login(resJson.token)
-      router.push({
-        pathname: '/' // autenticado
-      });
 
-      console.log(resJson)
+      if (resJson.message == "Login Successfull") {
+        Auth.login(resJson.token)
+
+        router.push({
+          pathname: '/' // autenticado
+        });
+      }else{
+        console.log("Invalid LOGIN") //change to toast
+      }
+      //console.log("resJson", resJson)
     } catch (err) {
       console.error(err);
     }
