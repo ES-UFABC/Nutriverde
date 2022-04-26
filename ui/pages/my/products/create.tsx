@@ -3,6 +3,7 @@ import Router from "next/router";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Layout from "../../../components/layout";
+import { IProduct } from "../../../Interfaces";
 
 interface IFile extends File {
   id: string;
@@ -41,11 +42,11 @@ export default function MyProductCreate() {
       });
 
       const uploadedFiles = await Promise.all(promises);
-
+      
       // FIXME: waits at least 1 second to load images correctly.
       await new Promise((r) => setTimeout(r, 1 * 1000));
-      setDataForm({ ...dataForm, cover: uploadedFiles[0].id });
-
+      setDataForm({ ...dataForm, cover: uploadedFiles[0].id,images: uploadedFiles.map(e => e.id) });
+      
       setFiles(uploadedFiles);
     },
   });
@@ -64,6 +65,7 @@ export default function MyProductCreate() {
       unitOfMeas: "KG",
       producerId: 1,
       cover: dataForm.cover,
+      images: dataForm.images,
     };
 
     const res = await fetch(`${serverUrl}/products`, {
@@ -91,6 +93,7 @@ export default function MyProductCreate() {
     proddelivery: "",
     proddescription: "",
     cover: "",
+    images:[""],
   });
 
   const onChangeInput = (e: any) =>
