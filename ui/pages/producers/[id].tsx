@@ -17,7 +17,7 @@ async function LoadProducer(id: number): Promise<IProducer> {
   try {
     const resp = await fetch(`${serverUrl}/producers/${id}`);
     const data = await resp.json();
-    // console.log("data: ", data)
+    console.log("data: ", data)
     console.log("LoadProducer fetch sucess", id);
     return data.items as IProducer;
   } catch (error) {
@@ -29,7 +29,7 @@ async function LoadProducts(id: number): Promise<IProduct[]> {
   try {
     const resp = await fetch(`${serverUrl}/producers/${id}/products`);
     const data = await resp.json();
-    // console.log("data: ", data)
+    console.log("data: ", data)
     console.log("LoadProducts fetch sucess", id);
     return data.items as IProduct[];
   } catch (error) {

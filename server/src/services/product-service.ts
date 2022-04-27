@@ -113,7 +113,11 @@ export class ProductService {
   */
   async findByProducerId(req: any | e.Request , res: e.Response) {
     const searchItem = parseInt(req.params.id) || req.body.producerId // FIXME:
-    const isProducer = req.user.isProducer
+    let isProducer = false
+    
+    if (req.user){
+      isProducer = req.user.isProducer
+    }
     // sem autenticação, recebe pelo params
     // com autenticação, token 
     try {

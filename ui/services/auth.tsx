@@ -12,3 +12,8 @@ export const login = (token: string) => {
 export const logout = () => {
   localStorage.removeItem(TOKEN_KEY);
 };
+
+// 0 1 2 (not user, user & producer )
+export const userType = () => {
+
+};
