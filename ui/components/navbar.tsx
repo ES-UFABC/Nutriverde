@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
+import * as Auth from "../services/auth"
 
 const navigation = [
   { name: "Produtores", href: "/producers", current: false },
@@ -10,14 +11,36 @@ const navigation = [
   { name: "Sobre", href: "/about", current: false },
 ];
 
-const profileNavigation = [
+function profileNavigation() {
+  if (typeof window !== 'undefined') {
+    if(Auth.isAuthenticated()){
+      return profileNavigationProducer
+    }
+      return profileNavigationGuest    
+  }
+  return profileNavigationGuest
+}
+
+const profileNavigationGuest = [
   { name: "Faça seu Cadastro", href: "/register" },
   { name: "Faça Login", href: "/login" },
+  { name: "Configurações", href: "/settings" },
+  { name: "Sair", href: "/logout" },
+];
+
+const profileNavigationUser = [
+  { name: "Perfil", href: "/profile" },
+  { name: "Configurações", href: "/settings" },
+  { name: "Sair", href: "/logout" },
+];
+
+const profileNavigationProducer = [
   { name: "Perfil", href: "/profile" },
   { name: "Configurações", href: "/settings" },
   { name: "Meus produtos", href: "/my/products" },
   { name: "Sair", href: "/logout" },
 ];
+
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -91,7 +114,7 @@ export default function Navbar() {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                      {profileNavigation.map((item) => (
+                      {profileNavigation().map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
                             <Link href={item.href}>

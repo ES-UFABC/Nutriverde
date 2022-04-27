@@ -19,9 +19,9 @@ import { ok } from "assert";
 // import * as mocker from "./mocker"
 // import { Producer, ProducerDAO } from "./models/producer-model";
 
-import  passport from "passport"
+//import  passport from "passport"
 
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
+//var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 import * as breeder from "./models/mocker-populate"
 import session from "express-session";
@@ -34,7 +34,7 @@ const upload = multer();
 app.use(e.json());
 app.use(e.urlencoded({ extended: true })); // to use
 app.use(cors());
-app.use(passport.initialize())
+//app.use(passport.initialize())
 
 
 // credencials 
@@ -129,46 +129,46 @@ app.get("/me/", userService.UserService.getInstance().auth ,  async (req : e.Req
   //res.status(200).json({user:req.user})
 })
 
-passport.use(new GoogleStrategy({
-  clientID:  process.env.GOOGLE_API_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,
-  callbackURL: process.env.GOOGLE_API_REDIRECT,
-  passReqToCallback: true,
-  session: false
-},
-function(request: any, accessToken: any, refreshToken: any, profile: any, done: (arg0: null, arg1: any) => any) {
-  console.log("req ", request)
-  console.log("Access token", accessToken)
-  console.log("Refress", refreshToken)
-  console.log("profile", profile)
+// passport.use(new GoogleStrategy({
+//   clientID:  process.env.GOOGLE_API_CLIENT_ID,
+//   clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,
+//   callbackURL: process.env.GOOGLE_API_REDIRECT,
+//   passReqToCallback: true,
+//   session: false
+// },
+// function(request: any, accessToken: any, refreshToken: any, profile: any, done: (arg0: null, arg1: any) => any) {
+//   console.log("req ", request)
+//   console.log("Access token", accessToken)
+//   console.log("Refress", refreshToken)
+//   console.log("profile", profile)
   
-  // CHECK IF EMAIL MATCH return JWT 
-  // se nao, cria uma conta
+//   // CHECK IF EMAIL MATCH return JWT 
+//   // se nao, cria uma conta
 
-  return done(null, profile);
-}));
-
-
-app.get('/google', (req, res) => {
-  res.send('<a href="/auth/google">Authenticate with Google</a>');
-});
-
-app.get('/auth/google',
-  passport.authenticate('google', { session: false ,scope: [ 'email', 'profile' ] }
-));
-
-app.get('/login-google',
-  passport.authenticate( 'google', {
-    session: false,
-    successRedirect: '/producers',
-    failureRedirect: '/auth/google/failure'
-  })
-);
+//   return done(null, profile);
+// }));
 
 
-app.get('/auth/google/failure', (req, res) => {
-  res.send('Failed to authenticate..');
-});
+// app.get('/google', (req, res) => {
+//   res.send('<a href="/auth/google">Authenticate with Google</a>');
+// });
+
+// app.get('/auth/google',
+//   passport.authenticate('google', { session: false ,scope: [ 'email', 'profile' ] }
+// ));
+
+// app.get('/login-google',
+//   passport.authenticate( 'google', {
+//     session: false,
+//     successRedirect: '/producers',
+//     failureRedirect: '/auth/google/failure'
+//   })
+// );
+
+
+// app.get('/auth/google/failure', (req, res) => {
+//   res.send('Failed to authenticate..');
+// });
 
 /**
  * Server stack set-up
