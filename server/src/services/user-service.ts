@@ -44,25 +44,33 @@ export class UserService {
         }
     }
 
+    /**
+     * @Test
+     * @Fabio
+     * @param req 
+     * @param res 
+     */
     async loginProcessing(req: e.Request, res: e.Response) {
         const email = req.body.email as string || ""
         const password = req.body.password as string || ""
         try {
             const retrUser =
-                await userModel.UserDAO.getInstance().findByEmail(email)
-
+                await userModel.UserDAO.getInstance().findByEmail(email) 
+            
+            console.log(retrUser)
             if (await bcrypt.compare(password, retrUser.password)) {
 
                 const token = await JWT.sign({
                     name: retrUser.name,
                     email: retrUser.email,
-                    id: retrUser.id
+                    id: retrUser.id,
+                    isProducer: 'fantasyName' in retrUser
                 },
                     process.env.SERVER_SECRET || config.secret,
                     { expiresIn: 60 * 60 }
 
                 );
-
+                
                 res.json({
                     token,
                     message: "Login Successfull"
@@ -73,7 +81,7 @@ export class UserService {
             }
         } catch (error) {
             console.log(error)
-            res.status(500).json({ name: email, message: "Invalid Login" });
+            res.status(401).json({ name: email, message: "Invalid Credencials" });
         }
     }
 
@@ -85,6 +93,7 @@ export class UserService {
     async findById(req: e.Request, res: e.Response) {
         try {
             const id = Number(req.params.id) || req.body.id
+            console.log(id)
             const Users = await userModel.UserDAO.getInstance().findById(id);
             res.json({ items: Users, message: "success" });
         } catch (error) {
@@ -125,7 +134,8 @@ export class UserService {
                 const token = await JWT.sign({
                     name: User.name,
                     email: User.email,
-                    id: User.id
+                    id: User.id,
+                    isProducer: 'fantasyName' in User
                 },
                     process.env.SERVER_SECRET || config.secret,
                     { expiresIn: 60 * 60 }
@@ -200,6 +210,7 @@ export class UserService {
                             message: 'Error'
                         });
                     } else {
+                        console.log(user)
                         req.user = user;
                         next();
                     }

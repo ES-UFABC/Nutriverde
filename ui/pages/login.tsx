@@ -1,8 +1,15 @@
 import router from "next/router";
 import Layout from "../components/layout";
 import * as Auth from "../services/auth"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function Component() {
+
+export default function Component(props: any) {
+
+  const warn = (message: string) => toast.warn(message);
+  const success = (message: string) => toast.success(message);
+
   async function submit(e: any) {
     try {
       e.preventDefault();
@@ -14,6 +21,7 @@ export default function Component() {
       const corpo = JSON.stringify({ email: `${email}`, password: `${password}` })
       //console.log(corpo)
       const requestOptions = {
+
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: corpo
@@ -25,11 +33,12 @@ export default function Component() {
 
       if (resJson.message == "Login Successfull") {
         Auth.login(resJson.token)
-
+        success("Login Successfull")
         router.push({
           pathname: '/' // autenticado
         });
-      }else{
+      } else {
+        warn("Credencials Not Match")
         console.log("Invalid LOGIN") //change to toast
       }
       //console.log("resJson", resJson)
@@ -40,6 +49,18 @@ export default function Component() {
 
   return (
     <Layout title="Login" center>
+
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className="flex justify-center">
         <div className="w-full max-w-xs ">
           <form action="/login" className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 " onSubmit={submit}>

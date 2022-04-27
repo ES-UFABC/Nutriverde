@@ -62,10 +62,21 @@ app.get("/producers/:id/products" ,async (req,res) => {
 });
 
 
-app.get("/producers/products", userService.UserService.getInstance().auth , async (req : e.Request | any,res) => {
+
+/** 
+ * @Test
+ * /my/products -> only works with a Producer P
+ */
+app.get("/producers/products", userService.UserService.getInstance().auth , async (req : any | e.Request ,res) => {
+  console.log(req.user)
+  if(!req.user.isProducer){
+    res.status(401).json({ items: [], message: "Unauthorized" , isProducer: false });
+  }
   req.body.producerId = req.user.id
   await productService.ProductService.getInstance().findByProducerId(req,res)
 });
+
+
 
 app.get("/products", async (req,res) =>
   await productService.ProductService.getInstance().listAll(req,res)
@@ -89,6 +100,17 @@ app.get("/files/:filename", fileService.get);
 app.get("/producers", async (req,res) =>{
 
     await producerService.ProducerService.getInstance().listAll(req,res)
+}
+
+);
+
+
+/**
+ * User to Producer Form... 
+ * @Test 
+ */
+app.put("/producers", userService.UserService.getInstance().auth ,  async (req,res) =>{
+  await producerService.ProducerService.getInstance().insert(req,res)
 }
 
 );

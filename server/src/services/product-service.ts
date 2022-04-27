@@ -105,15 +105,20 @@ export class ProductService {
   }
 
 
-
-  async findByProducerId(req: e.Request, res: e.Response) {
+ /**
+  * @Test 
+  * @Fabio 
+  * @param req 
+  * @param res 
+  */
+  async findByProducerId(req: any | e.Request , res: e.Response) {
     const searchItem = parseInt(req.params.id) || req.body.producerId // FIXME:
-
+    const isProducer = req.user.isProducer
     // sem autenticação, recebe pelo params
     // com autenticação, token 
     try {
       const products = await productModel.ProductDAO.getInstance().findByProducerId(searchItem);
-      res.status(200).json({ items: products, message: "success" });
+      res.status(200).json({ items: products, message: "success" , isProducer: isProducer });
     } catch (error) {
       console.error(error);
       res.status(500).json({ items: [], message: "error searching products" });

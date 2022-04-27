@@ -1,6 +1,7 @@
 import * as dbConnection from "./db-connection"
 import { config } from '../config'
 import * as dbConnect from "./db-connection"
+import { Producer } from "./producer-model"
 
 /**
  * User model
@@ -63,6 +64,18 @@ export class User {
         }
         return user
     }
+
+    toJSON(): any {
+        return {
+            id: this.id,
+            name: this.name,
+            password: this.password,
+            email: this.email,
+            phones: this.phones,
+            address: this.address,
+            cpf: this.cpf
+        }
+    }
 }
 
 /**
@@ -89,11 +102,14 @@ export class UserDAO {
      * @param email the User email
      * @returns the User
      */
-    async findByEmail(email: string): Promise<User> {
+    async findByEmail(email: string): Promise<User | Producer> {
         try {
             const response = await this.getCollection().findOne({ email: email })
 
             if (response) {
+                console.log(response)
+                if (response.hasOwnProperty('fantasyName'))
+                    return Producer.decode(response)
                 return User.decode(response)
             }
             throw Error("Failed to retrieve User with given email")
@@ -109,11 +125,14 @@ export class UserDAO {
      * @param name the User name
      * @returns the User
      */
-    async findByname(name: string): Promise<User> {
+    async findByname(name: string): Promise<User | Producer> {
         try {
             const response = await this.getCollection().findOne({ name: name })
 
             if (response) {
+                console.log(response)
+                if (response.hasOwnProperty('fantasyName'))
+                    return Producer.decode(response)
                 return User.decode(response)
             }
             throw Error("Failed to retrieve User with given name")
@@ -128,12 +147,15 @@ export class UserDAO {
      * @param id the User id
      * @returns the User
      */
-    async findById(id: number): Promise<User> {
+    async findById(id: number): Promise<User | Producer> {
         try {
-            console.log("id:::::",id)
-            const response = await this.getCollection().findOne({ id: id, fantasyName: { $exists: false } })
+            console.log("id:::::", id)
+            const response = await this.getCollection().findOne({ id: id})
             console.log("respond>>>", response)
             if (response) {
+                console.log(response)
+                if (response.hasOwnProperty('fantasyName'))
+                    return Producer.decode(response)
                 return User.decode(response)
             }
             throw Error("Failed to retrieve User with given id")

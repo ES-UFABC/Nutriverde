@@ -60,22 +60,37 @@ export class ProducerService {
 
 
     /**
-     * 
+     * Evoluir de Usuário para Produtor 
+     * @Test
      * @param req 
      * @param res 
      */
-    async insert(req: e.Request, res: e.Response) {
+    async insert(req: any | e.Request, res: e.Response) {
         try {
+            
+            let retrUser = userModel.UserDAO.getInstance().findByEmail(req.user.email)
+            console.log("DEBUG UPDATE USER")
+            let retrUserJSON = (await retrUser).toJSON()
+            console.log("user JSON",retrUserJSON)
 
-            console.log(req.body) // DEBUG: 
-            const producer = producerModel.Producer.decode(req.body) // o erro está aqui campos obrigatorios dele
-            const response = await producerModel.ProducerDAO.getInstance().insert(producer)
+            var obj = Object.assign(retrUserJSON, req.body)
+            console.log("Merged Json", obj)
+
+            const producer = producerModel.Producer.decode(obj) // o erro está aqui campos obrigatorios dele
+            
+            console.log(producer)
+            
+            const response = await producerModel.ProducerDAO.getInstance().update(producer)
             res.status(200).json({ items: producer, message: "success" });
         } catch (error) {
             console.error(error);
             res.status(500).json({ items: [], message: "error inserting producers" });
         }
     }
+
+
+
+
 
     async remove(req: e.Request, res: e.Response) {
         try {
