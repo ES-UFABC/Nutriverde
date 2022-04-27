@@ -5,6 +5,7 @@ import Layout from "../../../components/layout";
 import ProductCard from "../../../components/product-card";
 import * as Auth from "../../../services/auth"
 import { IProduct } from "../../../Interfaces"
+import router from "next/router";
 
 
 export default function MyProducts() {
@@ -14,6 +15,11 @@ export default function MyProducts() {
   var token: any
   if (typeof window !== 'undefined') { 
     token = Auth.getToken()
+    if (!token){
+      router.push({
+        pathname: '/login' // autenticado
+      }); 
+    }
   }
 
   
