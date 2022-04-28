@@ -10,7 +10,7 @@ interface IFile extends File {
   preview: string;
 }
 
-export default function Contato() {
+export default function MyProductCreate() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [step, setStep] = useState(0);
   const [files, setFiles] = useState<IFile[]>([]);
@@ -19,6 +19,7 @@ export default function Contato() {
   if (typeof window !== 'undefined') { 
     token = Auth.getToken()
   }
+  // TODO: limit file quantity.
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
     onDropAccepted: async (files) => {
@@ -47,9 +48,17 @@ export default function Contato() {
 
       const uploadedFiles = await Promise.all(promises);
 
+      console.log(uploadedFiles);
+
       // FIXME: waits at least 1 second to load images correctly.
       await new Promise((r) => setTimeout(r, 1 * 1000));
-      setDataForm({ ...dataForm, cover: uploadedFiles[0].id });
+      setDataForm({
+        ...dataForm,
+        cover: uploadedFiles[0].id,
+        images: uploadedFiles.map((e) => e.id),
+      });
+
+      console.log(dataForm);
 
       setFiles(uploadedFiles);
     },
@@ -69,6 +78,7 @@ export default function Contato() {
       unitOfMeas: "KG", // FIXME: select Unit of measure 
       producerId: 1, // This id must be in a autorization fild in the req header
       cover: dataForm.cover,
+      images: dataForm.images,
     };
 
     const requestOptions = {
@@ -96,6 +106,7 @@ export default function Contato() {
     proddelivery: "",
     proddescription: "",
     cover: "",
+    images: [""],
   });
 
   const onChangeInput = (e: any) =>

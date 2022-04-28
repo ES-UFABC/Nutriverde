@@ -1,7 +1,6 @@
 import e from "express";
 import * as dbConnect from "./models/db-connection";
 import { config } from "./config";
-//import * as productService from "./services/product";
 import * as fileService from "./services/file";
 import multer from "multer";
 import * as producerService from "./services/producer-service"
@@ -15,9 +14,6 @@ import JWT from 'jsonwebtoken'
 
 
 import cors from "cors";
-import { ok } from "assert";
-// import * as mocker from "./mocker"
-// import { Producer, ProducerDAO } from "./models/producer-model";
 
 //import  passport from "passport"
 
@@ -25,6 +21,10 @@ import { ok } from "assert";
 
 import * as breeder from "./models/mocker-populate"
 import session from "express-session";
+import { ProductService } from "./services/product-service";
+import { ProducerService } from "./services/producer-service";
+import { UserService } from "./services/user-service";
+
 /**
  * Configure session middleware
  */
@@ -79,11 +79,15 @@ app.get("/producers/products", userService.UserService.getInstance().auth , asyn
 
 
 app.get("/products", async (req,res) =>
-  await productService.ProductService.getInstance().listAll(req,res)
+  await ProductService.getInstance().listAll(req,res)
+);
+
+app.get("/products/:id", async (req,res) =>
+  await ProductService.getInstance().findById(req, res)
 );
 
 app.get("/products/search/:word", async (req,res) =>
-await productService.ProductService.getInstance().listAllByName(req,res)
+await ProductService.getInstance().listAllByName(req,res)
 );
 
 
@@ -127,7 +131,7 @@ app.get("/producers/:id", async (req,res) =>{
  * Users routes
  */
 app.get("/users/:id", async (req,res) =>
-  await userService.UserService.getInstance().findById(req,res)
+  await UserService.getInstance().findById(req,res)
 );
 // TODO: 
 app.get("/mocker", async (req,res) => {
@@ -137,8 +141,9 @@ app.get("/mocker", async (req,res) => {
 app.put("/register", async (req,res) => {
   console.log("Estou registrando")
   await userService.UserService.getInstance().insert(req,res)
-
 })
+
+
 app.put("/login", async (req,res) => {
   await userService.UserService.getInstance().loginProcessing(req,res)
 })

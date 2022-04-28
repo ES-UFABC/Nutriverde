@@ -1,5 +1,6 @@
 import e from "express";
 import * as productModel from "../models/product-model";
+import { Product, ProductDAO } from "../models/product-model";
 
 /**
  * Custom exception to signal a database error
@@ -28,7 +29,7 @@ export class ProductService {
    */
   async listAll(req: e.Request, res: e.Response) {
     try {
-      const Products = await productModel.ProductDAO.getInstance().listAll();
+      const Products = await ProductDAO.getInstance().listAll();
       console.log("all products where fetch ");
       res.status(200).json({ items: Products, message: "success" });
     } catch (error) {
@@ -46,7 +47,7 @@ export class ProductService {
     try {
       const name = req.params.word || "";
       const Products =
-        await productModel.ProductDAO.getInstance().searchAndList(name);
+        await ProductDAO.getInstance().searchAndList(name);
       res.status(200).json({ items: Products, message: "success" });
     } catch (error) {
       console.error(error);
@@ -63,11 +64,11 @@ export class ProductService {
     try {
       const id = Number(req.params.id);
 
-      const Products = await productModel.ProductDAO.getInstance().findById(id);
-      res.status(200).json({ items: Products, message: "success" });
+      const product = await ProductDAO.getInstance().findById(id);
+      res.status(200).json({ item: product, message: "success" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ items: [], message: "error retrieving Products" });
+      res.status(500).json({ item: {}, message: "error retrieving Products" });
     }
   }
 
@@ -79,8 +80,8 @@ export class ProductService {
   async insert(req: e.Request, res: e.Response) {
     try {
       // console.log(req.body);
-      const product = productModel.Product.decode(req.body);
-      const response = await productModel.ProductDAO.getInstance().insert(
+      const product = Product.decode(req.body);
+      const response = await ProductDAO.getInstance().insert(
         product
       );
       res.status(200).json({ items: product, message: "success" });
@@ -92,9 +93,9 @@ export class ProductService {
 
   async update(req: e.Request, res: e.Response) {
     try {
-      const Product = await productModel.Product.decode(req.body);
-      const response = await productModel.ProductDAO.getInstance().update(
-        Product
+      const product = await Product.decode(req.body);
+      const response = await ProductDAO.getInstance().update(
+        product
       );
 
       res.status(200).json({ items: Product, message: "success" });
@@ -130,4 +131,3 @@ export class ProductService {
   }
 
 }
-
