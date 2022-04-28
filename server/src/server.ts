@@ -1,24 +1,16 @@
 import e from "express";
 import * as dbConnect from "./models/db-connection";
 import { config } from "./config";
-//import * as productService from "./services/product";
 import * as fileService from "./services/file";
 import multer from "multer";
-import * as producerService from "./services/producer-service"
-import * as userService from "./services/user-service"
-import * as productService from "./services/product-service"
-
-
-//import * as producerModel from "../models/producer-model";
-//import * as userModel from "../models/user-model";
-// import * as productModel from "./models/product-model";
 
 import cors from "cors";
-import { ok } from "assert";
-// import * as mocker from "./mocker"
-// import { Producer, ProducerDAO } from "./models/producer-model";
 
 import * as breeder from "./models/mocker-populate"
+import { ProductService } from "./services/product-service";
+import { ProducerService } from "./services/producer-service";
+import { UserService } from "./services/user-service";
+
 /**
  * Configure session middleware
  */
@@ -36,19 +28,23 @@ app.use(cors());
  * Products routes
  */
 app.post("/products", async (req,res) => {
-  await productService.ProductService.getInstance().insert(req,res)
+  await ProductService.getInstance().insert(req,res)
 });
 
 app.get("/producers/:id/products",async (req,res) => {
-  await productService.ProductService.getInstance().findByProducerId(req,res)
+  await ProductService.getInstance().findByProducerId(req,res)
 });
 
 app.get("/products", async (req,res) =>
-  await productService.ProductService.getInstance().listAll(req,res)
+  await ProductService.getInstance().listAll(req,res)
+);
+
+app.get("/products/:id", async (req,res) =>
+  await ProductService.getInstance().findById(req, res)
 );
 
 app.get("/products/search/:word", async (req,res) =>
-await productService.ProductService.getInstance().listAllByName(req,res)
+await ProductService.getInstance().listAllByName(req,res)
 );
 
 
@@ -63,11 +59,11 @@ app.get("/files/:filename", fileService.get);
  * Producers routes
  */
 app.get("/producers", async (req,res) =>
-  await producerService.ProducerService.getInstance().listAll(req,res)
+  await ProducerService.getInstance().listAll(req,res)
 );
 
 app.get("/producers/:id", async (req,res) =>
-  await producerService.ProducerService.getInstance().findById(req,res)
+  await ProducerService.getInstance().findById(req,res)
 );
 
 
@@ -75,7 +71,7 @@ app.get("/producers/:id", async (req,res) =>
  * Users routes
  */
 app.get("/users/:id", async (req,res) =>
-  await userService.UserService.getInstance().findById(req,res)
+  await UserService.getInstance().findById(req,res)
 );
 // TODO: 
 app.get("/mocker", async (req,res) => {
@@ -83,7 +79,7 @@ app.get("/mocker", async (req,res) => {
 })
 
 app.get("/register", async (req,res) => {
-  await userService.UserService.getInstance().insert(req,res)
+  await UserService.getInstance().insert(req,res)
   console.log("Estou registrando")
 })
 

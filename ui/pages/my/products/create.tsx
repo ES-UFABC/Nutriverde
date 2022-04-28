@@ -3,7 +3,6 @@ import Router from "next/router";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Layout from "../../../components/layout";
-import { IProduct } from "../../../Interfaces";
 
 interface IFile extends File {
   id: string;
@@ -15,6 +14,7 @@ export default function MyProductCreate() {
   const [step, setStep] = useState(0);
   const [files, setFiles] = useState<IFile[]>([]);
 
+  // TODO: limit file quantity.
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
     onDropAccepted: async (files) => {
@@ -42,11 +42,19 @@ export default function MyProductCreate() {
       });
 
       const uploadedFiles = await Promise.all(promises);
-      
+
+      console.log(uploadedFiles);
+
       // FIXME: waits at least 1 second to load images correctly.
       await new Promise((r) => setTimeout(r, 1 * 1000));
-      setDataForm({ ...dataForm, cover: uploadedFiles[0].id,images: uploadedFiles.map(e => e.id) });
-      
+      setDataForm({
+        ...dataForm,
+        cover: uploadedFiles[0].id,
+        images: uploadedFiles.map((e) => e.id),
+      });
+
+      console.log(dataForm);
+
       setFiles(uploadedFiles);
     },
   });
@@ -93,7 +101,7 @@ export default function MyProductCreate() {
     proddelivery: "",
     proddescription: "",
     cover: "",
-    images:[""],
+    images: [""],
   });
 
   const onChangeInput = (e: any) =>

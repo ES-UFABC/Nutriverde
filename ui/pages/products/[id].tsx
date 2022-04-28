@@ -1,72 +1,126 @@
+import classNames from "classnames";
+import { format } from "date-fns";
+import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import NumberFormat from "react-number-format";
 import Layout from "../../components/layout";
-import { IProduct } from "../../Interfaces";
+import { IProducer, IProduct } from "../../Interfaces";
 
-export default function ProductAbout() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-  const [product, setProduct] = useState<IProduct>();
 
-  const router = useRouter();
-  const id = router.query.id;
+  const id = context.params?.id;
+  if (!id) {
+    console.error("error loading page - undefined ID");
+    return {};
+  }
 
-  useEffect(() => {
-    fetch(`${serverUrl}/producers/${id}`)
-      .then(async (resp) => {
-        const data = await resp.json();
-        setProduct(data);
-      })
-      .catch((err) => console.log(err));
-  });
+  const props: { product?: IProduct; producer?: IProducer } = {
+    product: undefined,
+    producer: undefined,
+  };
+
+  {
+    const resp = await fetch(`${serverUrl}/products/${id}`);
+    const data = await resp.json();
+    if (!data.item) {
+      console.error("error loading page - product not found");
+      return {};
+    }
+    props.product = data.item;
+  }
+
+  console.log(props);
+
+  {
+    const resp = await fetch(
+      `${serverUrl}/producers/${props.product?.producerId}`
+    );
+    const data = await resp.json();
+    if (!data.items) {
+      console.error("error loading page - producer not found");
+      return {};
+    }
+    props.producer = data.items;
+  }
+
+  return { props };
+}
+
+export default function ProductAbout({
+  product,
+  producer,
+}: {
+  product: IProduct;
+  producer: IProducer;
+}) {
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+
+  const [selectedImage, setSelectedImage] = useState<string>(product.cover);
+  const [currentPrice, setCurrentPrice] = useState<number>(product.price);
+  const [quantity, setQuantity] = useState<number>(1);
+
+  const formatDate = (str: string) => {
+    const date = new Date(str);
+    return format(date, "dd/MM/yyyy");
+  };
+
+  const updatePrice = (e: any) => {
+    let quantity = parseInt(e.target.value);
+    if (isNaN(quantity)) {
+      quantity = 1;
+    } else {
+      quantity = quantity >= 1 ? quantity : 1;
+    }
+    setQuantity(quantity);
+    setCurrentPrice(quantity * product.price);
+  };
 
   return (
-    <Layout title={`Product - ${product?.name}`}>
-      {/* <img src={`${serverUrl}/files/${product?.cover}`}></img> */}
+    <Layout title={`${product.name}`}>
       <div className=" mx-auto p-4 flex flex-col ">
         <div className="flex flex-row gap-2 p-4 w-full text-center bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-          <div className="flex flex-row basis-2/5 ">
+          <div className="flex flex-row basis-1/2 ">
             <div className="flex flex-col basis-1/4 gap-2 ">
-              <img src="/home1.png"></img>
-              <img src="/home2.png"></img>
-              <img src="/home3.png"></img>
+              {product.images?.map((item) => (
+                <img
+                  className={classNames("cursor-pointer p-1", {
+                    "border-solid border-2 border-emerald-800 rounded-md":
+                      selectedImage === item,
+                  })}
+                  key={item}
+                  src={`${serverUrl}/files/${item}`}
+                  onClick={() => setSelectedImage(item)}
+                />
+              ))}
             </div>
-            <div className=" flex basis-3/4 ml-2 place-content-center flex-none  ">
-              <img className="" src="/home1.png"></img>
+            <div className="basis-3/4 ml-2">
+              <img src={`${serverUrl}/files/${selectedImage}`}></img>
             </div>
           </div>
 
-          <div className="basis-3/5 flex flex-col gap-6">
+          <div className="basis-1/2 flex flex-col gap-6">
             <p className="text-4xl font-bold text-center my-4">
-              Sopa de cogumelo e batata e cenoura
+              {product.name}
             </p>
 
-            <div className="flex flex-row">
-              <div className="flex flex-col basis-1/2 items-start ml-28 gap-3  ">
+            <div className="flex flex-row gap-8">
+              <div className="flex flex-col basis-1/2 items-start ml-8 gap-3 text-left">
                 <p className="text-xl">
-                  <span className="font-bold">Preço:</span>R$25,00
+                  <span className="font-bold">Tipo:</span> {product.typology}
                 </p>
                 <p className="text-xl">
-                  <span className="font-bold">Tipo:</span>Tubérculo
+                  <span className="font-bold">Safra:</span>{" "}
+                  {formatDate(product.cropDate)}
                 </p>
                 <p className="text-xl">
-                  <span className="font-bold">Safra:</span>11/10/2001
-                </p>
-                <p className="text-xl">
-                  <span className="font-bold">Produtor:</span>
-                  <a href="/producers/1">Carlos Augusto</a>
+                  <span className="font-bold">Produtor:</span>{" "}
+                  <a href="/producers/1">{producer.name}</a>
                 </p>
                 <div>
-                  <p className="font-bold text-xl text-left">Descrição:</p>
-                  <p className="text-justify">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
-                  </p>
+                  <p className="font-bold text-xl">Descrição:</p>
+                  <p className="text-justify">{product.description}</p>
                 </div>
               </div>
               <div className="flex flex-col items-center basis-1/2">
@@ -76,6 +130,9 @@ export default function ProductAbout() {
                     name="quantity"
                     className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-emerald-800 peer"
                     placeholder=" "
+                    min={1}
+                    value={quantity}
+                    onChange={updatePrice}
                   />
                   <label
                     htmlFor="quantity"
@@ -84,11 +141,23 @@ export default function ProductAbout() {
                     Quantidade
                   </label>
                 </div>
-                <button className="btn mb-3 mr-2 w-60 mt-3">
+                <p className="text-xl">
+                  <NumberFormat
+                    className="font-bold text-emerald-800 text-2xl"
+                    value={currentPrice}
+                    displayType="text"
+                    prefix="R$"
+                    decimalSeparator=","
+                    thousandSeparator="."
+                    decimalScale={2}
+                    fixedDecimalScale
+                  />
+                </p>
+                <button className="btn btn-primary mb-3 mr-2 w-60 mt-3">
                   Adicionar ao carrinho
                 </button>
 
-                <p>Em estoque:85</p>
+                <p>Em estoque: {product.quantity}</p>
               </div>
             </div>
           </div>

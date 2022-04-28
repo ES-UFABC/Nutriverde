@@ -15,6 +15,7 @@ export class Product {
   cropDate: string;
   quantity: number;
   cover: string;
+  images: string[];
   producerId: number;
 
   constructor(
@@ -35,6 +36,7 @@ export class Product {
     this.price = 0;
     this.specialDeliveryConditions = specialDeliveryConditions;
     this.cover = "";
+    this.images = [];
     this.cropDate = cropDate;
     this.quantity = quantity;
     this.producerId = producerId;
@@ -91,6 +93,9 @@ export class Product {
     }
     if ("price" in json) {
       product.price = json.price;
+    }
+    if ("images" in json) {
+      product.images = json.images;
     }
 
     return product;
