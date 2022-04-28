@@ -18,6 +18,10 @@ export default function producerRegister() {
     const handleChangeA = () => { setCheckeda(!checkeda); };
     const handleChangeO = () => { setCheckedo(!checkedo); };
 
+    let token: any
+    if (typeof window !== 'undefined') {
+      token = Auth.getToken()
+    }
 
     async function submit(e: any) {
         try {
@@ -69,10 +73,10 @@ export default function producerRegister() {
             console.log(corpo);
             const requestOptions = {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", 'x-auth-token': `${token}` },
                 body: corpo,
             };
-            const path = "register";
+            const path = "producers";
             const res = await fetch(`http://localhost:3000/${path}`, requestOptions);
             const resJson = await res.json();
 
@@ -477,3 +481,6 @@ export default function producerRegister() {
         </Layout>
     );
 }
+
+
+
