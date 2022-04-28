@@ -24,7 +24,7 @@ interface IUser {
 export default function Home() {
   const [users, setUsers] = useState<IUser>();
 
-  var token: any
+  let token: any
   if (typeof window !== 'undefined') {
     token = Auth.getToken()
   }
