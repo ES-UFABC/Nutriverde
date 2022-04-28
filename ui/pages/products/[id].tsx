@@ -2,8 +2,8 @@ import { ChatIcon, ShoppingCartIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import { format } from "date-fns";
 import { GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useState } from "react";
 import NumberFormat from "react-number-format";
 import Layout from "../../components/layout";
 import { IProducer, IProduct } from "../../Interfaces";
@@ -58,22 +58,23 @@ export default function ProductAbout({
 }) {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
-  const [selectedImage, setSelectedImage] = useState<string>(product.cover);
-  const [currentPrice, setCurrentPrice] = useState<number>(product.price);
-  const [quantity, setQuantity] = useState<number>(1);
+  const [selectedImage, setSelectedImage] = useState(product.cover);
+  const [currentPrice, setCurrentPrice] = useState(product.price);
+  const [quantity, setQuantity] = useState(1);
 
   const formatDate = (str: string) => {
     const date = new Date(str);
     return format(date, "dd/MM/yyyy");
   };
 
-  const updatePrice = (e: any) => {
+  const updateQuantity = (e: any) => {
     let quantity = parseInt(e.target.value);
-    if (isNaN(quantity)) {
+    if (isNaN(quantity) || quantity < 1) {
       quantity = 1;
-    } else {
-      quantity = quantity >= 1 ? quantity : 1;
+    } else if (quantity > product.quantity) {
+      quantity = product.quantity;
     }
+
     setQuantity(quantity);
     setCurrentPrice(quantity * product.price);
   };
@@ -117,7 +118,11 @@ export default function ProductAbout({
                 </p>
                 <p className="text-xl">
                   <span className="font-bold">Produtor:</span>{" "}
-                  <a href="/producers/1">{producer.name}</a>
+                  <Link href={`/producers/${product.producerId}`}>
+                    <a className="text-emerald-800 hover:underline active:text-emerald-600">
+                      {producer.name}
+                    </a>
+                  </Link>
                 </p>
                 <div>
                   <p className="font-bold text-xl">Descrição:</p>
@@ -133,7 +138,7 @@ export default function ProductAbout({
                     placeholder=" "
                     min={1}
                     value={quantity}
-                    onChange={updatePrice}
+                    onChange={updateQuantity}
                   />
                   <label
                     htmlFor="quantity"
