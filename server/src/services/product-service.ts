@@ -1,12 +1,11 @@
 import e from "express";
-import * as productModel from "../models/product-model";
 import { Product, ProductDAO } from "../models/product-model";
 
 /**
  * Custom exception to signal a database error
  */
-export class ValidationError extends Error { }
-export class DatabaseError extends Error { }
+export class ValidationError extends Error {}
+export class DatabaseError extends Error {}
 
 /**
  * A singleton service to perform CRUD operations over a Product
@@ -14,7 +13,7 @@ export class DatabaseError extends Error { }
 export class ProductService {
   private static instance: ProductService;
 
-  private constructor() { }
+  private constructor() {}
 
   static getInstance() {
     if (!this.instance) {
@@ -29,9 +28,9 @@ export class ProductService {
    */
   async listAll(req: e.Request, res: e.Response) {
     try {
-      const Products = await ProductDAO.getInstance().listAll();
+      const products = await ProductDAO.getInstance().listAll();
       console.log("all products where fetch ");
-      res.status(200).json({ items: Products, message: "success" });
+      res.status(200).json({ items: products, message: "success" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ items: [], message: "error retrieving Products" });
@@ -46,9 +45,8 @@ export class ProductService {
   async listAllByName(req: e.Request, res: e.Response) {
     try {
       const name = req.params.word || "";
-      const Products =
-        await ProductDAO.getInstance().searchAndList(name);
-      res.status(200).json({ items: Products, message: "success" });
+      const products = await ProductDAO.getInstance().searchAndList(name);
+      res.status(200).json({ items: products, message: "success" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ items: [], message: "error retrieving Products" });
@@ -81,9 +79,7 @@ export class ProductService {
     try {
       // console.log(req.body);
       const product = Product.decode(req.body);
-      const response = await ProductDAO.getInstance().insert(
-        product
-      );
+      const response = await ProductDAO.getInstance().insert(product);
       res.status(200).json({ items: product, message: "success" });
     } catch (error) {
       console.error(error);
@@ -93,10 +89,8 @@ export class ProductService {
 
   async update(req: e.Request, res: e.Response) {
     try {
-      const product = await Product.decode(req.body);
-      const response = await ProductDAO.getInstance().update(
-        product
-      );
+      const product = Product.decode(req.body);
+      const response = await ProductDAO.getInstance().update(product);
 
       res.status(200).json({ items: Product, message: "success" });
     } catch (error) {
@@ -105,29 +99,31 @@ export class ProductService {
     }
   }
 
+  /**
+   * @Test
+   * @Fabio
+   * @param req
+   * @param res
+   */
+  async findByProducerId(req: any | e.Request, res: e.Response) {
+    const searchItem = parseInt(req.params.id) || req.body.producerId; // FIXME:
+    let isProducer = false;
 
- /**
-  * @Test 
-  * @Fabio 
-  * @param req 
-  * @param res 
-  */
-  async findByProducerId(req: any | e.Request , res: e.Response) {
-    const searchItem = parseInt(req.params.id) || req.body.producerId // FIXME:
-    let isProducer = false
-    
-    if (req.user){
-      isProducer = req.user.isProducer
+    if (req.user) {
+      isProducer = req.user.isProducer;
     }
     // sem autenticação, recebe pelo params
-    // com autenticação, token 
+    // com autenticação, token
     try {
-      const products = await productModel.ProductDAO.getInstance().findByProducerId(searchItem);
-      res.status(200).json({ items: products, message: "success" , isProducer: isProducer });
+      const products = await ProductDAO.getInstance().findByProducerId(
+        searchItem
+      );
+      res
+        .status(200)
+        .json({ items: products, message: "success", isProducer: isProducer });
     } catch (error) {
       console.error(error);
       res.status(500).json({ items: [], message: "error searching products" });
     }
   }
-
 }

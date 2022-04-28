@@ -3,10 +3,10 @@
  */
 
 declare module "express-session" {
-    interface SessionData {
-        authenticated: boolean,
-        userName: string
-    }
+  interface SessionData {
+    authenticated: boolean;
+    userName: string;
+  }
 }
 
-export {}
+export {};
