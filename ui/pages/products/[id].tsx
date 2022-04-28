@@ -1,3 +1,4 @@
+import { ChatIcon, ShoppingCartIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import { format } from "date-fns";
 import { GetServerSidePropsContext } from "next";
@@ -79,7 +80,7 @@ export default function ProductAbout({
 
   return (
     <Layout title={`${product.name}`}>
-      <div className=" mx-auto p-4 flex flex-col ">
+      <div className=" mx-auto p-4 flex flex-col gap-3">
         <div className="flex flex-row gap-2 p-4 w-full text-center bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
           <div className="flex flex-row basis-1/2 ">
             <div className="flex flex-col basis-1/4 gap-2 ">
@@ -136,7 +137,7 @@ export default function ProductAbout({
                   />
                   <label
                     htmlFor="quantity"
-                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                    className="absolute left-0 text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Quantidade
                   </label>
@@ -154,13 +155,18 @@ export default function ProductAbout({
                   />
                 </p>
                 <button className="btn btn-primary mb-3 mr-2 w-60 mt-3">
-                  Adicionar ao carrinho
+                  <ShoppingCartIcon className="block w-6 h-6" /> Adicionar ao
+                  carrinho
                 </button>
 
                 <p>Em estoque: {product.quantity}</p>
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex flex-row gap-2 p-4 w-full text-center bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+          <ChatIcon className="block w-8 h-8" />
+          <p className="text-2xl font-bold">Comentários</p>
         </div>
       </div>
     </Layout>
