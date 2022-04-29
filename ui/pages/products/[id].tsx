@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import NumberFormat from "react-number-format";
 import Layout from "../../components/layout";
-import { IProducer, IProduct } from "../../Interfaces";
+import { IProducer, IProduct } from "../../interfaces";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;

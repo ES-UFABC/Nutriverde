@@ -3,40 +3,39 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Layout from "../../../components/layout";
 import ProductCard from "../../../components/product-card";
-import * as Auth from "../../../services/auth"
-import { IProduct } from "../../../Interfaces"
+import * as Auth from "../../../services/auth";
+import { IProduct } from "../../../interfaces";
 import router from "next/router";
 import Login from "../../login";
-
 
 export default function MyProducts() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [products, setProducts] = useState<IProduct[]>([]);
   const [isProducer, setIsProducer] = useState(false);
 
-  var token: any
-  if (typeof window !== 'undefined') {
-    token = Auth.getToken()
-    if(!token){
+  var token: any;
+  if (typeof window !== "undefined") {
+    token = Auth.getToken();
+    if (!token) {
       router.push({
-        pathname: '/login' // autenticado
+        pathname: "/login", // autenticado
       });
     }
   }
 
-
   const requestOptions = {
-    method: 'GET',
-    headers: { 'x-auth-token': `${token}` }
+    method: "GET",
+    headers: { "x-auth-token": `${token}` },
   };
 
-  useEffect(() => { // TODO: handler with no Data
+  useEffect(() => {
+    // TODO: handler with no Data
     fetch(`${serverUrl}/producers/products`, requestOptions)
       .then(async (response) => {
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setProducts(data.items);
-        setIsProducer(data.isProducer); // Sou Produtor ? 
+        setIsProducer(data.isProducer); // Sou Produtor ?
       })
       .catch((err) => {
         console.log("error: ", err);
@@ -45,18 +44,18 @@ export default function MyProducts() {
 
   /**
    * @Test
-   * @returns 
+   * @returns
    */
   function listProducts() {
     let render;
     if (products) {
       render = products.map((item) => (
         <ProductCard item={item} key={item.id} />
-      ))
+      ));
     } else {
-      render = <span>Nenhum Produto Cadastrado.</span>
+      render = <span>Nenhum Produto Cadastrado.</span>;
     }
-    return render
+    return render;
   }
 
   function condRender() {
@@ -85,18 +84,13 @@ export default function MyProducts() {
               {listProducts()}
             </div>
           </div>
-        </Layout>)
+        </Layout>
+      );
+    } else {
+      render = <p>Voce não possui permissoes para isso</p>;
     }
-    else {
-      render = <p>Voce não possui permissoes para isso</p>
-
-    }
-    return render
+    return render;
   }
 
-  return (
-    <>
-      {condRender()}
-    </>
-  );
+  return <>{condRender()}</>;
 }

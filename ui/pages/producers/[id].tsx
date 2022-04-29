@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Layout from "../../components/layout";
 import ProductCard from "../../components/product-card";
 import ProducerLoaded from "../../components/producer-loaded";
-import { IProducer, IProduct } from "../../Interfaces";
+import { IProducer, IProduct } from "../../interfaces";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import Marker from "../../components/marker";
 import Map from "../../components/map";
@@ -17,7 +17,7 @@ async function LoadProducer(id: number): Promise<IProducer> {
   try {
     const resp = await fetch(`${serverUrl}/producers/${id}`);
     const data = await resp.json();
-    console.log("data: ", data)
+    console.log("data: ", data);
     console.log("LoadProducer fetch sucess", id);
     return data.items as IProducer;
   } catch (error) {
@@ -29,7 +29,7 @@ async function LoadProducts(id: number): Promise<IProduct[]> {
   try {
     const resp = await fetch(`${serverUrl}/producers/${id}/products`);
     const data = await resp.json();
-    console.log("data: ", data)
+    console.log("data: ", data);
     console.log("LoadProducts fetch sucess", id);
     return data.items as IProduct[];
   } catch (error) {
