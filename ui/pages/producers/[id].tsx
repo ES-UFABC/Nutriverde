@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import ProductCard from "../../components/product-card";
 import ProducerLoaded from "../../components/producer-loaded";
@@ -7,36 +7,11 @@ import { IProducer, IProduct } from "../../Interfaces";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import Marker from "../../components/marker";
 import Map from "../../components/map";
+import { LoadProducer, LoadProducts } from "../../services/loader";
 
-// TODO: allow revalidation when informations change
 // TODO: make prety loading page or use blocking ?
 // TODO: return 404 page when cant find producer on DB
 
-const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-async function LoadProducer(id: number): Promise<IProducer> {
-  try {
-    const resp = await fetch(`${serverUrl}/producers/${id}`);
-    const data = await resp.json();
-    console.log("data: ", data)
-    console.log("LoadProducer fetch sucess", id);
-    return data.items as IProducer;
-  } catch (error) {
-    console.log("LoadpProducer error: ", error);
-    throw error;
-  }
-}
-async function LoadProducts(id: number): Promise<IProduct[]> {
-  try {
-    const resp = await fetch(`${serverUrl}/producers/${id}/products`);
-    const data = await resp.json();
-    console.log("data: ", data)
-    console.log("LoadProducts fetch sucess", id);
-    return data.items as IProduct[];
-  } catch (error) {
-    console.log("LoadProducts error: ", error);
-    throw error;
-  }
-}
 const render = (status: Status) => {
   return <h1>{status}</h1>;
 };
@@ -57,7 +32,7 @@ export default function ProducerAbout() {
       LoadProducer(id)
         .then((p) => {
           setProducer(p);
-          // setCenter(p.coord)
+          // setCenter(p.businessAddress.coord);
           // console.log("keys on useEffect", Object.keys(p))
         })
         .catch((err) =>

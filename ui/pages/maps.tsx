@@ -5,42 +5,55 @@ import Map from "../components/map";
 import Marker from "../components/marker";
 
 interface GeoPosition {
-  lat: number,
-  lng: number
+  lat: number;
+  lng: number;
 }
-var pst : GeoPosition = {
-  lat:-23.06,
-  lng:-46.5
+var pst: GeoPosition = {
+  lat: -23.06,
+  lng: -46.5,
 };
 
 const render = (status: Status) => {
   return <h1>{status}</h1>;
 };
 
-
-
-
 export default function Maps() {
-  let location: any ;
-  if (navigator.geolocation) {
-    location = navigator.geolocation.getCurrentPosition(getPosition);
-  }
-
   const ref = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
-  const [zoom, setZoom] = useState(10);
+  const [zoom, setZoom] = useState(13);
   const [center, setCenter] = useState<google.maps.LatLngLiteral>(pst);
 
-  
-  
-  function getPosition(position:GeolocationPosition):GeoPosition {
+  function getCoor(position: GeolocationPosition) {
     console.log(position.coords.latitude, position.coords.longitude);
     pst = {
       lat: position.coords.latitude,
-      lng: position.coords.longitude
-    }
-    return pst;
+      lng: position.coords.longitude,
+    };
+    setCenter(pst as google.maps.LatLngLiteral);
+    console.log("geo location", pst);
   }
+  function errorCoor(e: GeolocationPositionError) {
+    console.log("could not get geometry location", e);
+  }
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function () {},
+        function () {},
+        {}
+      );
+      navigator.geolocation.getCurrentPosition(getCoor, errorCoor, {
+        maximumAge: 60000,
+        timeout: 5000,
+        enableHighAccuracy: true,
+      });
+      //   location = navigator.geolocation.getCurrentPosition(getPosition);
+    } else {
+      alert(
+        "I'm sorry, but geolocation services are not supported by your browser."
+      );
+    }
+  });
 
   useEffect(() => {
     if (ref.current && !map) {
