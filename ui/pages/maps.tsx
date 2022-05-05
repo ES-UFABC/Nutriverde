@@ -53,7 +53,7 @@ export default function Maps() {
         "I'm sorry, but geolocation services are not supported by your browser."
       );
     }
-  });
+  },[]);
 
   useEffect(() => {
     if (ref.current && !map) {
