@@ -9,7 +9,6 @@ export default function InputField({
   return (
     <div className="relative z-0 mb-6 w-full group">
       <Field
-        type="text"
         placeholder=" "
         {...field}
         {...props}
