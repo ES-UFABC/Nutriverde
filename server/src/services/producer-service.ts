@@ -1,5 +1,7 @@
 import e from "express";
+import { config } from "../config";
 import { Producer, ProducerDAO } from "../models/producer-model";
+import JWT from "jsonwebtoken";
 import { UserDAO } from "../models/user-model";
 
 /**
@@ -81,7 +83,17 @@ export class ProducerService {
       console.log(producer);
 
       const response = await ProducerDAO.getInstance().update(producer);
-      res.status(200).json({ items: producer, message: "success" });
+      const token = JWT.sign(
+        {
+          name: producer.name,
+          email: producer.email,
+          id: producer.id,
+          isProducer: true,
+        },
+        process.env.SERVER_SECRET || config.secret,
+        { expiresIn: 60 * 60 }
+      );
+      res.status(200).json({ items: producer,token, message: "success" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ items: [], message: "error inserting producers" });

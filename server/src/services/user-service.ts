@@ -62,7 +62,7 @@ export class UserService {
             isProducer: "fantasyName" in retrUser,
           },
           process.env.SERVER_SECRET || config.secret,
-          { expiresIn: 1 * 30 }
+          { expiresIn: 60 * 60 }
         );
 
         res.json({

@@ -181,7 +181,8 @@ export class UserDAO {
       if (response) {
         console.log(response);
         if (response.hasOwnProperty("fantasyName"))
-          return Producer.decode(response);
+          return response as Producer;  
+        //return Producer.decode(response);
         return User.decode(response);
       }
       throw Error("Failed to retrieve User with given id");

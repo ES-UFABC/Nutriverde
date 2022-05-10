@@ -70,7 +70,6 @@ export default function producerRegister() {
                 district: e.target.PMunicipio.value,
                 county: e.target.PEstado.value
             }
-            console.log("pADD ", pAddres)
             const cAddres = {
                 street: e.target.CRua.value,
                 codeId: e.target.CBairro.value,
@@ -107,7 +106,6 @@ export default function producerRegister() {
             const path = "producers";
             const res = await fetch(`http://localhost:3000/${path}`, requestOptions);
             const resJson = await res.json();
-
             Auth.login(resJson.token)
             router.push({
                 pathname: '/' // autenticado
@@ -133,7 +131,7 @@ export default function producerRegister() {
                                 />
                                 <label
                                     htmlFor="fantasyName"
-                                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                 >
                                     Nome Fantasia
                                 </label>
@@ -151,7 +149,7 @@ export default function producerRegister() {
                                 />
                                 <label
                                     htmlFor="cnpj"
-                                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                    className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                 >
                                     CNPJ (ex.: 12.345.678/0000-01)
                                 </label>
@@ -161,13 +159,14 @@ export default function producerRegister() {
                             <div className="flex flex-wrap - mb-2">
                                 <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="PRua">
-                                        Rua
+                                        Rua e Numero
                                     </label>
                                     <input
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                         name="PRua"
                                         type="text"
-                                        placeholder="Rua dos Pessegueiros" />
+                                        placeholder="Rua dos Pessegueiros, 500" 
+                                        required/>
                                 </div>
                                 <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="PBairro">
@@ -177,7 +176,8 @@ export default function producerRegister() {
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                         name="PBairro"
                                         type="text"
-                                        placeholder="Conjunto das Oliveiras" />
+                                        placeholder="Conjunto das Oliveiras" 
+                                        required/>
                                 </div>
                                 <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="PMunicipio">
@@ -187,7 +187,8 @@ export default function producerRegister() {
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                         name="PMunicipio"
                                         type="text"
-                                        placeholder="São Paulo" />
+                                        placeholder="São Paulo" 
+                                        required/>
                                 </div>
                                 <div className="w-full md:w-1/2 px-3 mb-6 mt-3 md:mb-0">
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="PEstado">
@@ -233,7 +234,8 @@ export default function producerRegister() {
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="PCep">
                                         Cep
                                     </label>
-                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="PCep" type="text" placeholder="12345-678" />
+                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="PCep" type="text" 
+                                    placeholder="12345-678" required/>
                                 </div>
 
 
@@ -241,13 +243,14 @@ export default function producerRegister() {
                                 <div className="flex flex-wrap  mb-2">
                                     <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="CRua">
-                                            Rua
+                                            Rua e Numero
                                         </label>
                                         <input
                                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                             name="CRua"
                                             type="text"
-                                            placeholder="Rua dos Pessegueiros" />
+                                            placeholder="Rua dos Pessegueiros, 500" 
+                                            required/>
                                     </div>
                                     <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="CBairro">
@@ -257,7 +260,8 @@ export default function producerRegister() {
                                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                             name="CBairro"
                                             type="text"
-                                            placeholder="Capão" />
+                                            placeholder="Jardins"
+                                            required />
                                     </div>
                                     <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="CMunicipio">
@@ -267,7 +271,8 @@ export default function producerRegister() {
                                             className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                             name="CMunicipio"
                                             type="text"
-                                            placeholder="São Paulo" />
+                                            placeholder="São Paulo" 
+                                            required/>
                                     </div>
                                     <div className="w-full md:w-1/2 px-3 mb-6 mt-3 md:mb-0">
                                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="CEstado">
@@ -313,7 +318,7 @@ export default function producerRegister() {
                                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="CCep">
                                             Cep
                                         </label>
-                                        <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="CCep" type="text" placeholder="12345-678" />
+                                        <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="CCep" type="text" placeholder="12345678" required/>
                                     </div >
 
                                 </div>
@@ -326,7 +331,7 @@ export default function producerRegister() {
                                     />
                                     <label
                                         htmlFor="externalWebPages"
-                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                     >
                                         Página Externa (Site)
                                     </label>
@@ -342,7 +347,7 @@ export default function producerRegister() {
                                     />
                                     <label
                                         htmlFor="producerPaymentMethods"
-                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                     >
                                         Formas de Pagamento
                                     </label>
@@ -357,7 +362,7 @@ export default function producerRegister() {
                                     />
                                     <label
                                         htmlFor="productionRegion"
-                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                     >
                                         Comunidade ou região de produção
                                     </label>
@@ -372,7 +377,7 @@ export default function producerRegister() {
                                     />
                                     <label
                                         htmlFor="affiliatedEntities"
-                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                     >
                                         É cadastrado em alguma entidade? (listar entidades)
                                     </label>
@@ -387,7 +392,7 @@ export default function producerRegister() {
                                     />
                                     <label
                                         htmlFor="certificationsAndRecords"
-                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                     >
                                         Registros ou Certificações
                                     </label>
@@ -402,7 +407,7 @@ export default function producerRegister() {
                                     />
                                     <label
                                         htmlFor="agroEcologicalCertifications"
-                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                     >
                                         Certificados Agroecológicos
                                     </label>
@@ -460,7 +465,7 @@ export default function producerRegister() {
                                     </select>
                                     <label
                                         htmlFor="productionsClassification"
-                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                                        className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                                     >
                                         Tipo do produto
                                     </label>
