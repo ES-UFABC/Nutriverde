@@ -57,3 +57,8 @@ export interface IProduct {
   images: string[];
   producerId: number;
 }
+
+export interface IFile extends File {
+  id: string;
+  preview: string;
+}

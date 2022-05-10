@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import ProductCard from "../../components/product-card";
 import ProducerLoaded from "../../components/producer-loaded";
-import { IProducer, IProduct } from "../../Interfaces";
+import { IProducer, IProduct } from "../../interfaces";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import Marker from "../../components/marker";
 import Map from "../../components/map";
