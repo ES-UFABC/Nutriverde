@@ -6,16 +6,18 @@ Authentication:
         [+] Store a JWT in browser
         [+] protect a Page with Login credentials 
     Auth-2-for-Google:
-        [] register
-        [] login
+        [-] register
+        [-] login
     Update-JWT:
         [] Bearer (Autorization)
         [] http only ( only server may diggesty )
         [] Refresh + Acess token
 
-Today:
-    [] insert images on mongoDB
-
+CIBadge:
+    [] testes passados 
+    [] Donwload 
+    [] versionamento 
+    [] procurar alguns legais (até 3 mesmo)
 
 UnitTest:
     Model:
@@ -28,3 +30,13 @@ UnitTest:
         [] Product
 
 
+bugs: 
+    [+] lidar com o token invalidado no cliente-side (expirado) -- direcionar pro login
+    [+] Bug com F5 na tela do profile (design está quebrando)
+    [] inserir elementos já existentes ?  
+
+
+ProducerEvo:
+    [] preeencher o formulario de evolução (user -> Producer) para gerar um form de atualização de producer
+    [] preeencher o formulario de cadastro (user ) para gerar um form de atualização de user
+    [] 

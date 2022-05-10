@@ -7,8 +7,8 @@ import { User, UserDAO } from "../models/user-model";
 /**
  * Custom exception to signal a database error
  */
-export class ValidationError extends Error {}
-export class DatabaseError extends Error {}
+export class ValidationError extends Error { }
+export class DatabaseError extends Error { }
 
 /**
  * A singleton service to perform CRUD operations over a User
@@ -16,7 +16,7 @@ export class DatabaseError extends Error {}
 export class UserService {
   private static instance: UserService;
 
-  private constructor() {}
+  private constructor() { }
 
   static getInstance() {
     if (!this.instance) {
@@ -62,7 +62,7 @@ export class UserService {
             isProducer: "fantasyName" in retrUser,
           },
           process.env.SERVER_SECRET || config.secret,
-          { expiresIn: 60 * 60 }
+          { expiresIn: 1 * 30 }
         );
 
         res.json({
@@ -172,8 +172,7 @@ export class UserService {
   }
 
   /**
-   * @Test
-   * @deprecated
+   * 
    *
    */
   async auth(req: any, res: e.Response, next: any) {
@@ -182,12 +181,8 @@ export class UserService {
     // There is a token at req ?
     if (!token) {
       return res.status(401).json({
-        errors: [
-          {
-            msg: "No token found",
-          },
-        ],
-      });
+        message: "No token found",
+      })
     }
     try {
       const user = JWT.verify(
@@ -196,8 +191,7 @@ export class UserService {
         function (err: any, user: any) {
           if (err) {
             return res.status(401).json({
-              success: false,
-              message: "Error",
+              message: "Expired Token"
             });
           } else {
             console.log(user);
@@ -208,11 +202,7 @@ export class UserService {
       );
     } catch (error) {
       return res.status(400).json({
-        errors: [
-          {
-            msg: "Invalid Token",
-          },
-        ],
+        message: "Invalid Token",
       });
     }
   }

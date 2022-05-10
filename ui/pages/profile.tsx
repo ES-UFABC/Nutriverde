@@ -28,7 +28,7 @@ export default function Home() {
   if (typeof window !== 'undefined') {
     token = Auth.getToken()
   }
-
+  
 
   const requestOptions = {
     method: 'GET',
@@ -39,7 +39,14 @@ export default function Home() {
 
     fetch('http://localhost:3000/me', requestOptions)
       .then(async (response) => {
-        const data = await response.json();
+        const data = await response.json()  
+        if (response.status==401){
+            
+            console.log("Server-Message",data.message)
+            router.push({
+              pathname: '/login'
+          })
+        }
         setUsers(data.items)
       })
       .catch((err) => {
@@ -97,8 +104,6 @@ export default function Home() {
         </div>
 
       </Layout>)
-    } else {
-      render = <Login message="Login First"/>
     }
     return render;
   }
