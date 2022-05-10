@@ -2,15 +2,12 @@ import { useEffect, useState } from "react";
 import Layout from "../components/layout";
 import Carousel from "../components/carousel";
 import ProductCard from "../components/product-card";
-import { IProduct } from "../Interfaces"
+import { IProduct } from "../interfaces";
 import SearchBar from "../components/searchbar";
-
 
 export default function Home() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [products, setProducts] = useState<IProduct[]>([]);
-
-
 
   useEffect(() => {
     fetch(`${serverUrl}/products`)
@@ -32,12 +29,16 @@ export default function Home() {
         <p className="text-4xl font-bold text-center my-4">
           Veja nossos produtos!
         </p>
-        
-        <SearchBar onSet={setProducts} searchPath="products/search/" default="products" />
+
+        <SearchBar
+          onSet={setProducts}
+          searchPath="products/search/"
+          default="products"
+        />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
           {products.map((item) => (
-            <ProductCard item = {item}/>
+            <ProductCard item={item} />
           ))}
         </div>
       </div>

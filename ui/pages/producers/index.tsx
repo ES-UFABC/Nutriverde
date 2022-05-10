@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import ProducerCard from "../../components/producer-card";
-import { IProducer } from "../../Interfaces"
-
+import { IProducer } from "../../interfaces";
 
 export default function Producers() {
   const [producers, setProducts] = useState<IProducer[]>([]);

@@ -66,3 +66,7 @@ export interface IReview {
   title: string;
   images: string[];
 }
+export interface IFile extends File {
+  id: string;
+  preview: string;
+}
