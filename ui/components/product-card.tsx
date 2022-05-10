@@ -1,11 +1,11 @@
 import Image from "next/image";
 import NumberFormat from "react-number-format";
 import Link from "next/link";
+import { IProduct } from "../interfaces";
 
-export default function ProductCard(props: any) {
-  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
-  const item = props.item;
+const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
+export default function ProductCard({ item }: { item: IProduct }) {
   return (
     <Link href={`/products/${item.id}`}>
       <a className="flex flex-col items-center bg-white rounded-lg border shadow-md hover:bg-gray-100">

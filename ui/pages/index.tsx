@@ -33,12 +33,12 @@ export default function Home() {
         <SearchBar
           onSet={setProducts}
           searchPath="products/search/"
-          default="products"
+          defaultPath="products"
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-          {products.map((item) => (
-            <ProductCard item={item} />
+          {products.map((item, key) => (
+            <ProductCard item={item} key={"_home" + key} />
           ))}
         </div>
       </div>

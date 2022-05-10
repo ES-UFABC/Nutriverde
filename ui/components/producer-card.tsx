@@ -1,10 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRightIcon } from "@heroicons/react/outline";
+import { IProducer } from "../interfaces";
 
-
-export default function ProducerCard(props:any){
-  const item = props.item;
+export default function ProducerCard({ item }: { item: IProducer }) {
   return (
     <div
       key={item.id}
@@ -38,12 +37,11 @@ export default function ProducerCard(props:any){
         <div className="pt-4 flex justify-end">
           <Link href={`/producers/${item.id}`}>
             <a className="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
-              Saiba mais{" "}
-              <ArrowRightIcon className="w-5 h-5 ml-2 -mr-1" />
+              Saiba mais <ArrowRightIcon className="w-5 h-5 ml-2 -mr-1" />
             </a>
           </Link>
         </div>
       </div>
     </div>
-  )
+  );
 }
