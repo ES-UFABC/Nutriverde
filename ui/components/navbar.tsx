@@ -2,23 +2,24 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
-import * as Auth from "../services/auth"
+import * as Auth from "../services/auth";
 
 const navigation = [
   { name: "Produtores", href: "/producers", current: false },
   { name: "Mapa", href: "/maps", current: false },
   { name: "Notícias", href: "/news", current: false },
   { name: "Sobre", href: "/about", current: false },
+  { name: "Carrinho", href: "/cart", current: false },
 ];
 
 function profileNavigation() {
-  if (typeof window !== 'undefined') {
-    if(Auth.isAuthenticated()){
-      return profileNavigationProducer
+  if (typeof window !== "undefined") {
+    if (Auth.isAuthenticated()) {
+      return profileNavigationProducer;
     }
-      return profileNavigationGuest    
+    return profileNavigationGuest;
   }
-  return profileNavigationGuest
+  return profileNavigationGuest;
 }
 
 const profileNavigationGuest = [
@@ -40,7 +41,6 @@ const profileNavigationProducer = [
   { name: "Meus produtos", href: "/my/products" },
   { name: "Sair", href: "/logout" },
 ];
-
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
