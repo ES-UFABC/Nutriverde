@@ -1,5 +1,3 @@
-import { type } from "os";
-
 export interface IProducer {
   id: number;
   name: string;
@@ -7,10 +5,10 @@ export interface IProducer {
   email: string;
   producerPaymentMethods: string[];
   phones: string[];
-  productionAddress: address;
+  productionAddress: IAddress;
   productionRegion: string;
   negotiateOnProductionSite: boolean;
-  businessAddress: address;
+  businessAddress: IAddress;
   businessIsCollective: boolean;
   coord: { lat: number; lng: number };
   affiliatedEntities: string[];
@@ -23,14 +21,14 @@ export interface IProducer {
   externalWebPages: string[];
   productionsClassification: string[];
 }
-export type address = {
+export interface IAddress {
   street: string;
   codeId: string;
   cep: string;
   district: string;
   county: string;
-};
-export function stringifyAdress(address: address) {
+}
+export function stringifyAdress(address: IAddress) {
   return (
     address.street +
     ", " +
@@ -61,4 +59,9 @@ export interface IProduct {
 export interface IFile extends File {
   id: string;
   preview: string;
+}
+
+export interface IOrder {
+  productId: number;
+  quantity: number;
 }
