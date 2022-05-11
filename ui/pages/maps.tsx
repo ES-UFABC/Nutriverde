@@ -31,7 +31,7 @@ export default function Maps() {
   const [producers, setProducers] = useState<IProducer[]>([]);
   const [geo, setGeo] = useState<google.maps.LatLngLiteral>(pst);
 
-  
+
 
   useEffect(() => {
     fetch("http://localhost:3000/producers")
@@ -43,7 +43,7 @@ export default function Maps() {
       })
       .catch((err) => {
         console.log("error: ", err);
-      });      
+      });
   }, []);
 
   function getCoor(position: GeolocationPosition) {
@@ -95,15 +95,18 @@ export default function Maps() {
             style={{ flexGrow: "1", height: "100%" }}
             options={{ center: center, zoom: zoom }}
           >
-            {producers.map(
+            {/* {producers.map(
               (item, idx) => (
                 <Marker
                   key={item.email}
-                  position={item.geoReferencedLocalization}
-                  //position = {item.geoReferencedLocalization}
+                  // position:item.geoReferencedLocalization
+                  options={{position:item.geoReferencedLocalization}}
+                  pos={item.geoReferencedLocalization}
+                  //label={item.email}
+                //position = {item.geoReferencedLocalization}
                 />
               )
-            )}
+            )} */}
 
           </Map>
         </Wrapper>
