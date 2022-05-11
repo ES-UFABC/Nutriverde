@@ -70,7 +70,7 @@ export interface IOrder {
   id: number;
   date: string;
   quantity: number;
+  productId: number;
   producerId: number;
-  OrderId: number;
   consumerId: number;
 }

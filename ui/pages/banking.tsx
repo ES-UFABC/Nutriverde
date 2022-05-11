@@ -86,7 +86,7 @@ export default function Banking() {
           success("Successfull");
           Cart.cleanCart();
           router.push({
-            pathname: "/purchases",
+            pathname: "my/purchases",
           });
         } else {
           warn("Something Whent Wrong");

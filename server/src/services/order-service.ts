@@ -117,7 +117,7 @@ export class OrderService {
    * @param res
    */
   async findByConsumerId(req: any | e.Request, res: e.Response) {
-    const searchItem = req.body.consumerId;
+    const searchItem = parseInt(req.body.consumerId);
     // com autenticação, token
     try {
       const orders = await OrderDAO.getInstance().findByConsumerId(searchItem);
