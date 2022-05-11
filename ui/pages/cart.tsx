@@ -4,6 +4,7 @@ import * as Cart from "../services/cart";
 import { LoadProductsFromOrderList, LoadProducer } from "../services/loader";
 import { IProduct, IProducer, IOrder } from "../interfaces";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 // async function callCart(onSet: (list: IOrder[]) => void) {
 //   console.log("CartPage callCart ");
@@ -96,21 +97,19 @@ export default function CartPage() {
   function actionLink() {
     if (Auth.isAuthenticated()) {
       return (
-        <a
-          className="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
-          href="/banking"
-        >
-          Comprar Tudo
-        </a>
+        <Link href="/banking">
+          <a className="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
+            Comprar Tudo
+          </a>
+        </Link>
       );
     } else {
       return (
-        <a
-          className="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
-          href="/login"
-        >
-          Entre no NutriVerde para comprar!
-        </a>
+        <Link href="/login">
+          <a className="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
+            Entre no NutriVerde para comprar!
+          </a>
+        </Link>
       );
     }
   }
