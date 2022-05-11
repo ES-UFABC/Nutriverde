@@ -1,4 +1,5 @@
 import Layout from "../components/layout";
+import * as Auth from "../services/auth";
 import * as Cart from "../services/cart";
 import { LoadProductsFromOrderList, LoadProducer } from "../services/loader";
 import { IProduct, IProducer, IOrder } from "../interfaces";
@@ -92,7 +93,27 @@ export default function CartPage() {
     });
     setSumAmount(sum);
   }, [combos]);
-
+  function actionLink() {
+    if (Auth.isAuthenticated()) {
+      return (
+        <a
+          className="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+          href="/banking"
+        >
+          Comprar Tudo
+        </a>
+      );
+    } else {
+      return (
+        <a
+          className="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-900 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+          href="/login"
+        >
+          Entre no NutriVerde para comprar!
+        </a>
+      );
+    }
+  }
   return (
     <Layout title="Carrinho">
       <button
@@ -107,12 +128,7 @@ export default function CartPage() {
       <div>
         <span>Total:</span> R$ {sumAmount}
       </div>
-      <button
-        className="btn btn-primary mb-3 mr-2 w-60 mt-3"
-        onClick={productOnCart}
-      >
-        comprar tudo
-      </button>
+      {actionLink()}
     </Layout>
   );
 }
