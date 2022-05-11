@@ -12,6 +12,7 @@ import { ProductService } from "./services/product-service";
 import { ProducerService } from "./services/producer-service";
 import { UserService } from "./services/user-service";
 import { FileService } from "./services/file-service";
+import { ReviewService } from "./services/review-service";
 
 /**
  * Configure session middleware
@@ -143,6 +144,19 @@ app.get(
   }
 );
 
+//Sessão de Reviews
+
+app.get("/products/:id/reviews", async (req, res) => {
+  await ReviewService.getInstance().findByProductId(req, res);
+});
+app.post(
+  "/products/:id/reviews",
+  UserService.getInstance().auth,
+  async (req: any, res) => {
+    req.body.producerId = req.user.id;
+    await ReviewService.getInstance().insert(req, res);
+  }
+);
 // passport.use(new GoogleStrategy({
 //   clientID:  process.env.GOOGLE_API_CLIENT_ID,
 //   clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,
