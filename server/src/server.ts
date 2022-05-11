@@ -12,6 +12,7 @@ import { ProductService } from "./services/product-service";
 import { ProducerService } from "./services/producer-service";
 import { UserService } from "./services/user-service";
 import { FileService } from "./services/file-service";
+import { OrderService } from "./services/order-service";
 
 /**
  * Configure session middleware
@@ -146,6 +147,46 @@ app.get(
     req.body = req.user;
     await UserService.getInstance().findById(req, res);
     //res.status(200).json({user:req.user})
+  }
+);
+
+/**
+ * Orders routes
+ */
+app.put(
+  "/banking",
+  UserService.getInstance().auth,
+  async (req: any | e.Request, res) => {
+    console.log(req.user);
+    req.body.consumerId = req.user.id;
+    console.log("Estou registrando venda");
+    await OrderService.getInstance().insertMultiplesFromPrescription(req, res);
+  }
+);
+
+app.get(
+  "/orders/producer",
+  UserService.getInstance().auth,
+  async (req: any | e.Request, res) => {
+    console.log(req.user);
+    if (!req.user.isProducer) {
+      res
+        .status(401)
+        .json({ items: [], message: "Unauthorized", isProducer: false });
+      return;
+    }
+    req.body.producerId = req.user.id;
+    await OrderService.getInstance().findByProducerId(req, res);
+  }
+);
+
+app.get(
+  "/orders/consumer",
+  UserService.getInstance().auth,
+  async (req: any | e.Request, res) => {
+    console.log(req.user);
+    req.body.consumerId = req.user.id;
+    await OrderService.getInstance().findByConsumerId(req, res);
   }
 );
 

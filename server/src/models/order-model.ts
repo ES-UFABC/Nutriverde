@@ -8,23 +8,23 @@ export class Order {
   id: number;
   date: string;
   quantity: number;
+  productId: number;
   producerId: number;
-  OrderId: number;
   consumerId: number;
 
   constructor(
     id: number,
     date: string,
     quantity: number,
+    productId: number,
     producerId: number,
-    OrderId: number,
     consumerId: number
   ) {
     (this.id = 0),
       (this.date = date),
       (this.quantity = quantity),
+      (this.productId = productId),
       (this.producerId = producerId),
-      (this.OrderId = OrderId),
       (this.consumerId = consumerId);
   }
 
@@ -32,8 +32,8 @@ export class Order {
     return (
       this.date.length > 0 &&
       this.quantity > 0 &&
+      this.productId > 0 &&
       this.producerId > 0 &&
-      this.OrderId > 0 &&
       this.consumerId > 0
     );
   }
@@ -43,8 +43,8 @@ export class Order {
       "id",
       "date",
       "quantity",
+      "productId",
       "producerId",
-      "OrderId",
       "consumerId",
     ]) {
       if (!(prop in json)) {
@@ -56,8 +56,8 @@ export class Order {
       json.id,
       json.date,
       json.quantity,
+      json.productId,
       json.producerId,
-      json.OrderId,
       json.consumerId
     );
 
@@ -65,8 +65,8 @@ export class Order {
   }
 }
 
-export class OrdertDAO {
-  private static instance: OrdertDAO;
+export class OrderDAO {
+  private static instance: OrderDAO;
 
   private constructor() {}
 
@@ -74,12 +74,12 @@ export class OrdertDAO {
     return dbConnect.getDb().collection(config.db.collections.orders);
   }
 
-  static getInstance(): OrdertDAO {
-    if (!OrdertDAO.instance) {
-      OrdertDAO.instance = new OrdertDAO();
+  static getInstance(): OrderDAO {
+    if (!OrderDAO.instance) {
+      OrderDAO.instance = new OrderDAO();
     }
 
-    return OrdertDAO.instance;
+    return OrderDAO.instance;
   }
 
   /**
@@ -102,6 +102,30 @@ export class OrdertDAO {
   }
 
   /**
+   * Insert multiple new Orders
+   * @param orders the Order List
+   */
+  async insertFromOrderList(orders: Order[]): Promise<boolean> {
+    try {
+      for (const order of orders) {
+        order.id = await this.nextId();
+      }
+      console.log("after id aquire", orders);
+
+      const response = await this.getCollection().insertMany(orders);
+      // .insertOne(order);
+
+      if (!response || response.insertedCount < 1) {
+        throw Error("Invalid result while inserting Orders ");
+      }
+      return true;
+    } catch (error) {
+      console.error("Falha ao inserir elemento Order");
+      throw error;
+    }
+  }
+
+  /**
    * Find Order using its Producer id
    * @param id the Order Producer id
    */
@@ -109,7 +133,10 @@ export class OrdertDAO {
     try {
       // console.log( "model: id= %d: %s", id, typeof id)
       const response =
-        (await this.getCollection().find({ producerId: id }).toArray()) || [];
+        (await this.getCollection()
+          .find({ producerId: id })
+          // .sort()
+          .toArray()) || [];
       if (response) {
         return response as Order[];
       }
@@ -127,7 +154,10 @@ export class OrdertDAO {
     try {
       // console.log( "model: id= %d: %s", id, typeof id)
       const response =
-        (await this.getCollection().find({ consumerId: id }).toArray()) || [];
+        (await this.getCollection()
+          .find({ consumerId: id })
+          // .sort()
+          .toArray()) || [];
       if (response) {
         return response as Order[];
       }
@@ -146,7 +176,7 @@ export class OrdertDAO {
         .getDb()
         .collection(config.db.collections.sequences);
       const result = await seqColl.findOneAndUpdate(
-        { name: "Order_id" },
+        { name: "order_id" },
         { $inc: { value: 1 } }
       );
 
