@@ -23,6 +23,8 @@ export interface IProducer {
   organic: boolean;
   externalWebPages: string[];
   productionsClassification: string[];
+  cover: string;
+  images: string[];
 }
 export type address = {
   street: string;

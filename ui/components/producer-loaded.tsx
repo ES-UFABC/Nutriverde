@@ -2,6 +2,7 @@ import Image from "next/image"
 import { IProducer, address, stringifyAdress } from "../Interfaces"
 
 export default function ProducerLoaded(props: any) {
+    const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
     const producer: IProducer = props.item as IProducer
     producer.producerPaymentMethods = producer.producerPaymentMethods as [] || []
     producer.phones = producer.phones as [] || []
@@ -24,12 +25,26 @@ export default function ProducerLoaded(props: any) {
         <div>
             <p className="text-4xl font-bold text-center my-4 ">
                 {producer.fantasyName}
-            </p><div style={{ display: "flex", height: "200px" }} className="w-full h-48 relative">
+            </p>
+            <div style={{ display: "flex", height: "200px" }} className="w-full h-48 relative place-content-center">
+              {producer?.cover && (
+                <img
+                  className="object-cover rounded-none rounded-t-lg"
+                  src={`${serverUrl}/files/${producer?.cover}`}
+                  alt={producer?.name}
+                  width={300}
+                  height={300}
+                />
+              )}
+              {!producer?.cover && (
                 <Image
-                    className="object-cover w-full h-96 rounded-none rounded-t-lg md:h-auto md:w-48"
-                    src={`/home${producer.id}.png`}
-                    layout="fill"
-                    alt={producer.fantasyName} />
+                  className="object-cover rounded-none rounded-t-lg"
+                  src={"/placeholder.png"}
+                  width={300}
+                  height={300}
+                  alt={producer?.name}
+                />
+              )}
             </div>
             <div className="">
                 {line("Responsável", producer.name)}

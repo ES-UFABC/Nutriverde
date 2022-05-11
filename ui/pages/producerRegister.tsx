@@ -2,10 +2,18 @@ import Layout from "../components/layout";
 import router from "next/router";
 import "../styles/Register.module.css";
 import * as Auth from "../services/auth"
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CepCoords from "coordenadas-do-cep";
+import { useDropzone } from "react-dropzone";
+import classNames from "classnames";
+
+interface IFile extends File {
+    id: string;
+    preview: string;
+  }
 
 export default function producerRegister() {
+    const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
     const [checkedn, setCheckedn] = React.useState(false);
     const [checkedb, setCheckedb] = React.useState(false);
     const [checkedl, setCheckedl] = React.useState(false);
@@ -19,6 +27,14 @@ export default function producerRegister() {
     const handleChangeA = () => { setCheckeda(!checkeda); };
     const handleChangeO = () => { setCheckedo(!checkedo); };
 
+    const [files, setFiles] = useState<IFile[]>([]);
+    const [dataForm, setDataForm] = useState({
+        cover: "",
+        images: [""],
+      });
+    
+
+
     let token: any
     if (typeof window !== 'undefined') {
         token = Auth.getToken()
@@ -29,12 +45,55 @@ export default function producerRegister() {
         }
     }
 
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: "image/*",
+        onDropAccepted: async (files) => {
+          // Uploads files to server.
+          const promises = files.map(async (f) => {
+            const data = new FormData();
+            data.append("file", f);
+    
+            const res = await fetch(`${serverUrl}/files`, {
+              method: "POST",
+              body: data,
+            });
+    
+            console.log("file uploaded", res);
+            if (res.status < 200 && res.status >= 400) {
+              console.error("error uploading file", res);
+              return Object.assign(f, { preview: "", id: "" });
+            }
+    
+            const json = await res.json();
+            return Object.assign(f, {
+              preview: `${serverUrl}/files/${json.name}`,
+              id: json.name,
+            });
+          });
+    
+          const uploadedFiles = await Promise.all(promises);
+    
+          console.log(uploadedFiles);
+    
+          // FIXME: waits at least 1 second to load images correctly.
+          await new Promise((r) => setTimeout(r, 1 * 1000));
+          setDataForm({
+            ...dataForm,
+            cover: uploadedFiles[0].id,
+            images: uploadedFiles.map((e) => e.id),
+          });
+    
+    
+          setFiles(uploadedFiles);
+        },
+      });
+
     const requestOptions = {
         method: 'GET',
         headers: { 'x-auth-token': `${token}` }
     };
     useEffect(() => {
-        fetch('http://localhost:3000/me', requestOptions)
+        fetch(`${serverUrl}/me`, requestOptions)
             .then(async (response) => {
                 const data = await response.json()
                 if (response.status == 401) {
@@ -108,7 +167,9 @@ export default function producerRegister() {
                 organic: `${checkedo}`,
                 productionAddress: pAddres,
                 businessAddress: cAddres,
-                geoReferencedLocalization: geoReferencedLocalization
+                geoReferencedLocalization: geoReferencedLocalization,
+                cover: dataForm.cover,
+                images: dataForm.images,
             });
 
             console.log(corpo);
@@ -458,24 +519,6 @@ export default function producerRegister() {
                                         <option value="Chás e ervas">Chás e ervas</option>
                                         <option value="Embutidos">Embutidos</option>
                                         <option value="Conservas">Conservas</option>
-
-                                        {/* <option value="unknown">Desconhecido</option>
-                    <option value="beekeeping">Apicultura</option>
-                    <option value="cereals">Cereais</option>
-                    <option value="fruits">Frutas</option>
-                    <option value="vegetables">Hortaliças</option>
-                    <option value="dairy">Laticínios e derivados,</option>
-                    <option value="protein">Proteína de origem animal</option>
-                    <option value="tubers">Raizes e turbéculos</option>
-                    <option value="meals">Refeições</option>
-                    <option value="seeds">Sementes e mudas</option>
-                    <option value="legumes">Legumes</option>
-                    <option value="bakery">Panificação</option>
-                    <option value="sweets">Doces, mel, melado e geléias</option>
-                    <option value="beverages">Bebidas e polpas</option>
-                    <option value="herbs">Chás e ervas</option>
-                    <option value="sausages">Embutidos</option>
-                    <option value="preserves">Conservas</option> */}
                                     </select>
                                     <label
                                         htmlFor="productionsClassification"
@@ -507,10 +550,50 @@ export default function producerRegister() {
                                         <input id="organic" type="checkbox" name="organic" checked={checkedo} onChange={handleChangeO} value="" className="w-4 h-4 text-emerald-600 bg-gray-100 border-gray-300 rounded focus:ring-emerald-500 dark:focus:ring-emerald-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </div>
                                 </div>
+                                <hr className="w-full" />
+                                <section className="col-span-2">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Imagens
+                  </p>
 
+                  <div
+                    {...getRootProps({ className: "dropzone" })}
+                    className="w-full text-center border-dashed border-2 border-gray-300 py-12"
+                  >
+                    <input {...getInputProps()} name="files" />
+                    <p className="text-gray-400">
+                      Clique ou jogue as imagens aqui
+                    </p>
+                  </div>
+
+                  {files.length > 0 && (
+                    <>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-6 mb-4">
+                        Selecione uma imagem como cover:
+                      </p>
+                      <aside className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-1">
+                        {files.map((file) => (
+                          <img
+                            src={file.preview}
+                            className={classNames("cursor-pointer p-1", {
+                              "border-solid border-2 border-emerald-800 rounded-md":
+                                dataForm.cover === file.id,
+                            })}
+                            onClick={() =>
+                              setDataForm({ ...dataForm, cover: file.id })
+                            }
+                          />
+                        ))}
+                      </aside>
+                    </>
+                  )}
+                </section>
                                 <button
                                     type="submit"
-                                    className="text-white bg-emerald-700 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-900 font-medium rounded-lg text-sm w-full  px-3  py-2.5 item-center"
+                                    className="text-white bg-emerald-700 
+                                    hover:bg-emerald-700 focus:ring-4 focus:outline-none 
+                                    focus:ring-emerald-900 font-medium rounded-lg 
+                                    text-sm w-full  px-3  py-2.5 item-center mt-3"
                                 >
                                     Submit
                                 </button>

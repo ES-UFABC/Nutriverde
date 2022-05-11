@@ -22,6 +22,7 @@ interface IUser {
 
 
 export default function Home() {
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [users, setUsers] = useState<IUser>();
   const [botao,setBotao] = useState<String>();
   let token: any
@@ -37,7 +38,7 @@ export default function Home() {
 
   useEffect(() => {
 
-    fetch('http://localhost:3000/me', requestOptions)
+    fetch(`${serverUrl}/me`, requestOptions)
       .then(async (response) => {
         const data = await response.json()  
         if (response.status==401){

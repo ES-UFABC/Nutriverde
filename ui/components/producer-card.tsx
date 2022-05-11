@@ -4,20 +4,31 @@ import { ArrowRightIcon } from "@heroicons/react/outline";
 
 
 export default function ProducerCard(props:any){
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const item = props.item;
   return (
     <div
       key={item.id}
       className="flex flex-col items-center bg-white rounded-lg border shadow-md"
     >
-      <div className="w-full h-48 relative">
-        <Image
-          className="object-cover w-full h-96 rounded-none rounded-t-lg md:h-auto md:w-48"
-          src={`/home${item.id}.png`}
-          layout="fill"
-          alt={item.fantasyName}
-        />
-      </div>
+      <div className="flex w-full h-full relative justify-center">
+          {item.cover && (
+            <img
+              className="object-cover w-full rounded-none rounded-t-lg"
+              src={`${serverUrl}/files/${item.cover}`}
+              alt={item.name}
+            />
+          )}
+          {!item.cover && (
+            <Image
+              className="object-cover w-full rounded-none rounded-t-lg"
+              src={"/placeholder.png"}
+              width={125}
+              height={125}
+              alt={item.name}
+            />
+          )}
+        </div>
       <div className="flex flex-col justify-between px-4 py-2 leading-normal w-full">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
           {item.fantasyName}

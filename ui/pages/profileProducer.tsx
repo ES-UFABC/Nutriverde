@@ -11,6 +11,7 @@ import { IProducer, address, stringifyAdress } from "../Interfaces"
 
 
 export default function Home() {
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [producer, setProducer] = useState<IProducer>();
 
   let token: any
@@ -26,23 +27,23 @@ export default function Home() {
 
   useEffect(() => {
 
-    fetch('http://localhost:3000/me', requestOptions)
+    fetch(`${serverUrl}/me`, requestOptions)
       .then(async (response) => {
         const data = await response.json();
         console.log(data)
-        if (response.status==401){            
-            console.log("Server-Message",data.message)
-            router.push({
-              pathname: '/login'
+        if (response.status == 401) {
+          console.log("Server-Message", data.message)
+          router.push({
+            pathname: '/login'
           })
         }
         setProducer(data.items)
 
-        if(data.items.fantasyName == undefined){
-            console.log("Requisição Inválida")
-            router.push({
-                pathname: '/producerRegister'
-            })
+        if (data.items.fantasyName == undefined) {
+          console.log("Requisição Inválida")
+          router.push({
+            pathname: '/producerRegister'
+          })
         }
       })
       .catch((err) => {
@@ -61,7 +62,28 @@ export default function Home() {
             Perfil de Produtor
           </p>
           <hr className="w-full" />
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="flex w-full h-full relative justify-center mt-3 mb-3">
+              {producer?.cover && (
+                <img
+                  className="object-cover rounded-none rounded-t-lg"
+                  src={`${serverUrl}/files/${producer?.cover}`}
+                  alt={producer?.name}
+                  width={300}
+                  height={300}
+                />
+              )}
+              {!producer?.cover && (
+                <Image
+                  className="object-cover rounded-none rounded-t-lg"
+                  src={"/placeholder.png"}
+                  width={300}
+                  height={300}
+                  alt={producer?.name}
+                />
+              )}
+            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-1 ">
+            
             <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
               <div className="flex flex-col  pb-10 " >
                 <div className="bg-emerald-700 text-center">
@@ -78,7 +100,7 @@ export default function Home() {
                   <span className="font-bold">CPNJ</span>: {producer?.cnpj}
                 </h4>
                 <h3>
-                  <span className="font-bold">Endereço de Produção</span>: {producer?.productionAddress?.street+
+                  <span className="font-bold">Endereço de Produção</span>: {producer?.productionAddress?.street +
                     ", " + producer?.productionAddress?.codeId + ", " + producer?.productionAddress?.county}
                 </h3>
                 <h3>
