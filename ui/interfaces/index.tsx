@@ -61,7 +61,16 @@ export interface IFile extends File {
   preview: string;
 }
 
-export interface IOrder {
+// export interface IPrescription {
+export interface IPrescription {
   productId: number;
   quantity: number;
+}
+export interface IOrder {
+  id: number;
+  date: string;
+  quantity: number;
+  producerId: number;
+  OrderId: number;
+  consumerId: number;
 }
