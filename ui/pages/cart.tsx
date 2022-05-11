@@ -2,7 +2,7 @@ import Layout from "../components/layout";
 import * as Auth from "../services/auth";
 import * as Cart from "../services/cart";
 import { LoadProductsFromOrderList, LoadProducer } from "../services/loader";
-import { IProduct, IProducer, IOrder } from "../interfaces";
+import { IProduct, IProducer, IPrescription } from "../interfaces";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -24,7 +24,13 @@ async function productOnCart() {
   Cart.addOrUpdate(9, 4);
 }
 
-function ItemLine({ product, order }: { product: IProduct; order: IOrder }) {
+function ItemLine({
+  product,
+  order,
+}: {
+  product: IProduct;
+  order: IPrescription;
+}) {
   const [producer, setProducer] = useState<IProducer>({} as IProducer);
   useEffect(() => {
     LoadProducer(product.producerId).then((p) => {
@@ -48,11 +54,11 @@ function ItemLine({ product, order }: { product: IProduct; order: IOrder }) {
 
 interface ICombo {
   product: IProduct;
-  order: IOrder;
+  order: IPrescription;
 }
 
 export default function CartPage() {
-  const [cart, setCart] = useState<IOrder[]>([]);
+  const [cart, setCart] = useState<IPrescription[]>([]);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [combos, setCombos] = useState<ICombo[]>([]);
   const [sumAmount, setSumAmount] = useState<number>(0);

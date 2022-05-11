@@ -1,10 +1,10 @@
-import { IOrder } from "../interfaces";
+import { IPrescription } from "../interfaces";
 
 const CART_KEY = "@nutriverde-cart";
 
 export function getCart() {
   const cart = sessionStorage.getItem(CART_KEY);
-  if (cart !== null) return JSON.parse(cart) as Array<IOrder>;
+  if (cart !== null) return JSON.parse(cart) as Array<IPrescription>;
 }
 
 export function cleanCart() {
@@ -38,7 +38,7 @@ export function addOrUpdate(productId: number, quantity: number) {
     remove(productId);
   }
   const cart = getCart();
-  let new_cart: Array<IOrder> = [];
+  let new_cart: Array<IPrescription> = [];
   if (cart) {
     new_cart = cart;
   }

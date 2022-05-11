@@ -1,4 +1,4 @@
-import { IProducer, IProduct, IOrder } from "../interfaces";
+import { IProducer, IProduct, IPrescription } from "../interfaces";
 
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -29,7 +29,7 @@ export async function LoadProducts(id: number): Promise<IProduct[]> {
 }
 
 export async function LoadProductsFromOrderList(
-  list: IOrder[]
+  list: IPrescription[]
 ): Promise<IProduct[]> {
   try {
     const idsList = list.map((item) => {
