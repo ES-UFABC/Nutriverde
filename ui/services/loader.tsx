@@ -1,4 +1,4 @@
-import { IProducer, IProduct } from "../Interfaces";
+import { IProducer, IProduct, IOrder } from "../interfaces";
 
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
@@ -24,6 +24,30 @@ export async function LoadProducts(id: number): Promise<IProduct[]> {
     return data.items as IProduct[];
   } catch (error) {
     console.log("LoadProducts error: ", error);
+    throw error;
+  }
+}
+
+export async function LoadProductsFromOrderList(
+  list: IOrder[]
+): Promise<IProduct[]> {
+  try {
+    const idsList = list.map((item) => {
+      return item.productId;
+    });
+    // console.log("LoadProductsFromOrderList idsList: ", idsList);
+    const url =
+      `${serverUrl}/products/orders?` +
+      new URLSearchParams({ idsList: JSON.stringify(idsList) }).toString();
+    // console.log("LoadProductsFromOrderList URL: ", url);
+    const response = await fetch(url);
+    // console.log("LoadProductsFromOrderList resp", response);
+    const data = await response.json();
+    console.log("LoadProductsFromOrderList data: ", data);
+    // return data.items as IProduct[];
+    return data.items;
+  } catch (error) {
+    console.log("LoadProductsFromOrderList error: ", error);
     throw error;
   }
 }
