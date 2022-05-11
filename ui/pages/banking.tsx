@@ -6,12 +6,19 @@ import { useEffect, useState } from "react";
 import NumberFormat from "react-number-format";
 import * as Cart from "../services/cart";
 import { LoadProductsFromOrderList } from "../services/loader";
-import { IOrder } from "../interfaces";
+import { IPrescription } from "../interfaces";
+import { ToastContainer, toast } from "react-toastify";
+
+const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
 export default function Banking() {
+  const warn = (message: string) => toast.warn(message);
+  const success = (message: string) => toast.success(message);
+
   const [parcel, setParcel] = useState(1);
   const [currentPrice, setCurrentPrice] = useState(0);
   const [cartSum, setCartSum] = useState(0);
+  const [prescriptions, setPrescriptions] = useState<IPrescription[]>([]);
 
   const updateQuantity = (e: any) => {
     let quantity = parseInt(e.target.value);
@@ -31,16 +38,17 @@ export default function Banking() {
         pathname: "/404",
       });
     }
-    const cartStored = Cart.getCart() as IOrder[];
+    const cartStored = Cart.getCart() as IPrescription[];
     let sum: number = 0;
     if (cartStored) {
+      setPrescriptions(cartStored);
       LoadProductsFromOrderList(cartStored).then((ps) => {
         ps.forEach((item) => {
-          const order = cartStored.find((value) => {
+          const prescription = cartStored.find((value) => {
             return value.productId === item.id;
           });
-          if (order) {
-            sum += item.price * order.quantity;
+          if (prescription) {
+            sum += item.price * prescription.quantity;
           }
         });
 
@@ -50,11 +58,58 @@ export default function Banking() {
     }
   }, []);
 
-  function buyCart() {
+  async function buyCart() {
     console.log("comprei!!!");
+    const token = Auth.getToken();
+    if (token)
+      try {
+        const buyOptions = { parcel: parcel };
+        const corpo = JSON.stringify({
+          prescriptions: prescriptions,
+          options: buyOptions,
+        });
+        //console.log(corpo)
+        const requestOptions = {
+          method: "PUT",
+          headers: {
+            "x-auth-token": `${token}`,
+            "Content-Type": "application/json",
+          },
+          body: corpo,
+        };
+        const path = "banking";
+        const res = await fetch(`${serverUrl}/${path}`, requestOptions);
+        const data = await res.json();
+        console.log("banking data:", data);
+
+        if (data.message == "Successfull") {
+          success("Successfull");
+          Cart.cleanCart();
+          router.push({
+            pathname: "/purchases",
+          });
+        } else {
+          warn("Something Whent Wrong");
+          console.log("Invalid LOGIN"); //change to toast
+        }
+        //console.log("resJson", resJson)
+      } catch (err) {
+        console.error(err);
+      }
   }
   return (
     <Layout>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       Banking
       <div className="flex flex-col items-center basis-1/2">
         <div className="relative z-0 mb-6 w-32  group">
