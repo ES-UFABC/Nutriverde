@@ -129,23 +129,23 @@ export default function Map({
       marker.addListener("click", () => {
         // selectedLocation = location;
         infoWindow.setContent(
-          `<div className='flex flex-col content-start p-2'>` +
-          `<h2 className='font-semibold text-lg mb-2'>` +
-            `<a
-            href=/producers/`
-            + `${item.id && item.id!}` +
-              ` className="text-emerald-800 hover:underline active:text-emerald-600"
-            >` + `${item.fantasyName}` + `</a>`+
-          `</h2>` +
-          `<p>${item.businessAddress.street}</p>` +
+          `<div class='flex flex-col content-start p-2'>` +
+            `<h1 class='font-semibold text-4xl mb-2'>` +
+              `<a
+                href=/producers/`
+              + `${item.id && item.id!}` +
+              ` class="text-emerald-800 hover:underline active:text-emerald-600"
+                >` + `${item.fantasyName}` + `</a>` +
+            `</h1>` +
+              `<p class = "text-xl mb-2">${item.businessAddress.street}</p>` +
+              `<a
+                href=https://`+`${item.externalWebPages && item.externalWebPages!}` +
+              ` class=" text-xl text-emerald-800 hover:underline active:text-emerald-600"
+              >`+
+             `${item.externalWebPages && item.externalWebPages!}
+            </a>` +
+          `</div>`
 
-          `<a
-            href=https://`
-          + `${item.externalWebPages && item.externalWebPages!}` +
-          ` className="text-emerald-800 hover:underline active:text-emerald-600"
-        >` + `${item.externalWebPages && item.externalWebPages!}
-        </a>`
-      
 
         );
 

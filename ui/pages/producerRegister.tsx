@@ -309,8 +309,11 @@ export default function producerRegister() {
                                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="PCep">
                                         Cep
                                     </label>
-                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="PCep" type="text" 
-                                    placeholder="12345-678" required/>
+                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 
+                                    rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+                                    name="PCep" type="text"
+                                    pattern="\d{5}-?\d{3}" 
+                                    placeholder="12345-678" />
                                 </div>
 
 
@@ -393,7 +396,9 @@ export default function producerRegister() {
                                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="CCep">
                                             Cep
                                         </label>
-                                        <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="CCep" type="text" placeholder="12345678" required/>
+                                        <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" 
+                                        name="CCep" type="text" placeholder="12345678" 
+                                        pattern = "\d{5}-?\d{3}" required/>
                                     </div >
 
                                 </div>
