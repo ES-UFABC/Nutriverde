@@ -37,7 +37,6 @@ export class ReviewService {
     }
   }
 
- 
   /**
    *
    * @param req
@@ -62,7 +61,7 @@ export class ReviewService {
    */
   async insert(req: e.Request, res: e.Response) {
     try {
-      // console.log(req.body);
+      console.log(req.body);
       const review = Review.decode(req.body);
       const response = await ReviewDAO.getInstance().insert(review);
       res.status(200).json({ items: review, message: "success" });
@@ -92,16 +91,10 @@ export class ReviewService {
    */
   async findByProductId(req: any | e.Request, res: e.Response) {
     const searchItem = parseInt(req.params.id) || req.body.productId; // FIXME:
-    
 
-    
     try {
-      const reviews = await ReviewDAO.getInstance().findByProductId(
-        searchItem
-      );
-      res
-        .status(200)
-        .json({ items: reviews, message: "success",  });
+      const reviews = await ReviewDAO.getInstance().findByProductId(searchItem);
+      res.status(200).json({ items: reviews, message: "success" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ items: [], message: "error searching reviews" });
