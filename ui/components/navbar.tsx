@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
@@ -7,16 +7,15 @@ import * as Auth from "../services/auth"
 const navigation = [
   { name: "Produtores", href: "/producers", current: false },
   { name: "Mapa", href: "/maps", current: false },
-  { name: "Notícias", href: "/news", current: false },
   { name: "Sobre", href: "/about", current: false },
 ];
 
 function profileNavigation() {
   if (typeof window !== 'undefined') {
-    if(Auth.isAuthenticated()){
+    if (Auth.isAuthenticated()) {
       return profileNavigationProducer
     }
-      return profileNavigationGuest    
+    return profileNavigationGuest
   }
   return profileNavigationGuest
 }
@@ -24,19 +23,16 @@ function profileNavigation() {
 const profileNavigationGuest = [
   { name: "Faça seu Cadastro", href: "/register" },
   { name: "Faça Login", href: "/login" },
-  { name: "Configurações", href: "/settings" },
   { name: "Sair", href: "/logout" },
 ];
 
 const profileNavigationUser = [
   { name: "Perfil", href: "/profile" },
-  { name: "Configurações", href: "/settings" },
   { name: "Sair", href: "/logout" },
 ];
 
 const profileNavigationProducer = [
   { name: "Perfil", href: "/profile" },
-  { name: "Configurações", href: "/settings" },
   { name: "Meus produtos", href: "/my/products" },
   { name: "Sair", href: "/logout" },
 ];
@@ -46,6 +42,34 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 export default function Navbar() {
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+  let token: any
+  if (typeof window !== 'undefined') {
+    token = Auth.getToken()
+  }
+
+
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'x-auth-token': `${token}` }
+  };
+
+  useEffect(() => {
+
+    fetch(`${serverUrl}/me`, requestOptions)
+      .then(async (response) => {
+        const data = await response.json()
+        if (response.status == 401) {
+          if (typeof window !== 'undefined')
+            Auth.logout()
+        }
+      })
+      .catch((err) => {
+        console.log("error: ", err);
+      });
+
+  }, []);
+
   return (
     <Disclosure as="nav" className="bg-emerald-800">
       {({ open }) => (
