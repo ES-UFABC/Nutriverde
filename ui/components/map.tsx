@@ -88,13 +88,13 @@ export default function Map({
     if (ref.current && !map) {
       setMap(new window.google.maps.Map(ref.current, {}));
     }
-    
+
   }, [ref, map]);
 
   useEffect(() => {
     showMarkers()
     console.log("tentei")
-  },[producers])
+  }, [producers])
   // because React does not do deep comparisons, a custom hook is used
   // see discussion in https://github.com/googlemaps/js-samples/issues/946
   useDeepCompareEffectForMaps(() => {
@@ -121,19 +121,32 @@ export default function Map({
   }, [map, onClick, onIdle]);
 
   function showMarkers() {
-    producers.map((item) => {     
+    producers.map((item) => {
 
       const marker = new window.google.maps.Marker({
-        position: item.geoReferencedLocalization        
+        position: item.geoReferencedLocalization
       });
       marker.addListener("click", () => {
         // selectedLocation = location;
         infoWindow.setContent(
           `<div className='flex flex-col content-start p-2'>` +
-            `<h2 className='font-semibold text-lg mb-2'>` +
-            `${item.fantasyName}` +
-            `</h2>` +
-            `<p>${item.businessAddress.street}</p>`                       
+          `<h2 className='font-semibold text-lg mb-2'>` +
+            `<a
+            href=/producers/`
+            + `${item.id && item.id!}` +
+              ` className="text-emerald-800 hover:underline active:text-emerald-600"
+            >` + `${item.fantasyName}` + `</a>`+
+          `</h2>` +
+          `<p>${item.businessAddress.street}</p>` +
+
+          `<a
+            href=https://`
+          + `${item.externalWebPages && item.externalWebPages!}` +
+          ` className="text-emerald-800 hover:underline active:text-emerald-600"
+        >` + `${item.externalWebPages && item.externalWebPages!}
+        </a>`
+      
+
         );
 
         infoWindow.open({
