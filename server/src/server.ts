@@ -77,6 +77,12 @@ app.get(
 );
 
 app.get(
+  "/products/orders",
+  async (req, res) =>
+    await ProductService.getInstance().listAllFromIdsList(req, res)
+);
+
+app.get(
   "/products/:id",
   async (req, res) => await ProductService.getInstance().findById(req, res)
 );

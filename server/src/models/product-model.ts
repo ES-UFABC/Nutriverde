@@ -177,6 +177,22 @@ export class ProductDAO {
   }
 
   /**
+   * search and List all Products that match
+   */
+  async findFromIdsList(list: number[]): Promise<Product[]> {
+    try {
+      return (
+        this.getCollection()
+          .find({ id: { $in: list } }, { projection: { _id: 0 } })
+          .toArray() || []
+      );
+    } catch (error) {
+      console.error("Falha ao listar os Products findFromIdsList");
+      throw error;
+    }
+  }
+
+  /**
    * Find Product using its id
    * @param id the Product id
    */
@@ -191,7 +207,7 @@ export class ProductDAO {
       }
       throw Error("Erro ao buscar por elemento");
     } catch (error) {
-      console.error("Failed to find item by id");
+      console.error("Failed to find item by its id");
       throw error;
     }
   }
@@ -209,7 +225,7 @@ export class ProductDAO {
       }
       throw Error("Erro ao buscar por elemento");
     } catch (error) {
-      console.error("Failed to find item by id");
+      console.error("Failed to find item by its producer id");
       throw error;
     }
   }
