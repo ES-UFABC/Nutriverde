@@ -12,6 +12,7 @@ export interface IProducer {
   negotiateOnProductionSite: boolean;
   businessAddress: address;
   businessIsCollective: boolean;
+  geoReferencedLocalization: { lat: number, lng: number };
   coord: { lat: number; lng: number };
   affiliatedEntities: string[];
   cnpj: string;

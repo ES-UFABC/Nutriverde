@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { IProducer , address, stringifyAdress } from "../Interfaces"
+import { IProducer, address, stringifyAdress } from "../Interfaces"
 
 export default function ProducerLoaded(props: any) {
     const producer: IProducer = props.item as IProducer
@@ -12,12 +12,12 @@ export default function ProducerLoaded(props: any) {
     producer.externalWebPages = producer.externalWebPages as [] || []
     producer.businessAddress = producer.businessAddress || {} as address
     producer.productionAddress = producer.productionAddress || {} as address
-    function toString(array:string[]){
-        if(array instanceof Array)
+    function toString(array: string[]) {
+        if (array instanceof Array)
             return array.length < 1 ? "nenhum" : array.map(doc => " " + doc).toString()
         else return "nenhum"
     }
-    function line(title:string,text:string){
+    function line(title: string, text: string) {
         return <p><span className="font-bold">{title}</span>: {text}</p>
     }
     return (
@@ -37,32 +37,38 @@ export default function ProducerLoaded(props: any) {
                     <a className="text-emerald-800 hover:underline active:text-emerald-600"
                         href={`mailto:${producer.email}`}
                     > {producer.email} </a></p>
-                {line("Métodos de Pagamento",toString(producer.producerPaymentMethods))}
-                {line("Telefones",toString(producer.phones))}
+                <p><span className="font-bold">Métodos de Pagamento</span>: {(producer.producerPaymentMethods)}</p>
+                <p><span className="font-bold">Telefones</span>: {(producer.phones)}</p>
                 {line("Endereço de Produção", stringifyAdress(producer.productionAddress))}
                 {line("Comunidade ou Região de Produção", producer.productionRegion)}
-                {line("Atente no endereço de produção",producer.negotiateOnProductionSite ? "sim" : "não")}
+                {line("Atente no endereço de produção", producer.negotiateOnProductionSite ? "sim" : "não")}
                 {line("Endereço de Comercio", stringifyAdress(producer.businessAddress))}
-                {line("Tipo de Produtor",producer.businessIsCollective ? "Coletivo" : "Individual")}
-                {line("Cadastrado em Entidades",toString(producer.affiliatedEntities) )}
+                {line("Tipo de Produtor", producer.businessIsCollective ? "Coletivo" : "Individual")}
+                <p><span className="font-bold">Cadastrado em Entidades</span>: {(producer.affiliatedEntities)}</p>
                 {line("CNPJ", producer.cnpj)}
-                {line("Produtor licenciado?",producer.licensed ? "sim" : "não")}
+                {line("Produtor licenciado?", producer.licensed ? "sim" : "não")}
             </div>
             <div className="">
-                {line("Registros ou Certificações",toString(producer.certificationsAndRecords) )}
+                <p><span className="font-bold">Registros ou Certificações</span>: {producer.certificationsAndRecords}</p>
                 {line("Produtor Agroecológico", producer.agroEcological ? "sim" : "não")}
-                {line("Certificações Agroecológicas",toString(producer.agroEcologicalCertifications))} 
+                <p><span className="font-bold">Certificações Agroecológicas</span>: {producer.agroEcologicalCertifications}</p>
                 {line("Produtor de Organicos", producer.organic ? "sim" : "não")}
                 <p><span className="font-bold">Paginas Externas</span>:
-                    {producer.externalWebPages.map(webLink => (
-                        <a
-                            href={`${webLink}`}
-                            className="text-emerald-800 hover:underline active:text-emerald-600"
-                        >
-                            {" "}{webLink}
-                        </a>
-                    ))}</p>
-                {line("Tipos de Produção",toString(producer.productionsClassification))}
+                    {/* {
+                        producer.externalWebPages[0].split(",").map(link => (
+
+                        )
+
+                    )} */}
+
+                    <a
+                        href={"https://"+`${producer.externalWebPages && producer.externalWebPages!}`}
+                        className="text-emerald-800 hover:underline active:text-emerald-600"
+                    >
+                        {" "}{producer.externalWebPages && producer.externalWebPages!}
+                    </a>
+                </p>
+                <p><span className="font-bold">Tipos de Produção</span>: {producer.productionsClassification}</p>
             </div>
         </div>
     )

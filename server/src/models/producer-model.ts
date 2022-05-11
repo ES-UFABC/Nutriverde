@@ -153,7 +153,7 @@ export class ProducerDAO {
       const response = await this.getCollection().findOne({ email: email });
 
       if (response) {
-        return Producer.decode(response);
+        return response as Producer;
       }
       throw Error("Failed to retrieve Producer with given email");
     } catch (error) {
@@ -173,7 +173,7 @@ export class ProducerDAO {
       const response = await this.getCollection().findOne({ name: name });
 
       if (response) {
-        return Producer.decode(response);
+        return response as Producer;
       }
       throw Error("Failed to retrieve Producer with given name");
     } catch (error) {
@@ -192,7 +192,7 @@ export class ProducerDAO {
       const response = await this.getCollection().findOne({ id: id });
 
       if (response) {
-        return Producer.decode(response);
+        return response as Producer;
       }
       throw Error("Failed to retrieve Producer with given id");
     } catch (error) {

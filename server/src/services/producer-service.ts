@@ -52,6 +52,7 @@ export class ProducerService {
       const id = Number(req.params.id);
       console.log(req.params);
       const producers = await ProducerDAO.getInstance().findById(id);
+      producers.password = "" // FIXME:
       console.log("producer-id(%d) fetch", id);
       res.status(200).json({ items: producers, message: "success" });
     } catch (error) {

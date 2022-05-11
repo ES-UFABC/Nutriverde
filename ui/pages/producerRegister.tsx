@@ -3,6 +3,7 @@ import router from "next/router";
 import "../styles/Register.module.css";
 import * as Auth from "../services/auth"
 import React, { useEffect } from "react";
+import CepCoords from "coordenadas-do-cep";
 
 export default function producerRegister() {
     const [checkedn, setCheckedn] = React.useState(false);
@@ -77,6 +78,18 @@ export default function producerRegister() {
                 district: e.target.CMunicipio.value,
                 county: e.target.CEstado.value
             }
+            let geoReferencedLocalization = {
+                lat : 0,
+                lng : 0
+            }
+
+            try{
+                const coords = await CepCoords.getByEndereco(cAddres.county+ ", " + cAddres.street);
+                geoReferencedLocalization.lat = coords.lat 
+                geoReferencedLocalization.lng = coords.lon
+             } catch (err) {
+                console.log("Error",err)
+             }
 
             const corpo = JSON.stringify({
                 fantasyName: `${fantasyName}`,
@@ -95,6 +108,7 @@ export default function producerRegister() {
                 organic: `${checkedo}`,
                 productionAddress: pAddres,
                 businessAddress: cAddres,
+                geoReferencedLocalization: geoReferencedLocalization
             });
 
             console.log(corpo);
