@@ -36,7 +36,12 @@ export default function MyProducts() {
         const data = await response.json();
         console.log(data)
         setProducts(data.items);
-        setIsProducer(data.isProducer); // Sou Produtor ? 
+        setIsProducer(data.isProducer); // Sou Produtor ?
+        if(!isProducer){
+          router.push({
+            pathname: '/' // autenticado
+          });
+        } 
       })
       .catch((err) => {
         console.log("error: ", err);

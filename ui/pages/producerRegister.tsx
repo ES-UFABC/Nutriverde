@@ -143,7 +143,8 @@ export default function producerRegister() {
             }
 
             try{
-                const coords = await CepCoords.getByEndereco(cAddres.county+ ", " + cAddres.street);
+                CepCoords.setOpcoes({ precisao: 7 })
+                const coords = await CepCoords.getByEndereco(cAddres.district+ ", " + cAddres.street);
                 geoReferencedLocalization.lat = coords.lat 
                 geoReferencedLocalization.lng = coords.lon
              } catch (err) {

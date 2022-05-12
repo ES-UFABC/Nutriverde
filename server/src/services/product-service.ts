@@ -118,6 +118,7 @@ export class ProductService {
       const products = await ProductDAO.getInstance().findByProducerId(
         searchItem
       );
+      if(isProducer)
       res
         .status(200)
         .json({ items: products, message: "success", isProducer: isProducer });

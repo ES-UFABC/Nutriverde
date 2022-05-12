@@ -93,7 +93,6 @@ export default function Map({
 
   useEffect(() => {
     showMarkers()
-    console.log("tentei")
   }, [producers])
   // because React does not do deep comparisons, a custom hook is used
   // see discussion in https://github.com/googlemaps/js-samples/issues/946
