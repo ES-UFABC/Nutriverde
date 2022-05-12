@@ -112,9 +112,6 @@ export default function MyProductCreate() {
     };
 
   const submit = async (values: IProduct) => {
-    console.log(values);
-    return;
-
     const requestOptions = {
       method: "POST",
       headers: {

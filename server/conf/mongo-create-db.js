@@ -149,3 +149,14 @@ db.products.insertOne({
   quantity: 1203123,
   cover: "",
 });
+
+/**
+ * Reviews
+ */
+
+db.createCollection("reviews");
+db.sequences.insertOne({
+  name: "review_id",
+  value: 1,
+});
+

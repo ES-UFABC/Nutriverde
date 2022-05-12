@@ -57,7 +57,17 @@ export interface IProduct {
   images: string[];
   producerId: number;
 }
-
+export interface IReview {
+  id: number;
+  userId: number;
+  userName: string;
+  productId: number;
+  date: string;
+  content: string;
+  rating: number;
+  title: string;
+  images: string[];
+}
 export interface IFile extends File {
   id: string;
   preview: string;

@@ -202,6 +202,7 @@ export class UserService {
           } else {
             console.log(user);
             req.user = user;
+            req.user.isProducer=true;
             next();
           }
         }
