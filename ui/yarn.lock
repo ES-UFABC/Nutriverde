@@ -677,6 +677,11 @@ cookie@^0.4.1:
   resolved "https://registry.npmjs.org/cookie/-/cookie-0.4.2.tgz"
   integrity sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==
 
+coordenadas-do-cep@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/coordenadas-do-cep/-/coordenadas-do-cep-1.2.0.tgz#bbbc3444e3f9d4e8662bab2b41836c7e95522086"
+  integrity sha512-YcmgNl+OneJxrRj7lc+hD8w3w1y3Puqbv5L5Z86mBTIN0+j8U4UL6v3FbAlvyFCnDQNVFWbslhacy39/yNVDcg==
+
 core-js-pure@^3.20.2:
   version "3.21.1"
   resolved "https://registry.npmjs.org/core-js-pure/-/core-js-pure-3.21.1.tgz"

@@ -12,6 +12,7 @@ export interface IProducer {
   negotiateOnProductionSite: boolean;
   businessAddress: address;
   businessIsCollective: boolean;
+  geoReferencedLocalization: { lat: number, lng: number };
   coord: { lat: number; lng: number };
   affiliatedEntities: string[];
   cnpj: string;
@@ -22,6 +23,8 @@ export interface IProducer {
   organic: boolean;
   externalWebPages: string[];
   productionsClassification: string[];
+  cover: string;
+  images: string[];
 }
 export type address = {
   street: string;

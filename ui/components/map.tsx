@@ -10,6 +10,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { IProducer } from "../Interfaces";
 
 const deepCompareEqualsForMaps = createCustomEqual(
   (deepEqual) => (a: any, b: any) => {
@@ -46,6 +47,11 @@ function useDeepCompareEffectForMaps(
   useEffect(callback, dependencies.map(useDeepCompareMemoize));
 }
 
+
+
+
+
+
 export default function Map({
   onClick,
   onIdle,
@@ -61,13 +67,33 @@ export default function Map({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map>();
+  const [producers, setProducers] = useState<IProducer[]>([]);
+  let infoWindow = new google.maps.InfoWindow();
+
+  useEffect(() => {
+    fetch("http://localhost:3000/producers")
+      .then(async (response) => {
+        const data = await response.json();
+        console.log("data: ", data);
+        setProducers(data.items);
+        //getLatLng(data.items)
+      })
+      .catch((err) => {
+        console.log("error: ", err);
+      });
+  }, []);
+
 
   useEffect(() => {
     if (ref.current && !map) {
       setMap(new window.google.maps.Map(ref.current, {}));
     }
+
   }, [ref, map]);
 
+  useEffect(() => {
+    showMarkers()
+  }, [producers])
   // because React does not do deep comparisons, a custom hook is used
   // see discussion in https://github.com/googlemaps/js-samples/issues/946
   useDeepCompareEffectForMaps(() => {
@@ -75,6 +101,7 @@ export default function Map({
       map.setOptions(options);
     }
   }, [map, options]);
+
 
   useEffect(() => {
     if (map) {
@@ -92,6 +119,48 @@ export default function Map({
     }
   }, [map, onClick, onIdle]);
 
+  function showMarkers() {
+    producers.map((item) => {
+
+      const marker = new window.google.maps.Marker({
+        position: item.geoReferencedLocalization
+      });
+      marker.addListener("click", () => {
+        // selectedLocation = location;
+        infoWindow.setContent(
+          `<div class='flex flex-col content-start p-2'>` +
+            `<h1 class='font-semibold text-4xl mb-2'>` +
+              `<a
+                href=/producers/`
+              + `${item.id && item.id!}` +
+              ` class="text-emerald-800 hover:underline active:text-emerald-600"
+                >` + `${item.fantasyName}` + `</a>` +
+            `</h1>` +
+              `<p class = "text-xl mb-2">${item.businessAddress.street}</p>` +
+              `<a
+                href=https://`+`${item.externalWebPages && item.externalWebPages!}` +
+              ` class=" text-xl text-emerald-800 hover:underline active:text-emerald-600"
+              >`+
+             `${item.externalWebPages && item.externalWebPages!}
+            </a>` +
+          `</div>`
+
+
+        );
+
+        infoWindow.open({
+          anchor: marker,
+          map,
+          shouldFocus: true
+        });
+      });
+
+      marker.setMap(map);
+    });
+  };
+
+
+
   return (
     <>
       <div ref={ref} style={style} />
@@ -104,3 +173,7 @@ export default function Map({
     </>
   );
 }
+function item(item: any) {
+  throw new Error("Function not implemented.");
+}
+

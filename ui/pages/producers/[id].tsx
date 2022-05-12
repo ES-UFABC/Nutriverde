@@ -17,7 +17,7 @@ const render = (status: Status) => {
 };
 export default function ProducerAbout() {
   const router = useRouter();
-  let id = Number(router.query.id);
+  const [id,setId] = useState<number>(0);
   const [producer, setProducer] = useState<IProducer>({} as IProducer);
   const [products, setProducts] = useState<IProduct[]>([]);
   const [center, setCenter] = useState<google.maps.LatLngLiteral>({
@@ -28,9 +28,15 @@ export default function ProducerAbout() {
   // const [map, setMap] = useState<google.maps.Map>();
 
   useEffect(() => {
-    if (typeof id === "number") {
+    if (!router.isReady){
+      return;
+    }
+    setId(parseInt(router.query.id as string))
+    if (id !== NaN) {
       LoadProducer(id)
         .then((p) => {
+          console.log("producer",p)
+          setCenter(p.geoReferencedLocalization)
           setProducer(p);
           // setCenter(p.businessAddress.coord);
           // console.log("keys on useEffect", Object.keys(p))
@@ -50,7 +56,7 @@ export default function ProducerAbout() {
           )
         );
     }
-  }, [id]);
+  }, [id,router.isReady]);
 
   // useEffect(() => {
   //     if (ref.current && !map) {
@@ -61,14 +67,14 @@ export default function ProducerAbout() {
     <Layout title={`${producer.fantasyName} - Produtor`}>
       <ProducerLoaded item={producer && producer} />
 
-      <div style={{ display: "flex", height: "200px" }}>
+      <div style={{ display: "flex", height: "400px" }}>
         <Wrapper
           apiKey={"AIzaSyCXGJse38b65vXJStGzFD3r7-CuC0TjPgk"}
           render={render}
         >
           <Map
             style={{ flexGrow: "1", height: "100%" }}
-            options={{ center: center, zoom: 17 }}
+            options={{ center: center, zoom: 14 }}
           >
             <Marker key="center" position={center} />
           </Map>

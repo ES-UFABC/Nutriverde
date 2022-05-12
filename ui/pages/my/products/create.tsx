@@ -118,7 +118,7 @@ export default function MyProductCreate() {
         "x-auth-token": `${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ values }),
+      body: JSON.stringify(values),
     };
 
     const res = await fetch(`${serverUrl}/products`, requestOptions);

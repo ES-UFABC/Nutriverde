@@ -41,13 +41,6 @@ export default function Register() {
         pathname: '/' // autenticado
       });
 
-      router.push({
-        pathname: '/login'
-      });
-
-      router.push({
-        pathname: "/",
-      });
 
       console.log(resJson);
     } catch (err) {
@@ -137,7 +130,7 @@ export default function Register() {
               htmlFor="endereço"
               className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-emerald-800 peer-focus:dark:text-emerald-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
-              Endereço (ex.: Rua dos pessegueiros)
+              Endereço (ex.: Rua dos pessegueiros, 500)
             </label>
           </div>
           <div className="flex">

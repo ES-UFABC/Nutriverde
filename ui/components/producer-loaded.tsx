@@ -2,6 +2,7 @@ import Image from "next/image";
 import { IProducer, address, stringifyAdress } from "../interfaces";
 
 export default function ProducerLoaded(props: any) {
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const producer: IProducer = props.item as IProducer;
   producer.producerPaymentMethods =
     (producer.producerPaymentMethods as []) || [];
@@ -37,14 +38,26 @@ export default function ProducerLoaded(props: any) {
       </p>
       <div
         style={{ display: "flex", height: "200px" }}
-        className="w-full h-48 relative"
+        className="w-full h-48 relative place-content-center"
       >
-        <Image
-          className="object-cover w-full h-96 rounded-none rounded-t-lg md:h-auto md:w-48"
-          src={`/home${producer.id}.png`}
-          layout="fill"
-          alt={producer.fantasyName}
-        />
+        {producer?.cover && (
+          <img
+            className="object-cover rounded-none rounded-t-lg"
+            src={`${serverUrl}/files/${producer?.cover}`}
+            alt={producer?.name}
+            width={300}
+            height={300}
+          />
+        )}
+        {!producer?.cover && (
+          <Image
+            className="object-cover rounded-none rounded-t-lg"
+            src={"/placeholder.png"}
+            width={300}
+            height={300}
+            alt={producer?.name}
+          />
+        )}
       </div>
       <div className="">
         {line("Responsável", producer.name)}
@@ -58,11 +71,13 @@ export default function ProducerLoaded(props: any) {
             {producer.email}{" "}
           </a>
         </p>
-        {line(
-          "Métodos de Pagamento",
-          toString(producer.producerPaymentMethods)
-        )}
-        {line("Telefones", toString(producer.phones))}
+        <p>
+          <span className="font-bold">Métodos de Pagamento</span>:{" "}
+          {producer.producerPaymentMethods}
+        </p>
+        <p>
+          <span className="font-bold">Telefones</span>: {producer.phones}
+        </p>
         {line(
           "Endereço de Produção",
           stringifyAdress(producer.productionAddress)
@@ -80,40 +95,50 @@ export default function ProducerLoaded(props: any) {
           "Tipo de Produtor",
           producer.businessIsCollective ? "Coletivo" : "Individual"
         )}
-        {line("Cadastrado em Entidades", toString(producer.affiliatedEntities))}
+        <p>
+          <span className="font-bold">Cadastrado em Entidades</span>:{" "}
+          {producer.affiliatedEntities}
+        </p>
         {line("CNPJ", producer.cnpj)}
         {line("Produtor licenciado?", producer.licensed ? "sim" : "não")}
       </div>
       <div className="">
-        {line(
-          "Registros ou Certificações",
-          toString(producer.certificationsAndRecords)
-        )}
+        <p>
+          <span className="font-bold">Registros ou Certificações</span>:{" "}
+          {producer.certificationsAndRecords}
+        </p>
         {line(
           "Produtor Agroecológico",
           producer.agroEcological ? "sim" : "não"
         )}
-        {line(
-          "Certificações Agroecológicas",
-          toString(producer.agroEcologicalCertifications)
-        )}
+        <p>
+          <span className="font-bold">Certificações Agroecológicas</span>:{" "}
+          {producer.agroEcologicalCertifications}
+        </p>
         {line("Produtor de Organicos", producer.organic ? "sim" : "não")}
         <p>
           <span className="font-bold">Paginas Externas</span>:
-          {producer.externalWebPages.map((webLink) => (
-            <a
-              href={`${webLink}`}
-              className="text-emerald-800 hover:underline active:text-emerald-600"
-            >
-              {" "}
-              {webLink}
-            </a>
-          ))}
+          {/* {
+                        producer.externalWebPages[0].split(",").map(link => (
+
+                        )
+
+                    )} */}
+          <a
+            href={
+              "https://" +
+              `${producer.externalWebPages && producer.externalWebPages!}`
+            }
+            className="text-emerald-800 hover:underline active:text-emerald-600"
+          >
+            {" "}
+            {producer.externalWebPages && producer.externalWebPages!}
+          </a>
         </p>
-        {line(
-          "Tipos de Produção",
-          toString(producer.productionsClassification)
-        )}
+        <p>
+          <span className="font-bold">Tipos de Produção</span>:{" "}
+          {producer.productionsClassification}
+        </p>
       </div>
     </div>
   );

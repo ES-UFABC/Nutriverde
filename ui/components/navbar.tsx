@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
@@ -7,36 +7,37 @@ import * as Auth from "../services/auth"
 const navigation = [
   { name: "Produtores", href: "/producers", current: false },
   { name: "Mapa", href: "/maps", current: false },
-  { name: "Notícias", href: "/news", current: false },
   { name: "Sobre", href: "/about", current: false },
 ];
 
-function profileNavigation() {
+function profileNavigation(isUser: Boolean) {
   if (typeof window !== 'undefined') {
-    if(Auth.isAuthenticated()){
-      return profileNavigationProducer
+    if (Auth.isAuthenticated()) {
+      if (isUser) {
+        return profileNavigationUser
+      } else
+        return profileNavigationProducer
     }
-      return profileNavigationGuest    
+    return profileNavigationGuest
+
   }
   return profileNavigationGuest
 }
 
+
 const profileNavigationGuest = [
   { name: "Faça seu Cadastro", href: "/register" },
   { name: "Faça Login", href: "/login" },
-  { name: "Configurações", href: "/settings" },
   { name: "Sair", href: "/logout" },
 ];
 
 const profileNavigationUser = [
   { name: "Perfil", href: "/profile" },
-  { name: "Configurações", href: "/settings" },
   { name: "Sair", href: "/logout" },
 ];
 
 const profileNavigationProducer = [
   { name: "Perfil", href: "/profile" },
-  { name: "Configurações", href: "/settings" },
   { name: "Meus produtos", href: "/my/products" },
   { name: "Sair", href: "/logout" },
 ];
@@ -46,6 +47,41 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 export default function Navbar() {
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+  const [isUser, setisUser] = useState<Boolean>(true);
+  let token: any
+  if (typeof window !== 'undefined') {
+    token = Auth.getToken()
+  }
+
+
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'x-auth-token': `${token}` }
+  };
+
+  useEffect(() => {
+
+    fetch(`${serverUrl}/me`, requestOptions)
+      .then(async (response) => {
+        const data = await response.json()
+        if (response.status == 401) {
+          if (typeof window !== 'undefined')
+            Auth.logout()
+        }
+        if (data?.items.fantasyName == undefined) { // is a user, not a producer
+          setisUser(true)
+        }
+        else {
+          setisUser(false)
+        }
+      })
+      .catch((err) => {
+        console.log("error: ", err);
+      });
+
+  }, []);
+
   return (
     <Disclosure as="nav" className="bg-emerald-800">
       {({ open }) => (
@@ -114,7 +150,7 @@ export default function Navbar() {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                      {profileNavigation().map((item) => (
+                      {profileNavigation(isUser).map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
                             <Link href={item.href}>

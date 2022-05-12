@@ -22,13 +22,14 @@ interface IUser {
 
 
 export default function Home() {
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [users, setUsers] = useState<IUser>();
-
+  const [botao,setBotao] = useState<String>();
   let token: any
   if (typeof window !== 'undefined') {
     token = Auth.getToken()
   }
-
+  
 
   const requestOptions = {
     method: 'GET',
@@ -37,9 +38,22 @@ export default function Home() {
 
   useEffect(() => {
 
-    fetch('http://localhost:3000/me', requestOptions)
+    fetch(`${serverUrl}/me`, requestOptions)
       .then(async (response) => {
-        const data = await response.json();
+        const data = await response.json()  
+        if (response.status==401){
+            
+            console.log("Server-Message",data.message)
+            router.push({
+              pathname: '/login'
+          })
+        }
+        if(data?.items.fantasyName != undefined){
+          setBotao("Ir para seu perfil de Produtor")
+        }
+        else{
+          setBotao("Realizar cadastro como Produtor")
+        }
         setUsers(data.items)
       })
       .catch((err) => {
@@ -52,7 +66,7 @@ export default function Home() {
   function condRender() {
     let render;
     if (token) {
-      render = (<Layout title="Profile">
+      render = (<Layout title="Perfil">
         <div className="container mx-auto p-4 flex flex-col justify-content-center">
           <p className="text-4xl font-bold text-center my-4">
             Perfil de Usuário
@@ -81,7 +95,10 @@ export default function Home() {
                   <span className="font-bold">CPF</span>: {users?.cpf}
                 </p>
                 <div className="flex mt-2 space-x-3 lg:mt-3 place-self-center">
-                  <a href="#" className="inline-flex py-2 px-4 text-sm font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800">Ir ao Perfil de Produtor</a>
+                  <a href="/profileProducer" className="inline-flex py-2 px-4 text-sm font-medium text-center 
+                  text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none 
+                  focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 
+                  dark:focus:ring-emerald-800">{botao}</a>
                 </div>
               </div>
             </div>
@@ -97,8 +114,6 @@ export default function Home() {
         </div>
 
       </Layout>)
-    } else {
-      render = <Login message="Login First"/>
     }
     return render;
   }

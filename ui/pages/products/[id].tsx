@@ -126,7 +126,10 @@ export default function ProductAbout({
     rating: 0,
   };
 
-  const submitReview = async (values: IReview) => {
+  const submitReview = async (
+    values: IReview,
+    { resetForm }: { resetForm: any }
+  ) => {
     var token: any;
     if (typeof window !== "undefined") {
       token = Auth.getToken();
@@ -147,11 +150,12 @@ export default function ProductAbout({
       return;
     }
 
+    resetForm();
     getReviews();
   };
 
   const getReviewsPercent = (rating: number) => {
-    if (!reviews?.length) "0%";
+    if (!reviews?.length) return "0%";
 
     const percent =
       (reviews.filter((e) => e.rating === rating).length / reviews.length) *
@@ -289,7 +293,7 @@ export default function ProductAbout({
           </div>
         </div>
 
-        <div className="  p-4 w-full text-center bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <div className="p-4 w-full text-center bg-white rounded-lg border shadow-md sm:p-8 dark:bg-gray-800 dark:border-gray-700">
           <div className="flex flex-row gap-2">
             <ChatIcon className="block w-8 h-8" />
             <p className="text-2xl font-bold">Avaliações</p>
@@ -407,7 +411,7 @@ export default function ProductAbout({
                   reviews.map((item) => (
                     <li key={item.id} className="py-3 sm:py-4">
                       <div className="flex items-center space-x-4">
-                        <div className="flex-shrink-0 content-center">
+                        <div className="flex-shrink-0 basis-10 content-center">
                           <div className="flex flex-col items-center">
                             <UserCircleIcon className="block w-8 h-8" />
                             <p className="text-xs">{item.userName}</p>
