@@ -7,6 +7,7 @@ import * as dbConnect from "./db-connection";
 export class Review {
   id: number;
   userId: number;
+  userName: string;
   productId: number;
   date: string;
   content: string;
@@ -16,6 +17,7 @@ export class Review {
 
   constructor(
     userId: number,
+    userName: string,
     productId: number,
     date: string,
     content: string,
@@ -24,6 +26,7 @@ export class Review {
   ) {
     this.id = 0;
     this.userId = userId;
+    this.userName = userName;
     this.date = date;
     this.content = content;
     this.rating = rating;
@@ -36,7 +39,8 @@ export class Review {
     return (
       this.title.length > 0 &&
       this.content.length > 0 &&
-      this.rating >= 1 && this.rating <=5
+      this.rating >= 1 &&
+      this.rating <= 5
     );
   }
 
@@ -51,8 +55,9 @@ export class Review {
       "content",
       "rating",
       "userId",
+      "userName",
       "date",
-      "productId"
+      "productId",
     ]) {
       if (!(prop in json)) {
         throw new Error(`Field ${prop} is required`);
@@ -61,17 +66,18 @@ export class Review {
 
     const review = new Review(
       json.userId,
+      json.userName,
       json.productId,
       json.date,
       json.content,
       json.rating,
-      json.title,
+      json.title
     );
 
     if ("id" in json) {
       review.id = parseInt(json.id);
     }
-  
+
     if ("images" in json) {
       review.images = json.images;
     }
@@ -135,7 +141,6 @@ export class ReviewDAO {
     }
   }
 
-  
   /**
    * Find Review using its id
    * @param id the Review id

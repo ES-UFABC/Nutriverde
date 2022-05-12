@@ -154,6 +154,7 @@ app.post(
   UserService.getInstance().auth,
   async (req: any, res) => {
     req.body.producerId = req.user.id;
+    req.body.userName = req.user.name;
     await ReviewService.getInstance().insert(req, res);
   }
 );

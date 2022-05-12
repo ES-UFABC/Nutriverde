@@ -60,6 +60,7 @@ export interface IProduct {
 export interface IReview {
   id: number;
   userId: number;
+  userName: string;
   productId: number;
   date: string;
   content: string;

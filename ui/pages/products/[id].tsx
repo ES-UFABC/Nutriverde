@@ -117,6 +117,7 @@ export default function ProductAbout({
   const initialReview: IReview = {
     id: 0,
     userId: 0,
+    userName: "",
     productId: product.id,
     images: [],
     title: "",
@@ -149,6 +150,15 @@ export default function ProductAbout({
     getReviews();
   };
 
+  const getReviewsPercent = (rating: number) => {
+    if (!reviews?.length) "0%";
+
+    const percent =
+      (reviews.filter((e) => e.rating === rating).length / reviews.length) *
+      100;
+    return Math.round(percent) + "%";
+  };
+
   return (
     <Layout title={`${product.name}`}>
       <div className=" mx-auto p-4 flex flex-col gap-3">
@@ -171,7 +181,7 @@ export default function ProductAbout({
             <div className="flex flex-col items-center basis-4/5 ml-2">
               <img src={`${serverUrl}/files/${selectedImage}`}></img>
 
-              <div className="inline-flex items-center mt-10 text-base font-semibold text-gray-900 dark:text-white">
+              {/* <div className="inline-flex items-center mt-10 text-base font-semibold text-gray-900 dark:text-white">
                 <div className="flex items-center">
                   <svg
                     className="w-5 h-5 text-yellow-400"
@@ -214,7 +224,7 @@ export default function ProductAbout({
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                   </svg>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -294,58 +304,23 @@ export default function ProductAbout({
           <div className="flex flex-row">
             <div className="basis-1/3">
               <p className="text-sm font-medium text-gray-500 dark:text-gray-400 text-left mt-2">
-                1,745 global ratings
+                {reviews.length} avaliação(ões) totais
               </p>
-              <div className="flex items-center mt-4">
-                <span className="text-sm font-medium ">5 star</span>
-                <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                  <div
-                    className="h-5 bg-yellow-400 rounded"
-                    style={{ width: "70%" }}
-                  ></div>
+
+              {[1, 2, 3, 4, 5].reverse().map((item) => (
+                <div className="flex items-center mt-4">
+                  <span className="text-sm font-medium ">{item} estrelas</span>
+                  <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
+                    <div
+                      className="h-5 bg-yellow-400 rounded"
+                      style={{ width: getReviewsPercent(item) }}
+                    ></div>
+                  </div>
+                  <span className="text-sm font-medium ">
+                    {getReviewsPercent(item)}
+                  </span>
                 </div>
-                <span className="text-sm font-medium ">70%</span>
-              </div>
-              <div className="flex items-center mt-4">
-                <span className="text-sm font-medium ">4 star</span>
-                <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                  <div
-                    className="h-5 bg-yellow-400 rounded"
-                    style={{ width: "17%" }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium ">17%</span>
-              </div>
-              <div className="flex items-center mt-4">
-                <span className="text-sm font-medium ">3 star</span>
-                <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                  <div
-                    className="h-5 bg-yellow-400 rounded"
-                    style={{ width: "8%" }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium ">8%</span>
-              </div>
-              <div className="flex items-center mt-4">
-                <span className="text-sm font-medium ">2 star</span>
-                <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                  <div
-                    className="h-5 bg-yellow-400 rounded"
-                    style={{ width: "4%" }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium ">4%</span>
-              </div>
-              <div className="flex items-center mt-4">
-                <span className="text-sm font-medium ">1 star</span>
-                <div className="w-2/4 h-5 mx-4 bg-gray-200 rounded dark:bg-gray-700">
-                  <div
-                    className="h-5 bg-yellow-400 rounded"
-                    style={{ width: "1%" }}
-                  ></div>
-                </div>
-                <span className="text-sm font-medium ">1%</span>
-              </div>
+              ))}
             </div>
 
             <div className="flow-root basis-2/3">
@@ -363,21 +338,12 @@ export default function ProductAbout({
                     })}
                     onSubmit={submitReview}
                   >
-                    {({
-                      values,
-                      isValid,
-                      isSubmitting,
-                      errors,
-                      setFieldValue,
-                      setFieldTouched,
-                      handleSubmit,
-                      validateField,
-                    }) => (
+                    {({ values, setFieldValue, handleSubmit }) => (
                       <form onSubmit={handleSubmit}>
                         <div className="flex items-center space-x-4">
                           <div className="flex-shrink-0 content-center">
                             <UserCircleIcon className="block w-8 h-8" />
-                            <p className="text-xs">Julinho</p>
+                            <p className="text-xs">{}</p>
                           </div>
                           <div className="flex-1 min-w-0 text-left">
                             <div className="">
@@ -449,8 +415,10 @@ export default function ProductAbout({
                     <li key={item.id} className="py-3 sm:py-4">
                       <div className="flex items-center space-x-4">
                         <div className="flex-shrink-0 content-center">
-                          <UserCircleIcon className="block w-8 h-8" />
-                          <p className="text-xs">Julinho</p>
+                          <div className="flex flex-col items-center">
+                            <UserCircleIcon className="block w-8 h-8" />
+                            <p className="text-xs">{item.userName}</p>
+                          </div>
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-xl text-left font-bold">
