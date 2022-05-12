@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { IProducer, address, stringifyAdress } from "../interfaces";
+import { IProducer, IAddress, stringifyAdress } from "../interfaces";
 
 export default function ProducerLoaded(props: any) {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -15,8 +15,8 @@ export default function ProducerLoaded(props: any) {
   producer.productionsClassification =
     (producer.productionsClassification as []) || [];
   producer.externalWebPages = (producer.externalWebPages as []) || [];
-  producer.businessAddress = producer.businessAddress || ({} as address);
-  producer.productionAddress = producer.productionAddress || ({} as address);
+  producer.businessAddress = producer.businessAddress || ({} as IAddress);
+  producer.productionAddress = producer.productionAddress || ({} as IAddress);
   function toString(array: string[]) {
     if (array instanceof Array)
       return array.length < 1

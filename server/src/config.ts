@@ -12,6 +12,7 @@ export const config = {
       sessions: "sessions",
       vendas: "vendas",
       reviews: "reviews",
+      orders: "orders",
     },
   },
   upload_dir: path.resolve(__dirname, "..", "uploads"),

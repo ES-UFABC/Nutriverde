@@ -19,6 +19,7 @@ import { IProducer, IProduct, IReview } from "../../interfaces";
 import * as Yup from "yup";
 import * as Auth from "../../services/auth";
 import Rating from "react-rating";
+import * as Cart from "../../services/cart";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
@@ -171,6 +172,9 @@ export default function ProductAbout({
     return rating;
   };
 
+  function addToCart() {
+    Cart.addOrUpdate(product.id, quantity);
+  }
   return (
     <Layout title={`${product.name}`}>
       <div className=" mx-auto p-4 flex flex-col gap-3">
@@ -282,7 +286,10 @@ export default function ProductAbout({
                     fixedDecimalScale
                   />
                 </p>
-                <button className="btn btn-primary mb-3 mr-2 w-60 mt-3">
+                <button
+                  className="btn btn-primary mb-3 mr-2 w-60 mt-3"
+                  onClick={addToCart}
+                >
                   <ShoppingCartIcon className="block w-6 h-6" /> Adicionar ao
                   carrinho
                 </button>

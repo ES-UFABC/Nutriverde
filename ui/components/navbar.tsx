@@ -2,28 +2,25 @@ import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Link from "next/link";
-import * as Auth from "../services/auth"
+import * as Auth from "../services/auth";
 
 const navigation = [
   { name: "Produtores", href: "/producers", current: false },
   { name: "Mapa", href: "/maps", current: false },
   { name: "Sobre", href: "/about", current: false },
+  { name: "Carrinho", href: "/cart", current: false },
 ];
 
 function profileNavigation(isUser: Boolean) {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     if (Auth.isAuthenticated()) {
       if (isUser) {
-        return profileNavigationUser
-      } else
-        return profileNavigationProducer
+        return profileNavigationUser;
+      } else return profileNavigationProducer;
     }
-    return profileNavigationGuest
-
   }
-  return profileNavigationGuest
+  return profileNavigationGuest;
 }
-
 
 const profileNavigationGuest = [
   { name: "Faça seu Cadastro", href: "/register" },
@@ -42,44 +39,39 @@ const profileNavigationProducer = [
   { name: "Sair", href: "/logout" },
 ];
 
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 export default function Navbar() {
   const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
   const [isUser, setisUser] = useState<Boolean>(true);
-  let token: any
-  if (typeof window !== 'undefined') {
-    token = Auth.getToken()
+  let token: any;
+  if (typeof window !== "undefined") {
+    token = Auth.getToken();
   }
 
-
   const requestOptions = {
-    method: 'GET',
-    headers: { 'x-auth-token': `${token}` }
+    method: "GET",
+    headers: { "x-auth-token": `${token}` },
   };
 
   useEffect(() => {
-
     fetch(`${serverUrl}/me`, requestOptions)
       .then(async (response) => {
-        const data = await response.json()
+        const data = await response.json();
         if (response.status == 401) {
-          if (typeof window !== 'undefined')
-            Auth.logout()
+          if (typeof window !== "undefined") Auth.logout();
         }
-        if (data?.items.fantasyName == undefined) { // is a user, not a producer
-          setisUser(true)
-        }
-        else {
-          setisUser(false)
+        if (data?.items.fantasyName == undefined) {
+          // is a user, not a producer
+          setisUser(true);
+        } else {
+          setisUser(false);
         }
       })
       .catch((err) => {
         console.log("error: ", err);
       });
-
   }, []);
 
   return (
@@ -135,7 +127,7 @@ export default function Navbar() {
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src="http://aproer.org.br/wp-content/uploads/fg-avatar-anonymous-user-retina-lrg.png"
                         alt=""
                       />
                     </Menu.Button>

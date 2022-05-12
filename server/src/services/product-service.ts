@@ -33,7 +33,9 @@ export class ProductService {
       res.status(200).json({ items: products, message: "success" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ items: [], message: "error retrieving Products" });
+      res
+        .status(500)
+        .json({ items: [], message: "error retrieving listAll() Products" });
     }
   }
 
@@ -49,7 +51,32 @@ export class ProductService {
       res.status(200).json({ items: products, message: "success" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ items: [], message: "error retrieving Products" });
+      res.status(500).json({
+        items: [],
+        message: "error retrieving listAllByName() Products",
+      });
+    }
+  }
+
+  /**
+   *
+   * @param req
+   * @param res
+   */
+  async listAllFromIdsList(req: e.Request, res: e.Response) {
+    try {
+      const list =
+        (JSON.parse(String(req.query.idsList)) as number[]) || ([] as number[]);
+      console.log(list);
+      const products = await ProductDAO.getInstance().findFromIdsList(list);
+      res.status(200).json({ items: products, message: "success" });
+      // res.status(200).json({ items: [{ m: "oi" }], message: "success" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        items: [],
+        message: "error retrieving listAllFromIdsList() Products",
+      });
     }
   }
 
@@ -66,7 +93,9 @@ export class ProductService {
       res.status(200).json({ item: product, message: "success" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ item: {}, message: "error retrieving Products" });
+      res
+        .status(500)
+        .json({ item: {}, message: "error retrieving findById() Products" });
     }
   }
 

@@ -13,6 +13,7 @@ import { ProducerService } from "./services/producer-service";
 import { UserService } from "./services/user-service";
 import { FileService } from "./services/file-service";
 import { ReviewService } from "./services/review-service";
+import { OrderService } from "./services/order-service";
 
 /**
  * Configure session middleware
@@ -75,6 +76,12 @@ app.get(
 app.get(
   "/products",
   async (req, res) => await ProductService.getInstance().listAll(req, res)
+);
+
+app.get(
+  "/products/orders",
+  async (req, res) =>
+    await ProductService.getInstance().listAllFromIdsList(req, res)
 );
 
 app.get(
@@ -158,6 +165,46 @@ app.post(
     await ReviewService.getInstance().insert(req, res);
   }
 );
+/**
+ * Orders routes
+ */
+app.put(
+  "/banking",
+  UserService.getInstance().auth,
+  async (req: any | e.Request, res) => {
+    console.log(req.user);
+    req.body.consumerId = req.user.id;
+    console.log("Estou registrando venda");
+    await OrderService.getInstance().insertMultiplesFromPrescription(req, res);
+  }
+);
+
+app.get(
+  "/orders/producer",
+  UserService.getInstance().auth,
+  async (req: any | e.Request, res) => {
+    console.log(req.user);
+    if (!req.user.isProducer) {
+      res
+        .status(401)
+        .json({ items: [], message: "Unauthorized", isProducer: false });
+      return;
+    }
+    req.body.producerId = req.user.id;
+    await OrderService.getInstance().findByProducerId(req, res);
+  }
+);
+
+app.get(
+  "/orders/consumer",
+  UserService.getInstance().auth,
+  async (req: any | e.Request, res) => {
+    console.log(req.user);
+    req.body.consumerId = req.user.id;
+    await OrderService.getInstance().findByConsumerId(req, res);
+  }
+);
+
 // passport.use(new GoogleStrategy({
 //   clientID:  process.env.GOOGLE_API_CLIENT_ID,
 //   clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,
