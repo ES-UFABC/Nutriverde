@@ -30,5 +30,3 @@ jobs:
 
     - run: cd ui/ 
     - run: yarn install 
-    - run: cd .. && cd server
-    - run: yarn install
